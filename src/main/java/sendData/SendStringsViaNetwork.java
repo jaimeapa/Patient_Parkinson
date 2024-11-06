@@ -10,7 +10,7 @@ public class SendStringsViaNetwork {
 
     public static void main(String args[]) throws IOException {
         System.out.println("Starting Client...");
-        Socket socket = new Socket("localhost", 9009);
+        Socket socket = new Socket("10.60.121.206", 8080);
         PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
         System.out.println("Connection established... sending text");
         printWriter.println("Header File\n\n");

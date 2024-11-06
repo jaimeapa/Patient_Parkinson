@@ -15,7 +15,7 @@ public class ClientSendCharactersViaNetwork {
         InputStream console = (System.in);
         //You should change localhost by the IP address 
         //We are connecting to a "service" in an IP and port 9000
-        Socket socket = new Socket("localhost", 9000);
+        Socket socket = new Socket("10.60.121.206", 9000);
         OutputStream outputStream = socket.getOutputStream();
 
         while (true) {
