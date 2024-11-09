@@ -46,6 +46,7 @@ package BITalino;
  import java.io.IOException;
  import java.util.Vector;
 
+
 /// The %BITalino device class.
 public class BITalino {
 	
