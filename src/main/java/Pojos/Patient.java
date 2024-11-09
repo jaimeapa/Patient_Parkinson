@@ -35,6 +35,13 @@ public class Patient {
         this.values = new LinkedList<Integer>();
     }
 
+    public Patient(String name, String surname, LocalDate dob, String email) {
+        this.name = name;
+        this.surname = surname;
+        this.dob = dob;
+        this.email = email;
+    }
+
     public int getPatient_id() {
         return patient_id;
     }
