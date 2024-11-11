@@ -1,13 +1,18 @@
 package UI;
 
+import sendData.*;
+
+
 public class LogInMenu {
     public static void main(String[] args) {
         switch(printMenu()){
             case 1:{
                 Utilities.registerPatient();
+
                 break;
             }
             case 2:{
+                logInMenu();
                 break;
             }
             case 3:{
@@ -15,6 +20,13 @@ public class LogInMenu {
             }
 
         }
+    }
+
+    private static void logInMenu()
+    {
+        String email = Utilities.readString("Email: ");
+        String password = Utilities.readString("Password: ");
+
     }
     private static int printMenu(){
         System.out.println("Patient Menu:\n"
