@@ -33,7 +33,8 @@ public class Patient {
         this.email = email;
         this.hospital_id = hospital_id;
         this.symptoms = symptoms;
-        this.values = new LinkedList<Integer>();
+        this.values_EMG = new LinkedList<Integer>();
+        this.values_EDA = new LinkedList<Integer>();
     }
 
     public Patient(String name, String surname, LocalDate dob, String email) {
