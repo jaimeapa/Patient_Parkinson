@@ -116,18 +116,19 @@ public class Signal {
     }
 
     // Método común para obtener los valores de la señal
-    public String getSignalValues(int samplingRate) {
-        String result = "";
+    public List<Integer> getSignalValues(int samplingRate) {
+        List<Integer> result = new LinkedList<>();
         for (int j = 0; j < samplingRate; j++) {
             int blockSize = samplingRate;
-            result = result + "\nSize blocks: " + (j + 1) + "/" + blockSize;
+            // Si necesitas esta información visual, puedes guardarla en otro lugar.
             for (int i = 0; i < blockSize; i++) {
                 int value = j * blockSize + i;
-                result = result + ("\n Value " + (value + 1) + ": " + values.get(value));
+                result.add(values.get(value));  // Agregar los valores a la lista.
             }
         }
         return result;
     }
+
 
     @Override
     public String toString() {

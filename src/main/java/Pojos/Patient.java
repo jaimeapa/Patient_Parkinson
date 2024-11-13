@@ -22,10 +22,11 @@ public class Patient {
     private Signal signal;
     private int hospital_id;
     private Symptons symptoms;
-    private LinkedList<String> values_EMG;
-    private LinkedList<String> values_EDA;
+    private LinkedList<Integer> values_EDA;
+    private LinkedList<Integer> values_EMG;
 
-    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, int hospital_id, LinkedList<String> symptoms) {
+
+    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, int hospital_id, Symptons symptoms) {
         this.patient_id = patient_id;
         this.name = name;
         this.surname = surname;
@@ -33,8 +34,8 @@ public class Patient {
         this.email = email;
         this.hospital_id = hospital_id;
         this.symptoms = symptoms;
-        this.values_EMG = new LinkedList<String>;
         this.values_EDA = new LinkedList<String>;
+        this.values_EMG = new LinkedList<String>;
     }
 
     public Patient(String name, String surname, LocalDate dob, String email) {
@@ -43,6 +44,25 @@ public class Patient {
         this.dob = dob;
         this.email = email;
     }
+
+    public void guardarValoresSegunTipoDeSenal(Signal signal) {
+        if (signal != null) {
+            // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
+            List<Integer> signalValues = signal.getSignalValues(samplingRate);
+
+            // Verificamos el tipo de señal y guardamos los valores en la lista correspondiente.
+            if (signal.getSignalType() == Signal.SignalType.EMG) {
+                values_EMG.addAll(signalValues);
+                System.out.println("Valores guardados en values_EMG");
+            } else if (signal.getSignalType() == Signal.SignalType.EDA) {
+                values_EDA.addAll(signalValues);
+                System.out.println("Valores guardados en values_EDA");
+            }
+        } else {
+            System.out.println("No hay señal asignada a este paciente.");
+        }
+    }
+
 
     public int getPatient_id() {
         return patient_id;
@@ -137,47 +157,43 @@ public class Patient {
         return file;
     }
 
-    public void recordBitalinoData(int seconds, String macAddress) {
-
-        //String macAddress = "20:17:11:20:51:27";
+    public void recordBitalinoData(int seconds, String macAddress, Signal.SignalType signalType) {
         BITalino bitalino = new BITalino();
         try {
-            //Una vez encontrado por bluettoth el dispositivo, se imprimime
-            Vector<RemoteDevice> devices = bitalino.findDevices();
+            Vector<RemoteDevice> devices = bitalino.findDevices();d
             System.out.println(devices);
 
-            //Establecemos el numero de muestras que queremos por segundo
             int samplingRate = 10;
             bitalino.open(macAddress, samplingRate);
 
-            //Establecemos el canal por el que se obtiene la señal EMG (A1)
-            int[] channelsToAcquire = {0};
+            int[] channelsToAcquire = {0}; // Asegúrate de usar el canal adecuado para EMG o EDA
             bitalino.start(channelsToAcquire);
 
-            System.out.println(" -Recording signal...");
-            //Imprimimos datos por pantalla y los almacenamos en una variable local (lista de valores)
-            for (int j=0; j<10; j++) {
-                //Each time reads a block of 10 samples
-                int blockSize = samplingRate;
-                Frame[] frames = bitalino.read(blockSize);
-                System.out.println("   Size blocks: " + (j+1) + "/" + frames.length);
-                for (int i=0; i<frames.length; i++) {
-                    System.out.println("    "+ (j * blockSize + i) + " seq: " + frames[i].seq + " "
-                            + frames[i].analog[0] + " ");
-                    values.add(frames[i].analog[0]);
+            System.out.println(" -Recording " + signalType + " signal...");
+
+            List<Integer> recordedValues = new LinkedList<>();
+            for (int j = 0; j < seconds * samplingRate / 10; j++) {
+                Frame[] frames = bitalino.read(samplingRate);
+                for (Frame frame : frames) {
+                    recordedValues.add(frame.analog[0]);
                 }
             }
-            bitalino.stop();
-            //Creamos una nueva señal con los valores y un nombre para el fichero con la señal EMG
-            this.signal = new Signal(values, this.name + "_" + this.surname);
 
-        } catch (BITalinoException ex) {
-            ex.printStackTrace();
-        } catch (Throwable ex) {
+            bitalino.stop();
+
+            // Asigna los valores según el tipo de señal
+            if (signalType == Signal.SignalType.EMG) {
+                values_EMG.addAll(recordedValues);
+                this.signal = new Signal(Signal.SignalType.EMG, values_EMG);
+            } else if (signalType == Signal.SignalType.EDA) {
+                values_EDA.addAll(recordedValues);
+                this.signal = new Signal(Signal.SignalType.EDA, values_EDA);
+            }
+
+        } catch (BITalinoException | Throwable ex) {
             ex.printStackTrace();
         } finally {
             try {
-                //Connection stops when we disconnect the bluetooth
                 if (bitalino != null) {
                     bitalino.close();
                 }
@@ -186,6 +202,8 @@ public class Patient {
             }
         }
     }
+
+
 
     @Override
     public String toString() {
@@ -202,4 +220,5 @@ public class Patient {
                 ", values EDA=" + values_EDA +
                 '}';
     }
-}
+
+    }
