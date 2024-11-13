@@ -79,4 +79,5 @@ public class Utilities {
         patient = new Patient(name,surname,dob,email);
         return patient;
     }
+
 }
