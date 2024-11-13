@@ -22,7 +22,8 @@ public class Patient {
     private Signal signal;
     private int hospital_id;
     private LinkedList<String> symptoms;
-    private LinkedList<Integer> values;
+    private LinkedList<Integer> values_EMG;
+    private LinkedList<Integer> values_EDA;
 
     public Patient(int patient_id, String name, String surname, LocalDate dob, String email, int hospital_id, LinkedList<String> symptoms) {
         this.patient_id = patient_id;
@@ -104,12 +105,19 @@ public class Patient {
         this.symptoms = symptoms;
     }
 
-    public LinkedList<Integer> getValues() {
-        return values;
+    public LinkedList<Integer> getValues_EMG() {
+        return values_EMG;
     }
 
-    public void setValues(LinkedList<Integer> values) {
-        this.values = values;
+    public void setValues_EMG(LinkedList<Integer> values_EMG) {
+        this.values_EMG = values_EMG;
+    }
+    public LinkedList<Integer> getValues_EDA() {
+        return values_EDA;
+    }
+
+    public void setValues_EDA(LinkedList<Integer> values_EDA) {
+        this.values_EDA = values_EDA;
     }
     public File almacenarDatosEnFichero() throws FileNotFoundException, FileNotFoundException {
 
@@ -120,7 +128,7 @@ public class Patient {
         pw.println("Patient: " + toString());
 
         pw.println(" -Bitalino recorded data: " );
-        for(Integer v: values) {
+        for(Integer v: values) { //como hacemos para que detecte si EDA o EMG???
             pw.println("   " + v);
         }
         pw.close();
@@ -189,7 +197,8 @@ public class Patient {
                 ", Signal=" + signal +
                 ", hospital_id=" + hospital_id +
                 ", symptoms=" + symptoms +
-                ", values=" + values +
+                ", values EMG=" + values_EMG +
+                ", values EDA=" + values_EDA +
                 '}';
     }
 }

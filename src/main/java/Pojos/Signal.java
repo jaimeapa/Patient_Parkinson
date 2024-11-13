@@ -18,7 +18,7 @@ public class Signal {
     private String EMGFilename;
     private String EDAFilename;
 
-
+    //HACER ENUMERADO CON VALUES_EMG Y VALUES_EDA
 
     public Signal(List<Integer> valuesEMG, String patientName, LocalDate beginDate, String EMGFilename) {
         this.valuesEMG = valuesEMG;
