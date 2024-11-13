@@ -20,6 +20,15 @@ public class Signal {
 
     //HACER ENUMERADO CON VALUES_EMG Y VALUES_EDA
 
+    public enum SignalType{
+        SignalEMG,
+        SignalEDA
+    }
+
+
+
+
+
     public Signal(List<Integer> valuesEMG, String patientName, LocalDate beginDate, String EMGFilename) {
         this.valuesEMG = valuesEMG;
         this.patientName = patientName;

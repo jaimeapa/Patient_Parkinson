@@ -22,8 +22,8 @@ public class Patient {
     private Signal signal;
     private int hospital_id;
     private LinkedList<String> symptoms;
-    private LinkedList<Integer> values_EMG;
-    private LinkedList<Integer> values_EDA;
+    private LinkedList<String> values_EMG;
+    private LinkedList<String> values_EDA;
 
     public Patient(int patient_id, String name, String surname, LocalDate dob, String email, int hospital_id, LinkedList<String> symptoms) {
         this.patient_id = patient_id;
@@ -33,8 +33,8 @@ public class Patient {
         this.email = email;
         this.hospital_id = hospital_id;
         this.symptoms = symptoms;
-        this.values_EMG = new LinkedList<Integer>();
-        this.values_EDA = new LinkedList<Integer>();
+        this.values_EMG = new LinkedList<String>;
+        this.values_EDA = new LinkedList<String>;
     }
 
     public Patient(String name, String surname, LocalDate dob, String email) {
