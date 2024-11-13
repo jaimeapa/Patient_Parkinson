@@ -21,7 +21,7 @@ public class Patient {
     private String email;
     private Signal signal;
     private int hospital_id;
-    private LinkedList<String> symptoms;
+    private Symptons symptoms;
     private LinkedList<String> values_EMG;
     private LinkedList<String> values_EDA;
 

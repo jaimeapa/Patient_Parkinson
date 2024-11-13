@@ -29,4 +29,13 @@ public class Symptons {
     public void setNombre(String name) {
         this.name = name;
     }
+
+    // Método toString
+    @Override
+    public String toString() {
+        return "Sintomas{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
