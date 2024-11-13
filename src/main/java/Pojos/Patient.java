@@ -48,7 +48,7 @@ public class Patient {
     public void guardarValoresSegunTipoDeSenal(Signal signal) {
         if (signal != null) {
             // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
-            List<Integer> signalValues = signal.getSignalValues(samplingRate);
+            LinkedList<Integer> signalValues = signal.getSignalValues(samplingRate);
 
             // Verificamos el tipo de señal y guardamos los valores en la lista correspondiente.
             if (signal.getSignalType() == Signal.SignalType.EMG) {

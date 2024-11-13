@@ -116,8 +116,8 @@ public class Signal {
     }
 
     // Método común para obtener los valores de la señal
-    public List<Integer> getSignalValues(int samplingRate) {
-        List<Integer> result = new LinkedList<>();
+    public LinkedList<Integer> getSignalValues(int samplingRate) {
+        LinkedList<Integer> result = new LinkedList<>();
         for (int j = 0; j < samplingRate; j++) {
             int blockSize = samplingRate;
             // Si necesitas esta información visual, puedes guardarla en otro lugar.
