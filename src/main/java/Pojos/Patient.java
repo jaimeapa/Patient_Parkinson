@@ -20,19 +20,17 @@ public class Patient {
     private LocalDate dob;
     private String email;
     private Signal signal;
-    private int hospital_id;
-    private Symptons symptoms;
+    private Symptoms symptoms;
     private LinkedList<Integer> values_EDA;
     private LinkedList<Integer> values_EMG;
 
 
-    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, int hospital_id, Symptons symptoms) {
+    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, Symptons symptoms) {
         this.patient_id = patient_id;
         this.name = name;
         this.surname = surname;
         this.dob = dob;
         this.email = email;
-        this.hospital_id = hospital_id;
         this.symptoms = symptoms;
         this.values_EDA = new LinkedList<String>;
         this.values_EMG = new LinkedList<String>;
@@ -110,19 +108,11 @@ public class Patient {
         this.signal = signal;
     }
 
-    public int getHospital_id() {
-        return hospital_id;
-    }
-
-    public void setHospital_id(int hospital_id) {
-        this.hospital_id = hospital_id;
-    }
-
-    public LinkedList<String> getSymptoms() {
+    public LinkedList<Symptoms> getSymptoms() {
         return symptoms;
     }
 
-    public void setSymptoms(LinkedList<String> symptoms) {
+    public void setSymptoms(LinkedList<Symptoms> symptoms) {
         this.symptoms = symptoms;
     }
 
