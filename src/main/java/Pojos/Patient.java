@@ -163,8 +163,7 @@ public class Patient {
             Vector<RemoteDevice> devices = bitalino.findDevices();
             System.out.println(devices);
 
-            int samplingRate = 10;
-            bitalino.open(macAddress, samplingRate);
+            bitalino.open(macAddress, samplingrate);
 
             int[] channelsToAcquire = {0}; // Cambiar según el canal para EMG o EDA
             bitalino.start(channelsToAcquire);
@@ -172,8 +171,8 @@ public class Patient {
             System.out.println(" - Recording " + signalType + " signal...");
             LinkedList<Integer> recordedValues = new LinkedList<Integer>();
 
-            for (int j = 0; j < seconds * samplingRate / 10; j++) {
-                Frame[] frames = bitalino.read(samplingRate);
+            for (int j = 0; j < seconds * samplingrate / 10; j++) {
+                Frame[] frames = bitalino.read(samplingrate);
                 for (Frame frame : frames) {
                     recordedValues.add(frame.analog[0]);
                 }
