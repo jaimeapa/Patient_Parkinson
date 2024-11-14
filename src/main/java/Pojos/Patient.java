@@ -32,8 +32,8 @@ public class Patient {
         this.dob = dob;
         this.email = email;
         this.symptoms = new LinkedList<>();
-        this.values_EDA = new LinkedList<String>;
-        this.values_EMG = new LinkedList<String>;
+        this.values_EDA = new LinkedList<>();
+        this.values_EMG = new LinkedList<>();
     }
 
     public Patient(String name, String surname, LocalDate dob, String email) {
