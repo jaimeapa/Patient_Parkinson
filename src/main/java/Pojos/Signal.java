@@ -33,6 +33,17 @@ public class Signal {
         this.signalFilename = createFilename();
     }
 
+    public Signal(SignalType signaltype, List<Integer> values){
+        this.values = values;
+        this.signalType = signaltype;
+    }
+
+    public Signal(SignalType signaltype, List<Integer> values, LocalDate beginDate){
+        this.values = values;
+        this.signalType = signaltype;
+        this.beginDate = beginDate;
+    }
+
     // Método para crear el nombre del archivo basado en el tipo de señal
     private String createFilename() {
         Calendar c = Calendar.getInstance();
