@@ -16,6 +16,7 @@ public class Signal {
     private LocalDate beginDate;
     private String signalFilename;
     private SignalType signalType;
+    public static final int samplingrate = 100;
 
     public enum SignalType{
         EMG,
@@ -93,7 +94,7 @@ public class Signal {
         BufferedWriter bw = null;
         try {
             String ruta = "MeasurementsBitalino\\" + signalFilename;
-            String contenido = getSignalValues(10);
+            String contenido = getSignalValues(samplingrate).toString();
 
             File file = new File(ruta);
             if (!file.exists()) {
