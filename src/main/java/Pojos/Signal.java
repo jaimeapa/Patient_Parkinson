@@ -131,6 +131,25 @@ public class Signal {
         return result;
     }
 
+    // Método para obtener los valores de la señal como un String
+    /*   public String getSignalValuesString (int samplingRate) {
+        StringBuilder result = new StringBuilder();
+
+        for (int j = 0; j < samplingRate; j++) {
+            int blockSize = samplingRate;
+            for (int i = 0; i < blockSize; i++) {
+                int value = j * blockSize + i;
+                result.append(values.get(value)).append(", ");
+            }
+        }
+        if (result.length() > 0) {
+            result.setLength(result.length() - 2);
+        }
+
+        return result.toString();
+    }*/
+
+
 
     @Override
     public String toString() {
