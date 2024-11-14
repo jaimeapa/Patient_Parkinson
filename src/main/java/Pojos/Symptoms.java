@@ -1,11 +1,11 @@
 package Pojos;
 
-public class Symptons {
+public class Symptoms {
     private int id;
     private String name;
 
     // Constructor
-    public Symptons(int id, String name) {
+    public Symptoms(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -33,7 +33,7 @@ public class Symptons {
     // Método toString
     @Override
     public String toString() {
-        return "Sintomas{" +
+        return "Symptoms{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

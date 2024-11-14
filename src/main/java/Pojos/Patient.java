@@ -20,22 +20,20 @@ public class Patient {
     private LocalDate dob;
     private String email;
     private Signal signal;
-    private int hospital_id;
-    private Symptons symptoms;
+    private LinkedList<Symptoms>  symptoms;
     private LinkedList<Integer> values_EDA;
     private LinkedList<Integer> values_EMG;
 
 
-    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, int hospital_id, Symptons symptoms) {
+    public Patient(int patient_id, String name, String surname, LocalDate dob, String email,LinkedList<Symptoms>  symptoms) {
         this.patient_id = patient_id;
         this.name = name;
         this.surname = surname;
         this.dob = dob;
         this.email = email;
-        this.hospital_id = hospital_id;
-        this.symptoms = symptoms;
-        this.values_EDA = new LinkedList<String>;
-        this.values_EMG = new LinkedList<String>;
+        this.symptoms = new LinkedList<>();
+        this.values_EDA = new LinkedList<>();
+        this.values_EMG = new LinkedList<>();
     }
 
     public Patient(String name, String surname, LocalDate dob, String email) {
@@ -87,6 +85,7 @@ public class Patient {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
     public LocalDate getDob() {
         return dob;
     }
@@ -106,23 +105,16 @@ public class Patient {
     public Pojos.Signal getSignal() {
         return signal;
     }
+
     public void setSignal(Pojos.Signal signal) {
         this.signal = signal;
     }
 
-    public int getHospital_id() {
-        return hospital_id;
-    }
-
-    public void setHospital_id(int hospital_id) {
-        this.hospital_id = hospital_id;
-    }
-
-    public LinkedList<String> getSymptoms() {
+    public LinkedList<Symptoms> getSymptoms() {
         return symptoms;
     }
 
-    public void setSymptoms(LinkedList<String> symptoms) {
+    public void setSymptoms(LinkedList<Symptoms> symptoms) {
         this.symptoms = symptoms;
     }
 
@@ -133,6 +125,7 @@ public class Patient {
     public void setValues_EMG(LinkedList<Integer> values_EMG) {
         this.values_EMG = values_EMG;
     }
+
     public LinkedList<Integer> getValues_EDA() {
         return values_EDA;
     }
@@ -140,6 +133,7 @@ public class Patient {
     public void setValues_EDA(LinkedList<Integer> values_EDA) {
         this.values_EDA = values_EDA;
     }
+
     public File almacenarDatosEnFichero() throws FileNotFoundException, FileNotFoundException {
 
         Date date = (Date) java.sql.Date.valueOf(LocalDate.now());
@@ -148,8 +142,8 @@ public class Patient {
         PrintWriter pw = new PrintWriter(file);
         pw.println("Patient: " + toString());
 
-        pw.println(" -Bitalino recorded data: " );
-        for(Integer v: values) { //como hacemos para que detecte si EDA o EMG???
+        pw.println(" -Bitalino recorded data: ");
+        for (Integer v : values) { //como hacemos para que detecte si EDA o EMG???
             pw.println("   " + v);
         }
         pw.close();
@@ -160,7 +154,8 @@ public class Patient {
     public void recordBitalinoData(int seconds, String macAddress, Signal.SignalType signalType) {
         BITalino bitalino = new BITalino();
         try {
-            Vector<RemoteDevice> devices = bitalino.findDevices();d
+            Vector<RemoteDevice> devices = bitalino.findDevices();
+
             System.out.println(devices);
 
             int samplingRate = 10;
@@ -204,7 +199,6 @@ public class Patient {
     }
 
 
-
     @Override
     public String toString() {
         return "Patient{" +
@@ -214,11 +208,10 @@ public class Patient {
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
                 ", Signal=" + signal +
-                ", hospital_id=" + hospital_id +
                 ", symptoms=" + symptoms +
                 ", values EMG=" + values_EMG +
                 ", values EDA=" + values_EDA +
                 '}';
     }
 
-    }
+}
