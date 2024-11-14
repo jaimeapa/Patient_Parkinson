@@ -69,15 +69,6 @@ public class Utilities {
         return patient;
     }
 
-    public static Patient registerPatient()
-    {
-        Patient patient = null;
-        String name = readString("Enter your name: ");
-        String surname = readString("Enter your last name: ");
-        LocalDate dob = readDate("Enter your date of birth: ");
-        String email = readString("Enter your email: ");
-        patient = new Patient(name,surname,dob,email);
-        return patient;
-    }
+
 
 }
