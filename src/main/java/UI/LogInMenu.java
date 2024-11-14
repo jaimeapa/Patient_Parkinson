@@ -1,7 +1,9 @@
 package UI;
 
+import Pojos.Patient;
 import sendData.*;
 import java.sql.*;
+import java.time.LocalDate;
 
 public class LogInMenu {
     public static void main(String[] args) {
@@ -31,6 +33,17 @@ public class LogInMenu {
                 + "\n3. Exit"
         );
         return Utilities.readInteger("What would you want to do?");
+    }
+
+    public static Patient registerPatient()
+    {
+        Patient patient = null;
+        String name = Utilities.readString("Enter your name: ");
+        String surname = Utilities.readString("Enter your last name: ");
+        LocalDate dob = Utilities.readDate("Enter your date of birth: ");
+        String email = Utilities.readString("Enter your email: ");
+        patient = new Patient(name,surname,dob,email);
+        return patient;
     }
 }
 
