@@ -25,7 +25,7 @@ public class Patient {
     private LinkedList<Integer> values_EMG;
 
 
-    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, Symptons symptoms) {
+    public Patient(int patient_id, String name, String surname, LocalDate dob, String email, Symptoms symptoms) {
         this.patient_id = patient_id;
         this.name = name;
         this.surname = surname;
