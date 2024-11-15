@@ -18,29 +18,42 @@ public class SendDataViaNetwork {
         releaseResourcesForString(printWriter, socket);
         System.exit(0);
     }
+    public static void sendInt(Integer message, Socket socket) throws IOException{
+        OutputStream outputStream = socket.getOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        dataOutputStream.writeInt(message);
+        releaseResourcesInt(dataOutputStream,outputStream);
+    }
 
-    public static Patient logIn(String email, String password) throws IOException
+    public static Patient logIn(String email, String password, Socket socket) throws IOException
     {
         Patient patient = null;
-        Socket socket = new Socket("10.60.104.200", 8080);
+        //Socket socket = new Socket("10.60.104.200", 8080);
         PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+        InputStream inputStream = socket.getInputStream();
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         printWriter.println(email);
         printWriter.println(password);
         printWriter.println("stop");
-        BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+
+        if(!dataInputStream.readBoolean()){
+            return null;
+        }
+        else{
+
+            return patient;
+        }
         //Método no terminado
-        return patient;
     }
 
-    public static void sendPatient(Patient patient)
+    public static void sendPatient(Patient patient, Socket socket)
     {
         OutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
-        Socket socket = null;
 
         try {
-            socket = new Socket("10.60.104.200", 8080);
+            //socket = new Socket("localhost", 8080);
             outputStream = socket.getOutputStream();
         } catch (IOException ex) {
             System.out.println("It was not possible to connect to the server.");
@@ -55,11 +68,12 @@ public class SendDataViaNetwork {
             System.out.println("Unable to write the objects on the server.");
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            releaseResourcesForPatient(objectOutputStream, socket);
+            releaseResourcesForPatient(objectOutputStream);
 
         }
 
     }
+
 
     private static void releaseResourcesForString(PrintWriter printWriter, Socket socket) {
         printWriter.close();
@@ -70,14 +84,23 @@ public class SendDataViaNetwork {
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private static void releaseResourcesForPatient(ObjectOutputStream objectOutputStream, Socket socket) {
+    private static void releaseResourcesInt(DataOutputStream dataOutputStream, OutputStream outputStream){
         try {
-            objectOutputStream.close();
+            dataOutputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         try {
-            socket.close();
+            outputStream.close();
+        } catch (IOException ex) {
+           // Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }
+    private static void releaseResourcesForPatient(ObjectOutputStream objectOutputStream) {
+        try {
+            objectOutputStream.close();
         } catch (IOException ex) {
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
