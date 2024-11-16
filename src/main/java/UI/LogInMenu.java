@@ -3,10 +3,7 @@ package UI;
 import Pojos.Patient;
 import sendData.*;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.net.*;
@@ -19,6 +16,8 @@ public class LogInMenu {
     private static Socket socket;
     private static OutputStream outputStream;
     private static DataOutputStream dataOutputStream;
+    private static ClientMenu clientMenu;
+    private static PrintWriter printWriter;
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
         socket = new Socket("localhost", 8000);
@@ -26,11 +25,14 @@ public class LogInMenu {
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         outputStream = socket.getOutputStream();
+        printWriter = new PrintWriter(socket.getOutputStream(), true);
+        SendDataViaNetwork.sendInt(1, dataOutputStream);
 
         //SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
         while(true){
             switch (printMenu()) {
                 case 1 : {
+                    SendDataViaNetwork.sendStrings("REGISTER", printWriter);
                     registerPatient(socket);
                     break;
                 }
@@ -84,9 +86,10 @@ public class LogInMenu {
         LocalDate dob = Utilities.readDate("Enter your date of birth: ");
         String email = Utilities.readString("Enter your email: ");
         patient = new Patient(name,surname,dob,email);
-        System.out.println(patient.toString());
-        SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
-        SendDataViaNetwork.sendPatient(patient, socket, objectOutputStream);
+        //System.out.println(patient.toString());
+        SendDataViaNetwork.sendPatient(patient, objectOutputStream);
+        clientMenu.clientMenu(patient);
+
     }
     private static void releaseResources(Socket socket, DataOutputStream dataOutputStream, OutputStream outputStream, ObjectOutputStream objectOutputStream){
         try {

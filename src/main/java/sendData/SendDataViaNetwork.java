@@ -8,17 +8,15 @@ import Pojos.Patient;
 
 public class SendDataViaNetwork {
 
-    public static void sendStrings(String message) throws IOException {
-        Socket socket = new Socket("10.60.104.200", 8080);
-        PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-        System.out.println("Connection established... sending text");
+    public static void sendStrings(String message, PrintWriter printWriter) throws IOException {
+
+        //System.out.println("Connection established... sending text");
         printWriter.println(message);
-        System.out.println("Sending stop command");
         printWriter.println("stop");
-        releaseResourcesForString(printWriter, socket);
-        System.exit(0);
+        //releaseResourcesForString(printWriter,socket);
+
     }
-    public static void sendInt(Integer message, Socket socket, DataOutputStream dataOutputStream) throws IOException{
+    public static void sendInt(Integer message,  DataOutputStream dataOutputStream) throws IOException{
         //OutputStream outputStream = socket.getOutputStream();
         //DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(message);
@@ -47,7 +45,7 @@ public class SendDataViaNetwork {
         //Método no terminado
     }
 
-    public static void sendPatient(Patient patient, Socket socket, ObjectOutputStream objectOutputStream)
+    public static void sendPatient(Patient patient, ObjectOutputStream objectOutputStream)
     {
         //OutputStream outputStream = null;
         //ObjectOutputStream objectOutputStream = null;

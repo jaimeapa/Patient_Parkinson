@@ -8,7 +8,8 @@ public class ClientMenu {
 
     public static void clientMenu(Patient patient_logedIn){
         patient = patient_logedIn;
-        while(true){
+        boolean menu = true;
+        while(menu){
             switch(printMenu()){
                 case 1:{
 
@@ -32,6 +33,10 @@ public class ClientMenu {
                     break;
                 }
                 case 4:{
+                    break;
+                }
+                case 5:{
+                    menu = false;
                     break;
                 }
 
