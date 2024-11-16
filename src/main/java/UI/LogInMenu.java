@@ -3,7 +3,10 @@ package UI;
 import Pojos.Patient;
 import sendData.*;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.sql.*;
 import java.time.LocalDate;
 import java.net.*;
@@ -12,10 +15,19 @@ import java.util.logging.Logger;
 
 
 public class LogInMenu {
+    private static ObjectOutputStream objectOutputStream;
+    private static Socket socket;
+    private static OutputStream outputStream;
+    private static DataOutputStream dataOutputStream;
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
-        Socket socket = new Socket("localhost", 8000);
-        SendDataViaNetwork.sendInt(1,socket);
+        socket = new Socket("localhost", 8000);
+
+        dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        outputStream = socket.getOutputStream();
+
+        //SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
         while(true){
             switch (printMenu()) {
                 case 1 : {
@@ -28,7 +40,7 @@ public class LogInMenu {
                 }
                 case 3 :{
                     System.out.println("Exiting...");
-                    releaseSocket(socket);
+                    releaseResources(socket, dataOutputStream, outputStream, objectOutputStream);
                     System.exit(0);
                 }
                 default:{
@@ -64,7 +76,7 @@ public class LogInMenu {
         return Utilities.readInteger("What would you want to do?");
     }
 
-    public static void registerPatient(Socket socket)
+    public static void registerPatient(Socket socket) throws IOException
     {
         Patient patient = null;
         String name = Utilities.readString("Enter your name: ");
@@ -72,9 +84,28 @@ public class LogInMenu {
         LocalDate dob = Utilities.readDate("Enter your date of birth: ");
         String email = Utilities.readString("Enter your email: ");
         patient = new Patient(name,surname,dob,email);
-        SendDataViaNetwork.sendPatient(patient, socket);
+        System.out.println(patient.toString());
+        SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
+        SendDataViaNetwork.sendPatient(patient, socket, objectOutputStream);
     }
-    private static void releaseSocket(Socket socket){
+    private static void releaseResources(Socket socket, DataOutputStream dataOutputStream, OutputStream outputStream, ObjectOutputStream objectOutputStream){
+        try {
+            objectOutputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            dataOutputStream.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            // Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
         try {
             socket.close();
         } catch (IOException ex) {

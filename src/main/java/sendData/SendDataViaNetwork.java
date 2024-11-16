@@ -18,11 +18,11 @@ public class SendDataViaNetwork {
         releaseResourcesForString(printWriter, socket);
         System.exit(0);
     }
-    public static void sendInt(Integer message, Socket socket) throws IOException{
-        OutputStream outputStream = socket.getOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+    public static void sendInt(Integer message, Socket socket, DataOutputStream dataOutputStream) throws IOException{
+        //OutputStream outputStream = socket.getOutputStream();
+        //DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(message);
-        releaseResourcesInt(dataOutputStream,outputStream);
+        //releaseResourcesInt(dataOutputStream,outputStream);
     }
 
     public static Patient logIn(String email, String password, Socket socket) throws IOException
@@ -47,30 +47,30 @@ public class SendDataViaNetwork {
         //Método no terminado
     }
 
-    public static void sendPatient(Patient patient, Socket socket)
+    public static void sendPatient(Patient patient, Socket socket, ObjectOutputStream objectOutputStream)
     {
-        OutputStream outputStream = null;
-        ObjectOutputStream objectOutputStream = null;
+        //OutputStream outputStream = null;
+        //ObjectOutputStream objectOutputStream = null;
 
-        try {
+        /*try {
             //socket = new Socket("localhost", 8080);
             outputStream = socket.getOutputStream();
         } catch (IOException ex) {
             System.out.println("It was not possible to connect to the server.");
             System.exit(-1);
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         try {
-            objectOutputStream = new ObjectOutputStream(outputStream);
+            //objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(patient);
             objectOutputStream.flush();
         } catch (IOException ex) {
             System.out.println("Unable to write the objects on the server.");
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        } /*finally {
             releaseResourcesForPatient(objectOutputStream);
 
-        }
+        }*/
 
     }
 

@@ -4,6 +4,7 @@ import javax.bluetooth.RemoteDevice;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
@@ -14,7 +15,8 @@ import BITalino.Frame;
 import BITalino.BITalino;
 import BITalino.BITalinoException;
 
-public class Patient {
+public class Patient implements Serializable {
+    private static final long serialVersionUID = 4092297860583387711L;
     private int patient_id;
     private String name;
     private String surname;
