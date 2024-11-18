@@ -30,7 +30,7 @@ public class LogInMenu {
 
         //SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
         while(true){
-            switch (printMenu()) {
+            switch (printLogInMenu()) {
                 case 1 : {
                     SendDataViaNetwork.sendInt(1, dataOutputStream);
                     registerPatient(socket);
@@ -69,7 +69,7 @@ public class LogInMenu {
         }
     }
 
-    private static int printMenu() {
+    private static int printLogInMenu() {
         System.out.println("Patient Menu:\n"
                 + "\n1. Register"
                 + "\n2. Log In"
@@ -88,9 +88,68 @@ public class LogInMenu {
         patient = new Patient(name,surname,dob,email);
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, objectOutputStream);
-        clientMenu.clientMenu(patient);
+        clientMenu(patient);
 
     }
+
+    public static void clientMenu(Patient patient_logedIn) throws IOException {
+        Patient patient = patient_logedIn;
+        boolean menu = true;
+        while(menu){
+            switch(printClientMenu()){
+                case 1:{
+                    SendDataViaNetwork.sendInt(1, dataOutputStream);
+                    break;
+                }
+                case 2:{
+                    break;
+                }
+                case 3:{
+                    switch(bitalinoMenu())
+                    {
+                        case 1:
+                        {
+                            break;
+                        }
+                        case 2:
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case 4:{
+
+                    break;
+                }
+                case 5:{
+                    menu = false;
+                    break;
+                }
+
+            }
+        }
+    }
+
+    private static int bitalinoMenu(){
+        System.out.println("Possible measurements\n"
+                + "\n1. EMG"
+                + "\n2. EDA"
+        );
+        return Utilities.readInteger("What do you want to measure?");
+    }
+    private static int printClientMenu(){
+        System.out.println("Diagnosis Menu:\n"
+                + "\n1. Register personal data"
+                + "\n2. Input your symptoms"
+                + "\n3. Record Signal with BITalino"
+                + "\n4. See your data"
+                + "\n5. Log out"
+        );
+        return Utilities.readInteger("What would you want to do?");
+    }
+
+
     private static void releaseResources(Socket socket, DataOutputStream dataOutputStream, OutputStream outputStream, ObjectOutputStream objectOutputStream){
         try {
             objectOutputStream.close();

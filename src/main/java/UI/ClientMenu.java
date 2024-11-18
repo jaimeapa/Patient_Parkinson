@@ -2,6 +2,8 @@ package UI;
 
 import Pojos.Patient;
 
+import java.net.*;
+
 
 public class ClientMenu {
     private static Patient patient;
@@ -10,7 +12,7 @@ public class ClientMenu {
         patient = patient_logedIn;
         boolean menu = true;
         while(menu){
-            switch(printMenu()){
+            switch(printClientMenu()){
                 case 1:{
 
                     break;
@@ -33,6 +35,7 @@ public class ClientMenu {
                     break;
                 }
                 case 4:{
+
                     break;
                 }
                 case 5:{
@@ -51,7 +54,7 @@ public class ClientMenu {
       );
       return Utilities.readInteger("What do you want to measure?");
   }
-private static int printMenu(){
+private static int printClientMenu(){
     System.out.println("Diagnosis Menu:\n"
             + "\n1. Register personal data"
             + "\n2. Input your symptoms"
