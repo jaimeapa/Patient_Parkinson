@@ -20,7 +20,7 @@ public class LogInMenu {
     private static PrintWriter printWriter;
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
-        socket = new Socket("localhost", 8000);
+        socket = new Socket("10.60.115.182", 8000);
 
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
