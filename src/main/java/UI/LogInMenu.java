@@ -20,7 +20,7 @@ public class LogInMenu {
     private static PrintWriter printWriter;
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
-        socket = new Socket("192.168.92.81", 8080);
+        socket = new Socket("localhost", 8000);
 
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -32,7 +32,7 @@ public class LogInMenu {
         while(true){
             switch (printMenu()) {
                 case 1 : {
-                    SendDataViaNetwork.sendStrings("REGISTER", printWriter);
+                    SendDataViaNetwork.sendInt(1, dataOutputStream);
                     registerPatient(socket);
                     break;
                 }
