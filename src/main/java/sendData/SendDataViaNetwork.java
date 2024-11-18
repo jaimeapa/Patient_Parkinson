@@ -62,6 +62,7 @@ public class SendDataViaNetwork {
             //objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(patient);
             objectOutputStream.flush();
+            objectOutputStream.reset();
         } catch (IOException ex) {
             System.out.println("Unable to write the objects on the server.");
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
