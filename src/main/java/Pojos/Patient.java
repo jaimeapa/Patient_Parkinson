@@ -46,6 +46,14 @@ public class Patient implements Serializable {
         this.email = email;
     }
 
+    public Patient(int patient_id, String name, String surname, LocalDate dob, String email) {
+        this.patient_id = patient_id;
+        this.name = name;
+        this.surname = surname;
+        this.dob = dob;
+        this.email = email;
+    }
+
     public void saveValues(Signal signal) {
         if (signal != null) {
             // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
