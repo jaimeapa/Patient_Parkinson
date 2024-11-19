@@ -19,7 +19,12 @@ public class SendDataViaNetwork {
     public static void sendInt(Integer message,  DataOutputStream dataOutputStream) throws IOException{
         //OutputStream outputStream = socket.getOutputStream();
         //DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeInt(message);
+        try{
+            dataOutputStream.writeInt(message);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+
         //releaseResourcesInt(dataOutputStream,outputStream);
     }
 
@@ -45,7 +50,7 @@ public class SendDataViaNetwork {
         //Método no terminado
     }
 
-    public static void sendPatient(Patient patient, ObjectOutputStream objectOutputStream)
+    public static void sendPatient(Patient patient, DataOutputStream dataOutputStream)
     {
         //OutputStream outputStream = null;
         //ObjectOutputStream objectOutputStream = null;
@@ -60,9 +65,14 @@ public class SendDataViaNetwork {
         }*/
         try {
             //objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(patient);
+            /*objectOutputStream.writeObject(patient);
             objectOutputStream.flush();
-            objectOutputStream.reset();
+            objectOutputStream.reset();*/
+            dataOutputStream.writeUTF(patient.getName());
+            dataOutputStream.writeUTF(patient.getSurname());
+            dataOutputStream.writeUTF(patient.getDob().toString());
+            dataOutputStream.writeUTF(patient.getEmail());
+
         } catch (IOException ex) {
             System.out.println("Unable to write the objects on the server.");
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);

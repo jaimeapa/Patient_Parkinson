@@ -84,10 +84,11 @@ public class LogInMenu {
         String name = Utilities.readString("Enter your name: ");
         String surname = Utilities.readString("Enter your last name: ");
         LocalDate dob = Utilities.readDate("Enter your date of birth: ");
+        System.out.println(dob.toString());
         String email = Utilities.readString("Enter your email: ");
         patient = new Patient(name,surname,dob,email);
         //System.out.println(patient.toString());
-        SendDataViaNetwork.sendPatient(patient, objectOutputStream);
+        SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         clientMenu(patient);
 
     }
@@ -124,6 +125,8 @@ public class LogInMenu {
                 }
                 case 5:{
                     menu = false;
+                    SendDataViaNetwork.sendInt(5, dataOutputStream);
+                    System.out.println("Closing server");
                     break;
                 }
 
