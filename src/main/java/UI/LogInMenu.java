@@ -18,6 +18,10 @@ public class LogInMenu {
     private static DataOutputStream dataOutputStream;
     private static ClientMenu clientMenu;
     private static PrintWriter printWriter;
+    private static BufferedReader bufferedReader;
+    private static DataInputStream dataInputStream;
+    private static ObjectInputStream objectInputStream;
+
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
         socket = new Socket("localhost", 8000);
@@ -25,7 +29,11 @@ public class LogInMenu {
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         outputStream = socket.getOutputStream();
-        printWriter = new PrintWriter(socket.getOutputStream(), true);
+        bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        //InputStream inputStream = socket.getInputStream();
+        dataInputStream = new DataInputStream(socket.getInputStream());
+        objectInputStream = new ObjectInputStream(socket.getInputStream());
+
         SendDataViaNetwork.sendInt(1, dataOutputStream);
 
         //SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
@@ -42,7 +50,7 @@ public class LogInMenu {
                 }
                 case 3 :{
                     System.out.println("Exiting...");
-                    releaseResources(socket, dataOutputStream, outputStream, objectOutputStream);
+                    releaseResources(socket, dataOutputStream, outputStream, objectOutputStream, dataInputStream, objectInputStream, bufferedReader, printWriter);
                     System.exit(0);
                 }
                 default:{
@@ -100,6 +108,7 @@ public class LogInMenu {
             switch(printClientMenu()){
                 case 1:{
                     SendDataViaNetwork.sendInt(1, dataOutputStream);
+                    ReceiveDataViaNetwork.receiveString(socket, bufferedReader);
                     break;
                 }
                 case 2:{
@@ -120,16 +129,11 @@ public class LogInMenu {
                     break;
                 }
                 case 4:{
-
-                    break;
-                }
-                case 5:{
                     menu = false;
                     SendDataViaNetwork.sendInt(5, dataOutputStream);
                     System.out.println("Closing server");
                     break;
                 }
-
             }
         }
     }
@@ -143,17 +147,16 @@ public class LogInMenu {
     }
     private static int printClientMenu(){
         System.out.println("Diagnosis Menu:\n"
-                + "\n1. Register personal data"
-                + "\n2. Input your symptoms"
-                + "\n3. Record Signal with BITalino"
-                + "\n4. See your data"
-                + "\n5. Log out"
+                + "\n1. Input your symptoms"
+                + "\n2. Record Signal with BITalino"
+                + "\n3. See your data"
+                + "\n4. Log out"
         );
         return Utilities.readInteger("What would you want to do?");
     }
 
 
-    private static void releaseResources(Socket socket, DataOutputStream dataOutputStream, OutputStream outputStream, ObjectOutputStream objectOutputStream){
+    private static void releaseResources(Socket socket, DataOutputStream dataOutputStream, OutputStream outputStream, ObjectOutputStream objectOutputStream, DataInputStream dataInputStream, ObjectInputStream objectInputStream, BufferedReader bufferedReader, PrintWriter printWriter){
         try {
             objectOutputStream.close();
         } catch (IOException ex) {
@@ -177,6 +180,24 @@ public class LogInMenu {
             //Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
+        try {
+            objectInputStream.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(ReceiveClientViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        try {
+            dataInputStream.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(ReceiveBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        try {
+            bufferedReader.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(ReceiveStringsViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        printWriter.close();
     }
 }
 
