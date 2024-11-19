@@ -53,6 +53,7 @@ public class LogInMenu {
                 }
                 case 3 :{
                     System.out.println("Exiting...");
+                    SendDataViaNetwork.sendInt(3, dataOutputStream);
                     releaseResources(socket, dataOutputStream, outputStream, objectOutputStream, dataInputStream, objectInputStream, bufferedReader, printWriter);
                     System.exit(0);
                 }
@@ -181,12 +182,7 @@ public class LogInMenu {
             // Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
-        try {
-            socket.close();
-        } catch (IOException ex) {
-            //Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-        }
+
         try {
             objectInputStream.close();
         } catch (IOException ex) {
@@ -205,6 +201,12 @@ public class LogInMenu {
             //Logger.getLogger(ReceiveStringsViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
         printWriter.close();
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
     }
 }
 

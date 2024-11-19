@@ -18,7 +18,7 @@ public class ReceiveDataViaNetwork {
         String line = "";
         String information = "";
         information = bufferedReader.readLine();
-        System.out.println(information);
+        //System.out.println(information);
         return information;
     }
 
