@@ -1,6 +1,8 @@
 package UI;
 
 import Pojos.Patient;
+import Pojos.Role;
+import Pojos.User;
 import sendData.*;
 
 import java.io.*;
@@ -79,25 +81,29 @@ public class LogInMenu {
     }
 
     private static int printLogInMenu() {
-        System.out.println("Patient Menu:\n"
+        System.out.println("\n\nPatient Menu:\n"
                 + "\n1. Register"
                 + "\n2. Log In"
                 + "\n3. Exit"
         );
-        return Utilities.readInteger("What would you want to do?");
+        return Utilities.readInteger("What would you want to do?\n");
     }
 
     public static void registerPatient(Socket socket) throws IOException
     {
         Patient patient = null;
+        User u = null;
         String name = Utilities.readString("Enter your name: ");
         String surname = Utilities.readString("Enter your last name: ");
         LocalDate dob = Utilities.readDate("Enter your date of birth: ");
         System.out.println(dob.toString());
         String email = Utilities.readString("Enter your email: ");
         patient = new Patient(name,surname,dob,email);
+        String password = Utilities.readString("Enter your password: ");
+        u = new User(email, password.getBytes(), new Role("patient"));
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
+        SendDataViaNetwork.sendUser(u, dataOutputStream);
         clientMenu(patient);
 
     }
@@ -140,20 +146,20 @@ public class LogInMenu {
     }
 
     private static int bitalinoMenu(){
-        System.out.println("Possible measurements\n"
+        System.out.println("\n\nPossible measurements\n"
                 + "\n1. EMG"
                 + "\n2. EDA"
         );
-        return Utilities.readInteger("What do you want to measure?");
+        return Utilities.readInteger("What do you want to measure?\n");
     }
     private static int printClientMenu(){
-        System.out.println("Diagnosis Menu:\n"
+        System.out.println("\n\nDiagnosis Menu:\n"
                 + "\n1. Input your symptoms"
                 + "\n2. Record Signal with BITalino"
                 + "\n3. See your data"
                 + "\n4. Log out"
         );
-        return Utilities.readInteger("What would you want to do?");
+        return Utilities.readInteger("What would you want to do?\n");
     }
 
 
