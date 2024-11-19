@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Pojos.Patient;
+import Pojos.User;
 
 public class SendDataViaNetwork {
 
@@ -81,6 +82,12 @@ public class SendDataViaNetwork {
 
         }*/
 
+    }
+    public static void sendUser(User u, DataOutputStream dataOutputStream) throws IOException
+    {
+        dataOutputStream.writeUTF(u.getEmail());
+        dataOutputStream.writeUTF(new String(u.getPassword()));
+        dataOutputStream.writeUTF(u.getRole().toString());
     }
 
 
