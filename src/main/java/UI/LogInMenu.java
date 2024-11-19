@@ -30,6 +30,7 @@ public class LogInMenu {
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         outputStream = socket.getOutputStream();
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        printWriter = new PrintWriter(socket.getOutputStream(), true);
         //InputStream inputStream = socket.getInputStream();
         dataInputStream = new DataInputStream(socket.getInputStream());
         objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -108,7 +109,7 @@ public class LogInMenu {
             switch(printClientMenu()){
                 case 1:{
                     SendDataViaNetwork.sendInt(1, dataOutputStream);
-                    ReceiveDataViaNetwork.receiveString(socket, bufferedReader);
+                    System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
                     break;
                 }
                 case 2:{
@@ -130,7 +131,7 @@ public class LogInMenu {
                 }
                 case 4:{
                     menu = false;
-                    SendDataViaNetwork.sendInt(5, dataOutputStream);
+                    SendDataViaNetwork.sendInt(4, dataOutputStream);
                     System.out.println("Closing server");
                     break;
                 }
