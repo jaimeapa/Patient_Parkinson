@@ -78,9 +78,13 @@ public class LogInMenu {
         try {
             Patient patient = ReceiveDataViaNetwork.recievePatient(socket, dataInputStream);
             if (patient != null) {
-                System.out.println("Log in successful");
-                System.out.println(patient.toString());
-                clientMenu(patient);
+                if(patient.getName().equals("name")){
+                    System.out.println("User or password is incorrect");
+                }else {
+                    System.out.println("Log in successful");
+                    System.out.println(patient.toString());
+                    clientMenu(patient);
+                }
             }
         }catch(IOException e){
             System.out.println("Log in problem");
