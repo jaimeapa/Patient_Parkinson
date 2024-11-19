@@ -23,6 +23,7 @@ public class LogInMenu {
     private static BufferedReader bufferedReader;
     private static DataInputStream dataInputStream;
     private static ObjectInputStream objectInputStream;
+    private static Role role;
 
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
@@ -38,7 +39,7 @@ public class LogInMenu {
         objectInputStream = new ObjectInputStream(socket.getInputStream());
 
         SendDataViaNetwork.sendInt(1, dataOutputStream);
-
+        role = new Role("patient");
         //SendDataViaNetwork.sendInt(1,socket, dataOutputStream);
         while(true){
             switch (printLogInMenu()) {
@@ -48,6 +49,7 @@ public class LogInMenu {
                     break;
                 }
                 case 2 :{
+                    SendDataViaNetwork.sendInt(2, dataOutputStream);
                     logInMenu(socket);
                     break;
                 }
@@ -70,15 +72,26 @@ public class LogInMenu {
     private static void logInMenu(Socket socket) throws IOException{
         String email = Utilities.readString("Email: ");
         String password = Utilities.readString("Password: ");
-        Patient patient = SendDataViaNetwork.logIn(email, password, socket);
-
-        if (patient != null) {
+        //Patient patient = SendDataViaNetwork.logIn(email, password, socket);
+        User u = new User (email,password.getBytes(), role);
+        SendDataViaNetwork.sendUser(u, dataOutputStream);
+        try {
+            Patient patient = ReceiveDataViaNetwork.recievePatient(socket, dataInputStream);
+            if (patient != null) {
+                System.out.println("Log in successful");
+                System.out.println(patient.toString());
+                clientMenu(patient);
+            }
+        }catch(IOException e){
+            System.out.println("Log in problem");
+        }
+        /*if (patient != null) {
             System.out.println("Login successful!");
             ClientMenu.clientMenu(patient);
             // Redirigir a la siguiente parte de la aplicación
         } else {
             System.out.println("Invalid email or password.");
-        }
+        }*/
     }
 
     private static int printLogInMenu() {
@@ -101,7 +114,7 @@ public class LogInMenu {
         String email = Utilities.readString("Enter your email: ");
         patient = new Patient(name,surname,dob,email);
         String password = Utilities.readString("Enter your password: ");
-        u = new User(email, password.getBytes(), new Role("patient"));
+        u = new User(email, password.getBytes(), role);
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         SendDataViaNetwork.sendUser(u, dataOutputStream);

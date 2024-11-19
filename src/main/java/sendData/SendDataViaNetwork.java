@@ -29,25 +29,19 @@ public class SendDataViaNetwork {
         //releaseResourcesInt(dataOutputStream,outputStream);
     }
 
-    public static Patient logIn(String email, String password, Socket socket) throws IOException
+    public static Patient logIn(String email, String password, PrintWriter printWriter) throws IOException
     {
         Patient patient = null;
         //Socket socket = new Socket("10.60.104.200", 8080);
-        PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+        /*PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
         InputStream inputStream = socket.getInputStream();
         DataInputStream dataInputStream = new DataInputStream(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));*/
         printWriter.println(email);
         printWriter.println(password);
         printWriter.println("stop");
+        return patient;
 
-        if(!dataInputStream.readBoolean()){
-            return null;
-        }
-        else{
-
-            return patient;
-        }
         //Método no terminado
     }
 
