@@ -133,6 +133,16 @@ public class LogInMenu {
             switch(printClientMenu()){
                 case 1:{
                     SendDataViaNetwork.sendInt(1, dataOutputStream);
+                    System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
+                    String message = "";
+                    int i = 1;
+                    while(!message.equals("stop")){
+                        message = ReceiveDataViaNetwork.receiveString(socket,bufferedReader);
+                        if(!message.equals("stop")){
+                            System.out.println(i+ ". " + message);
+                        }
+                        i++;
+                    }
                     System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
                     break;
                 }
