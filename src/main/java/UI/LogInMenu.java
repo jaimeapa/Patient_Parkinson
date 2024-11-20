@@ -9,6 +9,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.net.*;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,7 @@ public class LogInMenu {
     private static DataInputStream dataInputStream;
     private static ObjectInputStream objectInputStream;
     private static Role role;
+    private static Scanner scanner;
 
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
@@ -142,6 +144,23 @@ public class LogInMenu {
                             System.out.println(i+ ". " + message);
                         }
                         i++;
+                    }
+                    System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
+
+                    int symptomId;
+                    boolean mandarDatos = true;
+                    scanner = new Scanner(System.in);
+                    while (mandarDatos) {
+                        symptomId = scanner.nextInt();
+                        if (symptomId == 0) {
+                            mandarDatos = false;
+                            SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
+                        } else if (symptomId > 0 && symptomId < i-1) {
+                            SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
+                        }else{
+                            System.out.println("There are no symptoms with that number!");
+                            System.out.println("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'): ");
+                        }
                     }
                     System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
                     break;
