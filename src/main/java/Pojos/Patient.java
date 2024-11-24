@@ -169,13 +169,18 @@ public class Patient implements Serializable {
 
     public void recordBitalinoData(int seconds, String macAddress, Signal.SignalType signalType) throws BITalinoException {
         BITalino bitalino = new BITalino();
+        int channel = 0;
         try {
             Vector<RemoteDevice> devices = bitalino.findDevices();
             System.out.println(devices);
 
             bitalino.open(macAddress, samplingrate);
-
-            int[] channelsToAcquire = {0}; // Cambiar según el canal para EMG o EDA
+            if (signalType == Signal.SignalType.EMG) {
+                channel = 0;
+            } else if (signalType == Signal.SignalType.EDA) {
+                channel = 4;
+            }
+            int[] channelsToAcquire = {channel}; // Cambiar según el canal para EMG o EDA
             bitalino.start(channelsToAcquire);
 
             System.out.println(" - Recording " + signalType + " signal...");

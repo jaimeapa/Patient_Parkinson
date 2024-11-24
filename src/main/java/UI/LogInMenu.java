@@ -1,7 +1,9 @@
 package UI;
 
+import BITalino.BITalinoException;
 import Pojos.Patient;
 import Pojos.Role;
+import Pojos.Signal;
 import Pojos.User;
 import sendData.*;
 
@@ -178,10 +180,20 @@ public class LogInMenu {
                     {
                         case 1:
                         {
+                            try {
+                                patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
+                            }catch(BITalinoException e){
+                                System.out.println("Error al medir ");
+                            }
                             break;
                         }
                         case 2:
                         {
+                            try {
+                                patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
+                            }catch(BITalinoException e){
+                                System.out.println("Error al medir ");
+                            }
                             break;
                         }
                     }
