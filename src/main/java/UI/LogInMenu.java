@@ -172,16 +172,16 @@ public class LogInMenu {
                     System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
                     break;
                 }
+
                 case 2:{
-                    break;
-                }
-                case 3:{
+                    SendDataViaNetwork.sendInt(2, dataOutputStream);
                     switch(bitalinoMenu())
                     {
                         case 1:
                         {
                             try {
                                 patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
+                                SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EMG,dataOutputStream);
                             }catch(BITalinoException e){
                                 System.out.println("Error al medir ");
                             }
@@ -191,12 +191,16 @@ public class LogInMenu {
                         {
                             try {
                                 patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
+                                SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EDA,dataOutputStream);
                             }catch(BITalinoException e){
                                 System.out.println("Error al medir ");
                             }
                             break;
                         }
                     }
+                    break;
+                }
+                case 3:{
                     break;
                 }
                 case 4:{

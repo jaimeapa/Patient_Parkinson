@@ -44,6 +44,9 @@ public class Patient implements Serializable {
         this.surname = surname;
         this.dob = dob;
         this.email = email;
+        this.symptoms = new LinkedList<>();
+        this.values_EDA = new LinkedList<>();
+        this.values_EMG = new LinkedList<>();
     }
 
     public Patient(int patient_id, String name, String surname, LocalDate dob, String email) {
@@ -52,6 +55,9 @@ public class Patient implements Serializable {
         this.surname = surname;
         this.dob = dob;
         this.email = email;
+        this.symptoms = new LinkedList<>();
+        this.values_EDA = new LinkedList<>();
+        this.values_EMG = new LinkedList<>();
     }
 
     public void saveValues(Signal signal) {
@@ -175,24 +181,27 @@ public class Patient implements Serializable {
             System.out.println(devices);
 
             bitalino.open(macAddress, samplingrate);
+            System.out.println("Connection successful!");
+
             if (signalType == Signal.SignalType.EMG) {
                 channel = 0;
             } else if (signalType == Signal.SignalType.EDA) {
-                channel = 4;
+                channel = 2;
             }
             int[] channelsToAcquire = {channel}; // Cambiar según el canal para EMG o EDA
             bitalino.start(channelsToAcquire);
 
             System.out.println(" - Recording " + signalType + " signal...");
             LinkedList<Integer> recordedValues = new LinkedList<Integer>();
-
             for (int j = 0; j < seconds * samplingrate / 10; j++) {
+                System.out.println("Starting recording");
                 Frame[] frames = bitalino.read(samplingrate);
+                //System.out.println("Frames captured: " + frames.length);
                 for (Frame frame : frames) {
-                    recordedValues.add(frame.analog[0]);
+                    recordedValues.add(frame.analog[channel]);
                 }
             }
-
+            System.out.println(recordedValues);
             bitalino.stop();
 
             // Guardamos los valores según el tipo de señal

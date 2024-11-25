@@ -2,9 +2,11 @@ package sendData;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Pojos.Patient;
+import Pojos.Signal;
 import Pojos.User;
 
 public class SendDataViaNetwork {
@@ -84,6 +86,21 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(u.getRole().toString());
     }
 
+    public static void sendData(Patient patient, Signal.SignalType signalType, DataOutputStream dataOutputStream) throws IOException{
+        dataOutputStream.writeUTF(signalType.name());
+        if (signalType == Signal.SignalType.EMG) {
+            LinkedList<Integer> values_EMG = patient.getValues_EMG();
+            for(int i=0; i < values_EMG.size(); i++){
+                dataOutputStream.writeInt(values_EMG.get(i));
+            }
+        } else if (signalType == Signal.SignalType.EDA) {
+            LinkedList<Integer> values_EDA = patient.getValues_EDA();
+            for(int i=0; i < values_EDA.size(); i++){
+                dataOutputStream.writeInt(values_EDA.get(i));
+            }
+        }
+        dataOutputStream.writeInt(-1);
+    }
 
     private static void releaseResourcesForString(PrintWriter printWriter, Socket socket) {
         printWriter.close();
