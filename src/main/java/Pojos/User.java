@@ -1,7 +1,10 @@
 package Pojos;
 
+import java.rmi.NotBoundException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User {
     private Integer id;
@@ -31,8 +34,14 @@ public class User {
     public String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String email) throws NotBoundException {
+        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
+        Matcher mather = pattern.matcher(email);
+        if (mather.find() == true) {
+            this.email = email;
+        } else {
+            throw new NotBoundException("Not valid email");
+        }
     }
     public byte[] getPassword() {
         return password;

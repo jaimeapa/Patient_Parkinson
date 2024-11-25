@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import BITalino.Frame;
 import BITalino.BITalino;
@@ -60,23 +63,6 @@ public class Patient implements Serializable {
         this.values_EMG = new LinkedList<>();
     }
 
-    public void saveValues(Signal signal) {
-        if (signal != null) {
-            // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
-            LinkedList<Integer> signalValues = signal.getSignalValues(samplingrate);
-
-            // Verificamos el tipo de señal y guardamos los valores en la lista correspondiente.
-            if (signal.getSignalType() == Signal.SignalType.EMG) {
-                values_EMG.addAll(signalValues);
-                System.out.println("Valores guardados en values_EMG");
-            } else if (signal.getSignalType() == Signal.SignalType.EDA) {
-                values_EDA.addAll(signalValues);
-                System.out.println("Valores guardados en values_EDA");
-            }
-        } else {
-            System.out.println("No hay señal asignada a este paciente.");
-        }
-    }
 
 
     public int getPatient_id() {
@@ -115,8 +101,14 @@ public class Patient implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String email) throws NotBoundException {
+        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
+        Matcher mather = pattern.matcher(email);
+        if (mather.find() == true) {
+            this.email = email;
+        } else {
+            throw new NotBoundException("Not valid email");
+        }
     }
 
     public Pojos.Signal getSignal() {
@@ -151,6 +143,23 @@ public class Patient implements Serializable {
         this.values_EDA = values_EDA;
     }
 
+    public void saveValues(Signal signal) {
+        if (signal != null) {
+            // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
+            LinkedList<Integer> signalValues = signal.getSignalValues(samplingrate);
+
+            // Verificamos el tipo de señal y guardamos los valores en la lista correspondiente.
+            if (signal.getSignalType() == Signal.SignalType.EMG) {
+                values_EMG.addAll(signalValues);
+                System.out.println("Valores guardados en values_EMG");
+            } else if (signal.getSignalType() == Signal.SignalType.EDA) {
+                values_EDA.addAll(signalValues);
+                System.out.println("Valores guardados en values_EDA");
+            }
+        } else {
+            System.out.println("No hay señal asignada a este paciente.");
+        }
+    }
     public File almacenarDatosEnFichero() throws FileNotFoundException {
         Date date = java.sql.Date.valueOf(LocalDate.now());
         File file = new File("MeasurementsBitalino/" + name + "_" + surname + "-" + date + ".txt");
