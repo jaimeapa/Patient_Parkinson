@@ -22,7 +22,6 @@ public class LogInMenu {
     private static Socket socket;
     private static OutputStream outputStream;
     private static DataOutputStream dataOutputStream;
-    private static ClientMenu clientMenu;
     private static PrintWriter printWriter;
     private static BufferedReader bufferedReader;
     private static DataInputStream dataInputStream;
@@ -88,7 +87,7 @@ public class LogInMenu {
                 }else {
                     System.out.println("Log in successful");
                     System.out.println(patient.toString());
-                    clientMenu(patient);
+                    clientPatientMenu(patient);
                 }
             }
         }catch(IOException e){
@@ -127,11 +126,11 @@ public class LogInMenu {
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         SendDataViaNetwork.sendUser(u, dataOutputStream);
-        clientMenu(patient);
+        clientPatientMenu(patient);
 
     }
 
-    public static void clientMenu(Patient patient_logedIn) throws IOException {
+    public static void clientPatientMenu(Patient patient_logedIn) throws IOException {
         Patient patient = patient_logedIn;
         boolean menu = true;
         while(menu){
