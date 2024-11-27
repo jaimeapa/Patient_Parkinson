@@ -104,10 +104,17 @@ public class Signal {
     public void storeSignalInFile() {
         FileWriter fw = null;
         BufferedWriter bw = null;
+        String ruta=null;
         try {
-            String ruta = "MeasurementsBitalino\\" + signalFilename;
-            String contenido = getSignalValues(samplingrate).toString();
+            if(this.signalType==SignalType.EDA) {
+                ruta = "MeasurementsEDA\\" + signalFilename;
 
+            }else{
+                if(this.signalType==SignalType.EMG) {
+                    ruta = "MeasurementsEMG\\" + signalFilename;
+                }
+            }
+            String contenido = getSignalValues(samplingrate).toString();
             File file = new File(ruta);
             if (!file.exists()) {
                 file.createNewFile();
