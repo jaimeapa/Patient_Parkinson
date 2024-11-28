@@ -115,19 +115,31 @@ public class LogInMenu {
     {
         Patient patient = null;
         User u = null;
-        String name = Utilities.readString("Enter your name: ");
-        String surname = Utilities.readString("Enter your last name: ");
-        LocalDate dob = Utilities.readDate("Enter your date of birth: ");
+        String name;
+        String surname;
+        LocalDate dob;
+        String email;
+        String password;
+        name = Utilities.readString("Enter your name: ");
+        surname = Utilities.readString("Enter your last name: ");
+        dob = Utilities.readDate("Enter your date of birth: ");
         System.out.println(dob.toString());
-        String email = Utilities.readString("Enter your email: ");
+        do {
+            email = Utilities.readString("Enter your email: ");
+        }while(!Utilities.checkEmail(email));
+
         patient = new Patient(name,surname,dob,email);
-        String password = Utilities.readString("Enter your password: ");
+        password = Utilities.readString("Enter your password: ");
         u = new User(email, password.getBytes(), role);
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         SendDataViaNetwork.sendUser(u, dataOutputStream);
-        clientPatientMenu(patient);
-
+        String message = ReceiveDataViaNetwork.receiveString(socket, bufferedReader);
+        if(message.equals("ERROR")){
+            System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
+        }else {
+            clientPatientMenu(patient);
+        }
     }
 
     public static void clientPatientMenu(Patient patient_logedIn) throws IOException {
