@@ -76,7 +76,7 @@ public class LogInMenu {
         User u = new User (email,password.getBytes(), role);
         SendDataViaNetwork.sendUser(u, dataOutputStream);
         try {
-            Patient patient = ReceiveDataViaNetwork.recievePatient(socket, dataInputStream);
+            Patient patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
             if (patient != null) {
                 if(patient.getName().equals("name")){
                     System.out.println("User or password is incorrect");
@@ -131,8 +131,8 @@ public class LogInMenu {
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         SendDataViaNetwork.sendUser(u, dataOutputStream);
-        String message = ReceiveDataViaNetwork.receiveString(socket, bufferedReader);
-        patient = ReceiveDataViaNetwork.recievePatient(socket, dataInputStream);
+        String message = ReceiveDataViaNetwork.receiveString(bufferedReader);
+        patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
         if(message.equals("ERROR")){
             System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
         }else {
@@ -163,13 +163,20 @@ public class LogInMenu {
                 }
                 case 4:{
                     SendDataViaNetwork.sendInt(4, dataOutputStream);
-
                     break;
                 }
                 case 5:{
                     menu = false;
                     SendDataViaNetwork.sendInt(4, dataOutputStream);
-                    System.out.println("Closing server");
+                    System.out.println("Sending your data to the server...");
+                    SendDataViaNetwork.sendInterpretation(interpretation,dataOutputStream);
+                    if(ReceiveDataViaNetwork.receiveString(bufferedReader).equals("OK")){
+                        System.out.println("Data recieved by the server!");
+                    }else{
+                        System.out.println("Data was not recieved correctly");
+                    }
+
+                    System.out.println("Closing the server...");
                     break;
                 }
             }
@@ -189,7 +196,7 @@ public class LogInMenu {
                 + "\n2. Record Signal with BITalino"
                 + "\n3. See your data"
                 + "\n4. See your reports"
-                + "\n4. Log out"
+                + "\n5. Log out"
         );
         return Utilities.readInteger("What would you want to do?\n");
     }
@@ -247,7 +254,7 @@ public class LogInMenu {
         String message = "";
         int i = 1;
         while(!message.equals("stop")){
-            message = ReceiveDataViaNetwork.receiveString(socket,bufferedReader);
+            message = ReceiveDataViaNetwork.receiveString(bufferedReader);
             if(!message.equals("stop")){
                 System.out.println(i+ ". " + message);
                 symptomsInTable.add(message);
@@ -257,7 +264,7 @@ public class LogInMenu {
         }
         System.out.println(i+ ". Other symptoms\n");
         System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
-        System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
+        System.out.println(ReceiveDataViaNetwork.receiveString(bufferedReader));
 
         int symptomId;
         boolean mandarDatos = true;
@@ -292,7 +299,7 @@ public class LogInMenu {
                 System.out.println("Please, write yes or no");
             }
         }
-        System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
+        System.out.println(ReceiveDataViaNetwork.receiveString(bufferedReader));
     }
 
     private static void readBITalino(Patient patient_logedIn, Interpretation interpretation) throws IOException{
@@ -302,8 +309,8 @@ public class LogInMenu {
             case 1:
             {
                 try {
-                    patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
-                    SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EMG,dataOutputStream);
+                    interpretation.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
+                    //SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EMG,dataOutputStream);
                 }catch(BITalinoException e){
                     System.out.println("Error al medir ");
                 }
@@ -312,8 +319,8 @@ public class LogInMenu {
             case 2:
             {
                 try {
-                    patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
-                    SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EDA,dataOutputStream);
+                    interpretation.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
+                    //SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EDA,dataOutputStream);
                 }catch(BITalinoException e){
                     System.out.println("Error al medir ");
                 }
