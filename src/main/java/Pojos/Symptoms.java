@@ -9,6 +9,9 @@ public class Symptoms {
         this.id = id;
         this.name = name;
     }
+    public Symptoms (String name){
+        this.name = name;
+    }
 
     // Getter para id
     public int getId() {

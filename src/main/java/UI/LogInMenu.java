@@ -1,10 +1,7 @@
 package UI;
 
 import BITalino.BITalinoException;
-import Pojos.Patient;
-import Pojos.Role;
-import Pojos.Signal;
-import Pojos.User;
+import Pojos.*;
 import sendData.*;
 
 import java.io.*;
@@ -85,9 +82,10 @@ public class LogInMenu {
                 if(patient.getName().equals("name")){
                     System.out.println("User or password is incorrect");
                 }else {
+                    Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
                     System.out.println("Log in successful");
                     System.out.println(patient.toString());
-                    clientPatientMenu(patient);
+                    clientPatientMenu(patient, doctor);
                 }
             }
         }catch(IOException e){
@@ -138,17 +136,21 @@ public class LogInMenu {
         if(message.equals("ERROR")){
             System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
         }else {
-            clientPatientMenu(patient);
+            Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
+            clientPatientMenu(patient, doctor);
         }
     }
 
-    public static void clientPatientMenu(Patient patient_logedIn) throws IOException {
+    public static void clientPatientMenu(Patient patient_logedIn, Doctor assignedDoctor) throws IOException {
         Patient patient = patient_logedIn;
+        LocalDate date = LocalDate.now();
+        Interpretation interpretation = new Interpretation(date, patient_logedIn, assignedDoctor);
         boolean menu = true;
         while(menu){
             switch(printClientMenu()){
                 case 1:{
                     SendDataViaNetwork.sendInt(1, dataOutputStream);
+                    LinkedList<String> symptomsInTable = new LinkedList<>();
                     System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
                     String message = "";
                     int i = 1;
@@ -156,13 +158,20 @@ public class LogInMenu {
                         message = ReceiveDataViaNetwork.receiveString(socket,bufferedReader);
                         if(!message.equals("stop")){
                             System.out.println(i+ ". " + message);
+                            symptomsInTable.add(message);
+                            i++;
                         }
-                        i++;
+
                     }
+                    System.out.println(i+ ". Other symptoms\n");
+                    System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
                     System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
 
                     int symptomId;
+                    String newSymptom = "";
                     boolean mandarDatos = true;
+                    Symptoms symptomAdded = null;
+                    LinkedList<Symptoms> symptomsOfPatient = new LinkedList<>();
                     scanner = new Scanner(System.in);
                     LinkedList<Integer> alreadySendId = new LinkedList<>();
                     while (mandarDatos) {
@@ -172,12 +181,21 @@ public class LogInMenu {
                             SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
                         } else if (alreadySendId.contains(symptomId)) {
                             System.out.println("You already selected that symptom!");
-                        }else if (symptomId > 0 && symptomId < i-1) {
+                        }else if (symptomId > 0 && symptomId < i) {
                             SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
                             alreadySendId.add(symptomId);
+                            symptomAdded = new Symptoms(symptomsInTable.get(symptomId - 1));
+                            patient_logedIn.addSymptom(symptomAdded);
                         }else{
                             System.out.println("There are no symptoms with that number!");
                             System.out.println("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'): ");
+                        }
+                    }
+                    if(Utilities.readString("Would you like to add other symptom that is not in the list?[yes/no]").equalsIgnoreCase("yes")){
+                        while(!newSymptom.equalsIgnoreCase("stop")) {
+                            newSymptom = Utilities.readString("Write your symptom, write 'stop' when you are finished");
+                            symptomAdded = new Symptoms(newSymptom);
+                            patient_logedIn.addSymptom(symptomAdded);
                         }
                     }
                     System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
@@ -212,9 +230,15 @@ public class LogInMenu {
                     break;
                 }
                 case 3:{
+                    System.out.println(patient.toString());
                     break;
                 }
                 case 4:{
+                    SendDataViaNetwork.sendInt(4, dataOutputStream);
+
+                    break;
+                }
+                case 5:{
                     menu = false;
                     SendDataViaNetwork.sendInt(4, dataOutputStream);
                     System.out.println("Closing server");
@@ -236,6 +260,7 @@ public class LogInMenu {
                 + "\n1. Input your symptoms"
                 + "\n2. Record Signal with BITalino"
                 + "\n3. See your data"
+                + "\n4. See your reports"
                 + "\n4. Log out"
         );
         return Utilities.readInteger("What would you want to do?\n");

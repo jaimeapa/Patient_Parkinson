@@ -1,5 +1,6 @@
 package sendData;
 
+import Pojos.Doctor;
 import Pojos.Patient;
 import Pojos.Role;
 import Pojos.User;
@@ -20,6 +21,35 @@ public class ReceiveDataViaNetwork {
         information = bufferedReader.readLine();
         //System.out.println(information);
         return information;
+    }
+
+    public static Doctor receiveDoctor(DataInputStream dataInputStream){
+        //InputStream inputStream = null;
+        //ObjectInputStream objectInputStream = null;
+        Doctor doctor = null;
+
+        try {
+            //Object tmp;
+            String name = dataInputStream.readUTF();
+            String surname = dataInputStream.readUTF();
+            String date = dataInputStream.readUTF();
+            String email = dataInputStream.readUTF();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dob = LocalDate.parse(date, formatter);
+            doctor = new Doctor(name,surname,dob,email);
+
+            //patient = (Patient) objectInputStream.readObject();
+        } catch (EOFException ex) {
+            System.out.println("All data have been correctly read.");
+        } catch (IOException  ex) {
+            System.out.println("Unable to read from the client.");
+            ex.printStackTrace();
+            //Logger.getLogger(ReceiveClientViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(doctor != null){
+            System.out.println(doctor.toString()   );
+        }
+        return doctor;
     }
 
     public static Patient recievePatient(Socket socket, DataInputStream dataInputStream){

@@ -142,6 +142,9 @@ public class Patient implements Serializable {
     public void setValues_EDA(LinkedList<Integer> values_EDA) {
         this.values_EDA = values_EDA;
     }
+    public void addSymptom(Symptoms symptoms){
+        this.symptoms.add(symptoms);
+    }
 
     public void saveValues(Signal signal) {
         if (signal != null) {
@@ -252,5 +255,6 @@ public class Patient implements Serializable {
                 ", values EDA=" + values_EDA +
                 '}';
     }
+
 
 }
