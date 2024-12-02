@@ -9,45 +9,60 @@ import Pojos.Doctor;
 
 public class Interpretation {
 
+    private int interpretation_id;
     private LocalDate date;
-    private Patient patient;
-    private Doctor doctor;
+    private int patient_id;
+    private int doctor_id;
+    private Signal signalEMG;
+    private Signal signalEDA;
     private String interpretation;
+    private List<Symptoms> symptoms;
 
-    public Interpretation(LocalDate date, Patient patient, Doctor doctor, String interpretation) {
+    public Interpretation(LocalDate date, int patient, int doctor, String interpretation) {
         this.date = date;
-        this.patient = patient;
-        this.doctor = doctor;
+        this.patient_id = patient;
+        this.doctor_id = doctor;
         this.interpretation = interpretation;
     }
-    public Interpretation(LocalDate date, Patient patient, Doctor doctor){
+    public Interpretation(int interpretation_id, LocalDate date, int patient, int doctor, String interpretation) {
+        this.interpretation_id = interpretation_id;
         this.date = date;
-        this.patient = patient;
-        this.doctor = doctor;
+        this.patient_id = patient;
+        this.doctor_id = doctor;
+        this.interpretation = interpretation;
+    }
+    public Interpretation(LocalDate date, int patient, int doctor){
+        this.date = date;
+        this.patient_id = patient;
+        this.doctor_id = doctor;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
+    public int getInterpretation_id() {
+        return interpretation_id;
+    }
+
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public int getPatient() {
+        return patient_id;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatient(int patient) {
+        this.patient_id = patient;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public int getDoctor() {
+        return doctor_id;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setDoctor(int doctor) {
+        this.doctor_id = doctor;
     }
 
     public String getInterpretation() {
@@ -56,5 +71,13 @@ public class Interpretation {
 
     public void setInterpretation(String interpretation) {
         this.interpretation = interpretation;
+    }
+
+    public void setInterpretation_id(int interpretation_id) {
+        this.interpretation_id = interpretation_id;
+    }
+
+    public void addSymptom(Symptoms symptom){
+        this.symptoms.add(symptom);
     }
 }

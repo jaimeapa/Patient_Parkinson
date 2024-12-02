@@ -133,6 +133,7 @@ public class LogInMenu {
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         SendDataViaNetwork.sendUser(u, dataOutputStream);
         String message = ReceiveDataViaNetwork.receiveString(socket, bufferedReader);
+        patient = ReceiveDataViaNetwork.recievePatient(socket, dataInputStream);
         if(message.equals("ERROR")){
             System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
         }else {
@@ -144,89 +145,17 @@ public class LogInMenu {
     public static void clientPatientMenu(Patient patient_logedIn, Doctor assignedDoctor) throws IOException {
         Patient patient = patient_logedIn;
         LocalDate date = LocalDate.now();
-        Interpretation interpretation = new Interpretation(date, patient_logedIn, assignedDoctor);
+        Interpretation interpretation = new Interpretation(date, patient_logedIn.getPatient_id(), assignedDoctor.getDoctor_id());
         boolean menu = true;
         while(menu){
             switch(printClientMenu()){
                 case 1:{
-                    SendDataViaNetwork.sendInt(1, dataOutputStream);
-                    LinkedList<String> symptomsInTable = new LinkedList<>();
-                    System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
-                    String message = "";
-                    int i = 1;
-                    while(!message.equals("stop")){
-                        message = ReceiveDataViaNetwork.receiveString(socket,bufferedReader);
-                        if(!message.equals("stop")){
-                            System.out.println(i+ ". " + message);
-                            symptomsInTable.add(message);
-                            i++;
-                        }
-
-                    }
-                    System.out.println(i+ ". Other symptoms\n");
-                    System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
-                    System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
-
-                    int symptomId;
-                    String newSymptom = "";
-                    boolean mandarDatos = true;
-                    Symptoms symptomAdded = null;
-                    LinkedList<Symptoms> symptomsOfPatient = new LinkedList<>();
-                    scanner = new Scanner(System.in);
-                    LinkedList<Integer> alreadySendId = new LinkedList<>();
-                    while (mandarDatos) {
-                        symptomId = scanner.nextInt();
-                        if (symptomId == 0) {
-                            mandarDatos = false;
-                            SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
-                        } else if (alreadySendId.contains(symptomId)) {
-                            System.out.println("You already selected that symptom!");
-                        }else if (symptomId > 0 && symptomId < i) {
-                            SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
-                            alreadySendId.add(symptomId);
-                            symptomAdded = new Symptoms(symptomsInTable.get(symptomId - 1));
-                            patient_logedIn.addSymptom(symptomAdded);
-                        }else{
-                            System.out.println("There are no symptoms with that number!");
-                            System.out.println("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'): ");
-                        }
-                    }
-                    if(Utilities.readString("Would you like to add other symptom that is not in the list?[yes/no]").equalsIgnoreCase("yes")){
-                        while(!newSymptom.equalsIgnoreCase("stop")) {
-                            newSymptom = Utilities.readString("Write your symptom, write 'stop' when you are finished");
-                            symptomAdded = new Symptoms(newSymptom);
-                            patient_logedIn.addSymptom(symptomAdded);
-                        }
-                    }
-                    System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
+                    readSymptoms(patient_logedIn, interpretation);
                     break;
                 }
 
                 case 2:{
-                    SendDataViaNetwork.sendInt(2, dataOutputStream);
-                    switch(bitalinoMenu())
-                    {
-                        case 1:
-                        {
-                            try {
-                                patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
-                                SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EMG,dataOutputStream);
-                            }catch(BITalinoException e){
-                                System.out.println("Error al medir ");
-                            }
-                            break;
-                        }
-                        case 2:
-                        {
-                            try {
-                                patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
-                                SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EDA,dataOutputStream);
-                            }catch(BITalinoException e){
-                                System.out.println("Error al medir ");
-                            }
-                            break;
-                        }
-                    }
+                    readBITalino(patient_logedIn, interpretation);
                     break;
                 }
                 case 3:{
@@ -309,6 +238,86 @@ public class LogInMenu {
         } catch (IOException ex) {
             //Logger.getLogger(SendBinaryDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
+        }
+    }
+
+    private static void readSymptoms(Patient patient_logedIn, Interpretation interpretation) throws  IOException{
+        SendDataViaNetwork.sendInt(1, dataOutputStream);
+        LinkedList<String> symptomsInTable = new LinkedList<>();
+        System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
+        String message = "";
+        int i = 1;
+        while(!message.equals("stop")){
+            message = ReceiveDataViaNetwork.receiveString(socket,bufferedReader);
+            if(!message.equals("stop")){
+                System.out.println(i+ ". " + message);
+                symptomsInTable.add(message);
+                i++;
+            }
+
+        }
+        System.out.println(i+ ". Other symptoms\n");
+        System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
+        System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
+
+        int symptomId;
+        String newSymptom = "";
+        boolean mandarDatos = true;
+        Symptoms symptomAdded = null;
+        LinkedList<Symptoms> symptomsOfPatient = new LinkedList<>();
+        scanner = new Scanner(System.in);
+        LinkedList<Integer> alreadySendId = new LinkedList<>();
+        while (mandarDatos) {
+            symptomId = scanner.nextInt();
+            if (symptomId == 0) {
+                mandarDatos = false;
+                SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
+            } else if (alreadySendId.contains(symptomId)) {
+                System.out.println("You already selected that symptom!");
+            }else if (symptomId > 0 && symptomId < i) {
+                SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
+                alreadySendId.add(symptomId);
+                symptomAdded = new Symptoms(symptomsInTable.get(symptomId - 1));
+                interpretation.addSymptom(symptomAdded);
+            }else{
+                System.out.println("There are no symptoms with that number!");
+                System.out.println("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'): ");
+            }
+        }
+        if(Utilities.readString("Would you like to add other symptom that is not in the list?[yes/no]").equalsIgnoreCase("yes")){
+            while(!newSymptom.equalsIgnoreCase("stop")) {
+                newSymptom = Utilities.readString("Write your symptom, write 'stop' when you are finished");
+                symptomAdded = new Symptoms(newSymptom);
+                interpretation.addSymptom(symptomAdded);
+            }
+        }
+        System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
+    }
+
+    private static void readBITalino(Patient patient_logedIn, Interpretation interpretation) throws IOException{
+        SendDataViaNetwork.sendInt(2, dataOutputStream);
+        switch(bitalinoMenu())
+        {
+            case 1:
+            {
+                try {
+                    patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
+                    SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EMG,dataOutputStream);
+                }catch(BITalinoException e){
+                    System.out.println("Error al medir ");
+                }
+                break;
+            }
+            case 2:
+            {
+                try {
+                    patient_logedIn.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
+                    SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EDA,dataOutputStream);
+                }catch(BITalinoException e){
+                    System.out.println("Error al medir ");
+                }
+                break;
+            }
         }
     }
 }
