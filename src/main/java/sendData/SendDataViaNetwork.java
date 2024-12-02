@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import Pojos.Interpretation;
 import Pojos.Patient;
 import Pojos.Signal;
 import Pojos.User;
@@ -78,6 +80,14 @@ public class SendDataViaNetwork {
 
         }*/
 
+    }
+
+    public static void sendInterpretation(Interpretation interpretation, DataOutputStream dataOutputStream) throws IOException{
+        dataOutputStream.writeUTF(interpretation.getDate().toString());
+        dataOutputStream.writeInt(interpretation.getDoctor());
+        dataOutputStream.writeInt(interpretation.getPatient());
+        dataOutputStream.writeUTF(interpretation.getSignalEMG().valuesToString());
+        dataOutputStream.writeUTF(interpretation.getSignalEDA().valuesToString());
     }
     public static void sendUser(User u, DataOutputStream dataOutputStream) throws IOException
     {

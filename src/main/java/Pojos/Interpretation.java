@@ -17,6 +17,7 @@ public class Interpretation {
     private Signal signalEDA;
     private String interpretation;
     private List<Symptoms> symptoms;
+    private String observation;
 
     public Interpretation(LocalDate date, int patient, int doctor, String interpretation) {
         this.date = date;
@@ -61,6 +62,18 @@ public class Interpretation {
         return doctor_id;
     }
 
+    public Signal getSignalEMG() {
+        return signalEMG;
+    }
+
+    public Signal getSignalEDA() {
+        return signalEDA;
+    }
+
+    public String getObservation() {
+        return observation;
+    }
+
     public void setDoctor(int doctor) {
         this.doctor_id = doctor;
     }
@@ -75,6 +88,18 @@ public class Interpretation {
 
     public void setInterpretation_id(int interpretation_id) {
         this.interpretation_id = interpretation_id;
+    }
+
+    public void setSignalEMG(Signal signalEMG) {
+        this.signalEMG = signalEMG;
+    }
+
+    public void setSignalEDA(Signal signalEDA) {
+        this.signalEDA = signalEDA;
+    }
+
+    public void setObservation(String observation) {
+        this.observation = observation;
     }
 
     public void addSymptom(Symptoms symptom){

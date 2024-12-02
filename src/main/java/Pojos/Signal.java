@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 
 public class Signal {
     private List<Integer> values;
-    private String patientName;
-    private LocalDate beginDate;
     private String signalFilename;
     private SignalType signalType;
     public static final int samplingrate = 100;
@@ -25,27 +23,15 @@ public class Signal {
     }
 
     // Constructor único
-    public Signal(List<Integer> values, String patientName, LocalDate beginDate, SignalType signalType) {
-        this.values = values;
-        this.patientName = patientName;
-        this.beginDate = beginDate;
-        this.signalType = signalType;
-        this.signalFilename = createFilename();
-    }
+
 
     public Signal(SignalType signaltype, List<Integer> values){
         this.values = values;
         this.signalType = signaltype;
     }
 
-    public Signal(SignalType signaltype, List<Integer> values, LocalDate beginDate){
-        this.values = values;
-        this.signalType = signaltype;
-        this.beginDate = beginDate;
-    }
-
     // Método para crear el nombre del archivo basado en el tipo de señal
-    private String createFilename() {
+    /*private String createFilename() {
         Calendar c = Calendar.getInstance();
         String day = Integer.toString(c.get(Calendar.DATE));
         String month = Integer.toString(c.get(Calendar.MONTH));
@@ -57,7 +43,7 @@ public class Signal {
 
         String signalPrefix = signalType == SignalType.EMG ? "EMG" : "EDA";
         return patientName + signalPrefix + day + month + year + "_" + hour + minute + second + millisecond + ".txt";
-    }
+    }*/
 
     // Métodos getters y setters
     public List<Integer> getValues() {
@@ -68,21 +54,7 @@ public class Signal {
         this.values = values;
     }
 
-    public String getPatientName() {
-        return patientName;
-    }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public LocalDate getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(LocalDate beginDate) {
-        this.beginDate = beginDate;
-    }
 
     public String getSignalFilename() {
         return signalFilename;
@@ -168,13 +140,24 @@ public class Signal {
     }*/
 
 
+    public String valuesToString() {
+        StringBuilder message = new StringBuilder();
+        String separator = " ";
+
+        for (int i = 0; i < values.size(); i++) {
+            message.append(values.get(i));
+            if (i < values.size() - 1) {
+                message.append(separator);
+            }
+        }
+
+        return message.toString();
+    }
 
     @Override
     public String toString() {
         return "Signal{" +
                 "values=" + values +
-                ", patientName='" + patientName + '\'' +
-                ", beginDate=" + beginDate +
                 ", signalFilename='" + signalFilename + '\'' +
                 ", signalType=" + signalType +
                 '}';

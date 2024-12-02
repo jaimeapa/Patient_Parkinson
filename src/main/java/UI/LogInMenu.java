@@ -24,7 +24,6 @@ public class LogInMenu {
     private static DataInputStream dataInputStream;
     private static ObjectInputStream objectInputStream;
     private static Role role;
-    private static Scanner scanner;
 
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
@@ -261,14 +260,11 @@ public class LogInMenu {
         System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
 
         int symptomId;
-        String newSymptom = "";
         boolean mandarDatos = true;
         Symptoms symptomAdded = null;
-        LinkedList<Symptoms> symptomsOfPatient = new LinkedList<>();
-        scanner = new Scanner(System.in);
         LinkedList<Integer> alreadySendId = new LinkedList<>();
         while (mandarDatos) {
-            symptomId = scanner.nextInt();
+            symptomId = Utilities.readInteger("Insert a number: ");
             if (symptomId == 0) {
                 mandarDatos = false;
                 SendDataViaNetwork.sendInt(symptomId, dataOutputStream);
@@ -284,11 +280,16 @@ public class LogInMenu {
                 System.out.println("Type the numbers corresponding to the symptoms you have (To stop adding symptoms type '0'): ");
             }
         }
-        if(Utilities.readString("Would you like to add other symptom that is not in the list?[yes/no]").equalsIgnoreCase("yes")){
-            while(!newSymptom.equalsIgnoreCase("stop")) {
-                newSymptom = Utilities.readString("Write your symptom, write 'stop' when you are finished");
-                symptomAdded = new Symptoms(newSymptom);
-                interpretation.addSymptom(symptomAdded);
+        while(true) {
+            if (Utilities.readString("Would you like to add a more detailed description of your symptoms?[yes/no]").equalsIgnoreCase("yes")) {
+                //SendDataViaNetwork.sendStrings("ADDSYMPTOM", printWriter);
+                interpretation.setObservation(Utilities.readString("Write how you are feeling:\n"));
+                break;
+            } else if (Utilities.readString("Would you like to add a more detailed description of your symptoms?[yes/no]").equalsIgnoreCase("no")) {
+                System.out.println("Noted!");
+                break;
+            }else{
+                System.out.println("Please, write yes or no");
             }
         }
         System.out.println(ReceiveDataViaNetwork.receiveString(socket, bufferedReader));
