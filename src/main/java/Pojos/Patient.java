@@ -26,30 +26,14 @@ public class Patient implements Serializable {
     private LocalDate dob;
     private String email;
     private Signal signal;
-    private LinkedList<Symptoms>  symptoms;
-    private LinkedList<Integer> values_EDA;
-    private LinkedList<Integer> values_EMG;
-    public static final int samplingrate = 100;
 
-    public Patient(int patient_id, String name, String surname, LocalDate dob, String email,LinkedList<Symptoms>  symptoms) {
-        this.patient_id = patient_id;
-        this.name = name;
-        this.surname = surname;
-        this.dob = dob;
-        this.email = email;
-        this.symptoms = new LinkedList<>();
-        this.values_EDA = new LinkedList<>();
-        this.values_EMG = new LinkedList<>();
-    }
+
 
     public Patient(String name, String surname, LocalDate dob, String email) {
         this.name = name;
         this.surname = surname;
         this.dob = dob;
         this.email = email;
-        this.symptoms = new LinkedList<>();
-        this.values_EDA = new LinkedList<>();
-        this.values_EMG = new LinkedList<>();
     }
 
     public Patient(int patient_id, String name, String surname, LocalDate dob, String email) {
@@ -58,11 +42,7 @@ public class Patient implements Serializable {
         this.surname = surname;
         this.dob = dob;
         this.email = email;
-        this.symptoms = new LinkedList<>();
-        this.values_EDA = new LinkedList<>();
-        this.values_EMG = new LinkedList<>();
     }
-
 
 
     public int getPatient_id() {
@@ -119,126 +99,7 @@ public class Patient implements Serializable {
         this.signal = signal;
     }
 
-    public LinkedList<Symptoms> getSymptoms() {
-        return symptoms;
-    }
 
-    public void setSymptoms(LinkedList<Symptoms> symptoms) {
-        this.symptoms = symptoms;
-    }
-
-    public LinkedList<Integer> getValues_EMG() {
-        return values_EMG;
-    }
-
-    public void setValues_EMG(LinkedList<Integer> values_EMG) {
-        this.values_EMG = values_EMG;
-    }
-
-    public LinkedList<Integer> getValues_EDA() {
-        return values_EDA;
-    }
-
-    public void setValues_EDA(LinkedList<Integer> values_EDA) {
-        this.values_EDA = values_EDA;
-    }
-    public void addSymptom(Symptoms symptoms){
-        this.symptoms.add(symptoms);
-    }
-
-    public void saveValues(Signal signal) {
-        if (signal != null) {
-            // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
-            LinkedList<Integer> signalValues = signal.getSignalValues(samplingrate);
-
-            // Verificamos el tipo de señal y guardamos los valores en la lista correspondiente.
-            if (signal.getSignalType() == Signal.SignalType.EMG) {
-                values_EMG.addAll(signalValues);
-                System.out.println("Valores guardados en values_EMG");
-            } else if (signal.getSignalType() == Signal.SignalType.EDA) {
-                values_EDA.addAll(signalValues);
-                System.out.println("Valores guardados en values_EDA");
-            }
-        } else {
-            System.out.println("No hay señal asignada a este paciente.");
-        }
-    }
-    public File almacenarDatosEnFichero() throws FileNotFoundException {
-        Date date = java.sql.Date.valueOf(LocalDate.now());
-        File file = new File("MeasurementsBitalino/" + name + "_" + surname + "-" + date + ".txt");
-
-        try (PrintWriter pw = new PrintWriter(file)) {
-            pw.println("Patient: " + toString());
-
-            pw.println(" - Bitalino recorded data: ");
-            if (signal != null) {
-                if (signal.getSignalType() == Signal.SignalType.EMG) {
-                    values_EMG.forEach(value -> pw.println("   " + value));
-                } else if (signal.getSignalType() == Signal.SignalType.EDA) {
-                    values_EDA.forEach(value -> pw.println("   " + value));
-                }
-            } else {
-                pw.println("   No signal data available.");
-            }
-        }
-
-        return file;
-    }
-
-    public void recordBitalinoData(int seconds, String macAddress, Signal.SignalType signalType) throws BITalinoException {
-        BITalino bitalino = new BITalino();
-        int channel = 0;
-        try {
-            Vector<RemoteDevice> devices = bitalino.findDevices();
-            System.out.println(devices);
-
-            bitalino.open(macAddress, samplingrate);
-            System.out.println("Connection successful!");
-
-            if (signalType == Signal.SignalType.EMG) {
-                channel = 0;
-            } else if (signalType == Signal.SignalType.EDA) {
-                channel = 2;
-            }
-            int[] channelsToAcquire = {channel}; // Cambiar según el canal para EMG o EDA
-            bitalino.start(channelsToAcquire);
-
-            System.out.println(" - Recording " + signalType + " signal...");
-            LinkedList<Integer> recordedValues = new LinkedList<Integer>();
-            for (int j = 0; j < seconds * samplingrate / 10; j++) {
-                System.out.println("Starting recording");
-                Frame[] frames = bitalino.read(samplingrate);
-                //System.out.println("Frames captured: " + frames.length);
-                for (Frame frame : frames) {
-                    recordedValues.add(frame.analog[channel]);
-                }
-            }
-            System.out.println(recordedValues);
-            bitalino.stop();
-
-            // Guardamos los valores según el tipo de señal
-            if (signalType == Signal.SignalType.EMG) {
-                values_EMG.addAll(recordedValues);
-                this.signal = new Signal(Signal.SignalType.EMG, values_EMG);
-            } else if (signalType == Signal.SignalType.EDA) {
-                values_EDA.addAll(recordedValues);
-                this.signal = new Signal(Signal.SignalType.EDA, values_EDA);
-            }
-
-        } catch (BITalinoException ex) {
-        ex.printStackTrace();
-    } catch (Throwable ex) {
-        ex.printStackTrace();
-    } finally {
-        try {
-            if (bitalino != null) {
-                bitalino.close();
-            }
-        } catch (BITalinoException ex) {
-            ex.printStackTrace();
-        }
-    }
-    }
 
 
     @Override

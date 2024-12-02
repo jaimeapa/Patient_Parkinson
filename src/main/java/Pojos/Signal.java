@@ -24,7 +24,10 @@ public class Signal {
 
     // Constructor único
 
-
+    public Signal(SignalType signaltype){
+        this.values = new LinkedList<>();
+        this.signalType = signaltype;
+    }
     public Signal(SignalType signaltype, List<Integer> values){
         this.values = values;
         this.signalType = signaltype;
@@ -152,6 +155,10 @@ public class Signal {
         }
 
         return message.toString();
+    }
+
+    public void addValues(LinkedList<Integer> values){
+        this.values.addAll(values);
     }
 
     @Override
