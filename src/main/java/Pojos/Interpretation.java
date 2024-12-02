@@ -1,15 +1,11 @@
 package Pojos;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import Pojos.Signal.SignalType;
-import Pojos.Doctor;
 
 public class Interpretation {
 
-    private int interpretation_id;
+    private int id;
     private LocalDate date;
     private int patient_id;
     private int doctor_id;
@@ -26,7 +22,7 @@ public class Interpretation {
         this.interpretation = interpretation;
     }
     public Interpretation(int interpretation_id, LocalDate date, int patient, int doctor, String interpretation) {
-        this.interpretation_id = interpretation_id;
+        this.id = interpretation_id;
         this.date = date;
         this.patient_id = patient;
         this.doctor_id = doctor;
@@ -43,14 +39,14 @@ public class Interpretation {
     }
 
     public int getInterpretation_id() {
-        return interpretation_id;
+        return id;
     }
 
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public int getPatient() {
+    public int getPatient_id() {
         return patient_id;
     }
 
@@ -58,7 +54,7 @@ public class Interpretation {
         this.patient_id = patient;
     }
 
-    public int getDoctor() {
+    public int getDoctor_id() {
         return doctor_id;
     }
 
@@ -87,7 +83,7 @@ public class Interpretation {
     }
 
     public void setInterpretation_id(int interpretation_id) {
-        this.interpretation_id = interpretation_id;
+        this.id = interpretation_id;
     }
 
     public void setSignalEMG(Signal signalEMG) {

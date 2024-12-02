@@ -84,8 +84,8 @@ public class SendDataViaNetwork {
 
     public static void sendInterpretation(Interpretation interpretation, DataOutputStream dataOutputStream) throws IOException{
         dataOutputStream.writeUTF(interpretation.getDate().toString());
-        dataOutputStream.writeInt(interpretation.getDoctor());
-        dataOutputStream.writeInt(interpretation.getPatient());
+        dataOutputStream.writeInt(interpretation.getDoctor_id());
+        dataOutputStream.writeInt(interpretation.getPatient_id());
         dataOutputStream.writeUTF(interpretation.getSignalEMG().valuesToString());
         dataOutputStream.writeUTF(interpretation.getSignalEDA().valuesToString());
     }
