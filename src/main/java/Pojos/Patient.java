@@ -26,14 +26,14 @@ public class Patient implements Serializable {
     private LocalDate dob;
     private String email;
     private Signal signal;
-
-
+    private LinkedList<Interpretation> interpretations;
 
     public Patient(String name, String surname, LocalDate dob, String email) {
         this.name = name;
         this.surname = surname;
         this.dob = dob;
         this.email = email;
+        this.interpretations= new LinkedList<>();
     }
 
     public Patient(int patient_id, String name, String surname, LocalDate dob, String email) {
@@ -42,6 +42,7 @@ public class Patient implements Serializable {
         this.surname = surname;
         this.dob = dob;
         this.email = email;
+        this.interpretations= new LinkedList<>();
     }
 
 
@@ -111,9 +112,6 @@ public class Patient implements Serializable {
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
                 ", Signal=" + signal +
-                ", symptoms=" + symptoms +
-                ", values EMG=" + values_EMG +
-                ", values EDA=" + values_EDA +
                 '}';
     }
 
