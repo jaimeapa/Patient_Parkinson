@@ -88,6 +88,7 @@ public class SendDataViaNetwork {
         dataOutputStream.writeInt(interpretation.getPatient_id());
         dataOutputStream.writeUTF(interpretation.getSignalEMG().valuesToString());
         dataOutputStream.writeUTF(interpretation.getSignalEDA().valuesToString());
+        dataOutputStream.writeUTF(interpretation.getObservation());
     }
     public static void sendUser(User u, DataOutputStream dataOutputStream) throws IOException
     {
@@ -96,7 +97,7 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(u.getRole().toString());
     }
 
-    public static void sendData(Patient patient, Signal.SignalType signalType, DataOutputStream dataOutputStream) throws IOException{
+    /*public static void sendData(Patient patient, Signal.SignalType signalType, DataOutputStream dataOutputStream) throws IOException{
         dataOutputStream.writeUTF(signalType.name());
         if (signalType == Signal.SignalType.EMG) {
             LinkedList<Integer> values_EMG = patient.getValues_EMG();
@@ -110,7 +111,7 @@ public class SendDataViaNetwork {
             }
         }
         dataOutputStream.writeInt(-1);
-    }
+    }*/
 
     private static void releaseResourcesForString(PrintWriter printWriter, Socket socket) {
         printWriter.close();
