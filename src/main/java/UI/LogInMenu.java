@@ -156,7 +156,7 @@ public class LogInMenu {
                 }
 
                 case 2:{
-                    readBITalino(patient_logedIn, interpretation);
+                    readBITalino(interpretation);
                     break;
                 }
                 case 3:{
@@ -186,13 +186,7 @@ public class LogInMenu {
         }
     }
 
-    private static int bitalinoMenu(){
-        System.out.println("\n\nPossible measurements\n"
-                + "\n1. EMG"
-                + "\n2. EDA"
-        );
-        return Utilities.readInteger("What do you want to measure?\n");
-    }
+
     private static int printClientMenu(){
         System.out.println("\n\nDiagnosis Menu:\n"
                 + "\n1. Input your symptoms"
@@ -305,31 +299,13 @@ public class LogInMenu {
         System.out.println(ReceiveDataViaNetwork.receiveString(dataInputStream));
     }
 
-    private static void readBITalino(Patient patient_logedIn, Interpretation interpretation) throws IOException{
+    private static void readBITalino(Interpretation interpretation) throws IOException{
         SendDataViaNetwork.sendInt(2, dataOutputStream);
-        switch(bitalinoMenu())
-        {
-            case 1:
-            {
-                try {
-                    interpretation.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EMG);
-                    System.out.println(interpretation.getSignalEMG().valuesToString());
-                    //SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EMG,dataOutputStream);
-                }catch(BITalinoException e){
-                    System.out.println("Error al medir ");
-                }
-                break;
-            }
-            case 2:
-            {
-                try {
-                    interpretation.recordBitalinoData(5, "20:18:06:13:01:08", Signal.SignalType.EDA);
-                    //SendDataViaNetwork.sendData(patient_logedIn, Signal.SignalType.EDA,dataOutputStream);
-                }catch(BITalinoException e){
-                    System.out.println("Error al medir ");
-                }
-                break;
-            }
+        int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
+        try {
+            interpretation.recordBitalinoData(seconds, "20:18:06:13:01:08");
+        }catch(BITalinoException e){
+            System.out.println("Error al medir ");
         }
     }
 }

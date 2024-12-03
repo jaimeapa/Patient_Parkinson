@@ -167,7 +167,7 @@ public class Interpretation {
         return file;
     }*/
 
-    public void recordBitalinoData(int seconds, String macAddress, Signal.SignalType signalType) throws BITalinoException {
+    public void recordBitalinoData(int seconds, String macAddress) throws BITalinoException {
         BITalino bitalino = new BITalino();
         int channel = 0;
         try {
@@ -185,7 +185,7 @@ public class Interpretation {
             int[] channelsToAcquire = {0,2}; // Cambiar según el canal para EMG o EDA
             bitalino.start(channelsToAcquire);
 
-            System.out.println(" - Recording " + signalType + " signal...");
+            System.out.println(" - Recording the EMG and EDA signals...");
             LinkedList<Integer> recordedValuesEDA = new LinkedList<Integer>();
             LinkedList<Integer> recordedValuesEMG = new LinkedList<Integer>();
             for (int j = 0; j < seconds /** samplingrate / 10*/; j++) {
