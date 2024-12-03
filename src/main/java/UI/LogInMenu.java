@@ -131,7 +131,7 @@ public class LogInMenu {
         //System.out.println(patient.toString());
         SendDataViaNetwork.sendPatient(patient, dataOutputStream);
         SendDataViaNetwork.sendUser(u, dataOutputStream);
-        String message = ReceiveDataViaNetwork.receiveString(bufferedReader);
+        String message = ReceiveDataViaNetwork.receiveString(dataInputStream);
         patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
         if(message.equals("ERROR")){
             System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
@@ -170,7 +170,7 @@ public class LogInMenu {
                     SendDataViaNetwork.sendInt(4, dataOutputStream);
                     System.out.println("Sending your data to the server...");
                     SendDataViaNetwork.sendInterpretation(interpretation,dataOutputStream);
-                    if(ReceiveDataViaNetwork.receiveString(bufferedReader).equals("OK")){
+                    if(ReceiveDataViaNetwork.receiveString(dataInputStream).equals("OK")){
                         System.out.println("Data recieved by the server!");
                     }else{
                         System.out.println("Data was not recieved correctly");
@@ -254,7 +254,7 @@ public class LogInMenu {
         String message = "";
         int i = 1;
         while(!message.equals("stop")){
-            message = ReceiveDataViaNetwork.receiveString(bufferedReader);
+            message = ReceiveDataViaNetwork.receiveString(dataInputStream);
             if(!message.equals("stop")){
                 System.out.println(i+ ". " + message);
                 symptomsInTable.add(message);
@@ -264,7 +264,7 @@ public class LogInMenu {
         }
         System.out.println(i+ ". Other symptoms\n");
         System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
-        System.out.println(ReceiveDataViaNetwork.receiveString(bufferedReader));
+        System.out.println(ReceiveDataViaNetwork.receiveString(dataInputStream));
 
         int symptomId;
         boolean mandarDatos = true;
@@ -299,7 +299,7 @@ public class LogInMenu {
                 System.out.println("Please, write yes or no");
             }
         }
-        System.out.println(ReceiveDataViaNetwork.receiveString(bufferedReader));
+        System.out.println(ReceiveDataViaNetwork.receiveString(dataInputStream));
     }
 
     private static void readBITalino(Patient patient_logedIn, Interpretation interpretation) throws IOException{

@@ -13,11 +13,10 @@ import Pojos.User;
 
 public class SendDataViaNetwork {
 
-    public static void sendStrings(String message, PrintWriter printWriter) throws IOException {
+    public static void sendStrings(String message, DataOutputStream dataOutputStream) throws IOException {
 
         //System.out.println("Connection established... sending text");
-        printWriter.println(message);
-        printWriter.println("stop");
+        dataOutputStream.writeUTF(message);
         //releaseResourcesForString(printWriter,socket);
 
     }
@@ -33,7 +32,7 @@ public class SendDataViaNetwork {
         //releaseResourcesInt(dataOutputStream,outputStream);
     }
 
-    public static Patient logIn(String email, String password, PrintWriter printWriter) throws IOException
+    public static Patient logIn(String email, String password, DataOutputStream dataOutputStream) throws IOException
     {
         Patient patient = null;
         //Socket socket = new Socket("10.60.104.200", 8080);
@@ -41,9 +40,11 @@ public class SendDataViaNetwork {
         InputStream inputStream = socket.getInputStream();
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));*/
-        printWriter.println(email);
+        /*printWriter.println(email);
         printWriter.println(password);
-        printWriter.println("stop");
+        printWriter.println("stop");*/
+        dataOutputStream.writeUTF(email);
+        dataOutputStream.writeUTF(password);
         return patient;
 
         //Método no terminado
