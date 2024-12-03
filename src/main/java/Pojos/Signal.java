@@ -156,6 +156,21 @@ public class Signal {
 
         return message.toString();
     }
+    public List<Integer> stringToValues(String str) {
+        values.clear(); // Limpiamos la lista antes de agregar nuevos valores.
+        String[] tokens = str.split(" "); // Dividimos el String por el espacio.
+
+        for (String token : tokens) {
+            try {
+                values.add(Integer.parseInt(token)); // Convertimos cada fragmento a Integer y lo agregamos a la LinkedList.
+            } catch (NumberFormatException e) {
+                // Manejo de error si algún valor no es un Integer válido.
+                System.out.println("Error al convertir el valor: " + token);
+            }
+        }
+
+        return values;
+    }
 
     public void addValues(LinkedList<Integer> values){
         this.values.addAll(values);
