@@ -36,6 +36,7 @@ public class Interpretation {
         this.interpretation = interpretation;
         this.signalEDA = new Signal(Signal.SignalType.EDA);
         this.signalEMG = new Signal(Signal.SignalType.EMG);
+        this.symptoms = new LinkedList<>();
 
     }
     public Interpretation(int interpretation_id, LocalDate date, int patient, int doctor, String interpretation) {
@@ -46,6 +47,7 @@ public class Interpretation {
         this.interpretation = interpretation;
         this.signalEDA = new Signal(Signal.SignalType.EDA);
         this.signalEMG = new Signal(Signal.SignalType.EMG);
+        this.symptoms = new LinkedList<>();
     }
     public Interpretation(LocalDate date, int patient, int doctor){
         this.date = date;
@@ -53,6 +55,9 @@ public class Interpretation {
         this.doctor_id = doctor;
         this.signalEDA = new Signal(Signal.SignalType.EDA);
         this.signalEMG = new Signal(Signal.SignalType.EMG);
+        this.interpretation = "";
+        this.observation = "";
+        this.symptoms = new LinkedList<>();
     }
 
     public LocalDate getDate() {

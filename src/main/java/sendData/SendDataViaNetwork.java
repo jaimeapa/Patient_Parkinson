@@ -68,6 +68,7 @@ public class SendDataViaNetwork {
             /*objectOutputStream.writeObject(patient);
             objectOutputStream.flush();
             objectOutputStream.reset();*/
+            dataOutputStream.writeInt(patient.getPatient_id());
             dataOutputStream.writeUTF(patient.getName());
             dataOutputStream.writeUTF(patient.getSurname());
             dataOutputStream.writeUTF(patient.getDob().toString());
@@ -90,11 +91,14 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(interpretation.getSignalEMG().valuesToString());
         dataOutputStream.writeUTF(interpretation.getSignalEDA().valuesToString());
         dataOutputStream.writeUTF(interpretation.getObservation());
+        dataOutputStream.writeUTF(interpretation.getInterpretation());
     }
     public static void sendUser(User u, DataOutputStream dataOutputStream) throws IOException
     {
         dataOutputStream.writeUTF(u.getEmail());
-        dataOutputStream.writeUTF(new String(u.getPassword()));
+        byte[] password = u.getPassword();
+
+        dataOutputStream.writeUTF(new String(password));
         dataOutputStream.writeUTF(u.getRole().toString());
     }
 

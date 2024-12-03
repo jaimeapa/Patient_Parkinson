@@ -133,10 +133,12 @@ public class LogInMenu {
         SendDataViaNetwork.sendUser(u, dataOutputStream);
         String message = ReceiveDataViaNetwork.receiveString(dataInputStream);
         patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
+        System.out.println(message);
         if(message.equals("ERROR")){
             System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
         }else {
             Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
+            System.out.println("Your doctor is: " + doctor.getName());
             clientPatientMenu(patient, doctor);
         }
     }
@@ -169,7 +171,7 @@ public class LogInMenu {
                     menu = false;
                     SendDataViaNetwork.sendInt(4, dataOutputStream);
                     System.out.println("Sending your data to the server...");
-                    SendDataViaNetwork.sendInterpretation(interpretation,dataOutputStream);
+                    SendDataViaNetwork.sendInterpretation(interpretation, dataOutputStream);
                     if(ReceiveDataViaNetwork.receiveString(dataInputStream).equals("OK")){
                         System.out.println("Data recieved by the server!");
                     }else{
