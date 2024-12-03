@@ -177,36 +177,39 @@ public class Interpretation {
             bitalino.open(macAddress, samplingrate);
             System.out.println("Connection successful!");
 
-            if (signalType == Signal.SignalType.EMG) {
+            /*if (signalType == Signal.SignalType.EMG) {
                 channel = 0;
             } else if (signalType == Signal.SignalType.EDA) {
                 channel = 2;
-            }
-            int[] channelsToAcquire = {channel}; // Cambiar según el canal para EMG o EDA
+            }*/
+            int[] channelsToAcquire = {0,2}; // Cambiar según el canal para EMG o EDA
             bitalino.start(channelsToAcquire);
 
             System.out.println(" - Recording " + signalType + " signal...");
-            LinkedList<Integer> recordedValues = new LinkedList<Integer>();
+            LinkedList<Integer> recordedValuesEDA = new LinkedList<Integer>();
+            LinkedList<Integer> recordedValuesEMG = new LinkedList<Integer>();
             for (int j = 0; j < seconds /** samplingrate / 10*/; j++) {
                 //System.out.println("Starting recording");
                 Frame[] frames = bitalino.read(samplingrate);
                 //System.out.println("Frames captured: " + frames.length);
                 for (Frame frame : frames) {
-                    recordedValues.add(frame.analog[channel]);
+                    recordedValuesEMG.add(frame.analog[0]);
+                    recordedValuesEDA.add(frame.analog[2]);
                 }
             }
-            System.out.println(recordedValues);
+            System.out.println(recordedValuesEMG);
+            System.out.println(recordedValuesEDA);
             bitalino.stop();
 
             // Guardamos los valores según el tipo de señal
-            if (signalType == Signal.SignalType.EMG) {
-                signalEMG.addValues(recordedValues);
+            //if (signalType == Signal.SignalType.EMG) {
+                signalEMG.addValues(recordedValuesEMG);
                 //this.signalEMG = new Signal(Signal.SignalType.EMG, signalEMG.getValues());
 
-            } else if (signalType == Signal.SignalType.EDA) {
-                signalEDA.addValues(recordedValues);
+            //} else if (signalType == Signal.SignalType.EDA) {
+                signalEDA.addValues(recordedValuesEDA);
                 //this.signalEDA = new Signal(Signal.SignalType.EDA, signalEDA.getValues());
-            }
+            //}
 
         } catch (BITalinoException ex) {
             ex.printStackTrace();
