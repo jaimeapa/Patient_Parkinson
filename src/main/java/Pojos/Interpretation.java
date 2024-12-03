@@ -187,8 +187,8 @@ public class Interpretation {
 
             System.out.println(" - Recording " + signalType + " signal...");
             LinkedList<Integer> recordedValues = new LinkedList<Integer>();
-            for (int j = 0; j < seconds * samplingrate / 10; j++) {
-                System.out.println("Starting recording");
+            for (int j = 0; j < seconds /** samplingrate / 10*/; j++) {
+                //System.out.println("Starting recording");
                 Frame[] frames = bitalino.read(samplingrate);
                 //System.out.println("Frames captured: " + frames.length);
                 for (Frame frame : frames) {
@@ -221,5 +221,19 @@ public class Interpretation {
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Interpretation{" +
+                "date=" + date +
+                ", patient_id=" + patient_id +
+                ", doctor_id=" + doctor_id +
+                ", signalEMG=" + signalEMG +
+                ", signalEDA=" + signalEDA +
+                ", interpretation='" + interpretation + '\'' +
+                ", symptoms=" + symptoms +
+                ", observation='" + observation + '\'' +
+                '}';
     }
 }
