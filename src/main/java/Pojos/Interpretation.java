@@ -59,6 +59,16 @@ public class Interpretation {
         this.observation = "";
         this.symptoms = new LinkedList<>();
     }
+    public Interpretation(LocalDate date, String interpretation, Signal signalEMG, Signal signalEDA, int patient_id, int doctor_id, String observation) {
+        this.date = date;
+        this.interpretation = interpretation;
+        this.symptoms = new LinkedList<>();
+        this.signalEMG = signalEMG;
+        this.signalEDA = signalEDA;
+        this.patient_id = patient_id;
+        this.doctor_id = doctor_id;
+        this.observation = observation;
+    }
 
     public LocalDate getDate() {
         return date;
@@ -228,15 +238,11 @@ public class Interpretation {
 
     @Override
     public String toString() {
-        return "Interpretation{" +
-                "date=" + date +
-                ", patient_id=" + patient_id +
-                ", doctor_id=" + doctor_id +
-                ", signalEMG=" + signalEMG +
-                ", signalEDA=" + signalEDA +
-                ", interpretation='" + interpretation + '\'' +
-                ", symptoms=" + symptoms +
-                ", observation='" + observation + '\'' +
-                '}';
+        return "Report " + date + ":"+
+                "\n signalEMG=" + signalEMG +
+                "\n signalEDA=" + signalEDA +
+                "\n Your Symptoms: " + symptoms +
+                "\n Your observations: '" + observation + '\'' +
+                "\n Doctor´s notes: '" + interpretation + '\'';
     }
 }

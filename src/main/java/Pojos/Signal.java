@@ -57,7 +57,12 @@ public class Signal {
         this.values = values;
     }
 
-
+    public void setValuesEMG(String stringEMG) {
+        this.values = stringToValues(stringEMG);
+    }
+    public void setValuesEDA(String stringEDA) {
+        this.values = stringToValues(stringEDA);
+    }
 
     public String getSignalFilename() {
         return signalFilename;
@@ -165,7 +170,7 @@ public class Signal {
                 values.add(Integer.parseInt(token)); // Convertimos cada fragmento a Integer y lo agregamos a la LinkedList.
             } catch (NumberFormatException e) {
                 // Manejo de error si algún valor no es un Integer válido.
-                System.out.println("Error al convertir el valor: " + token);
+                //System.out.println("Error al convertir el valor: " + token);
             }
         }
 

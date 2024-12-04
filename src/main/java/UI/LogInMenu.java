@@ -165,6 +165,33 @@ public class LogInMenu {
                 }
                 case 4:{
                     SendDataViaNetwork.sendInt(4, dataOutputStream);
+                    int length = ReceiveDataViaNetwork.receiveInt(dataInputStream);
+                    LinkedList<Interpretation> allInterpretations = new LinkedList<>();
+                    //LinkedList<Symptoms> allSymptoms = new LinkedList<>();
+                    String symptomName = "";
+                    int lengthSymptoms = 0;
+                    for(int i = 0; i < length; i++){
+                        Interpretation recievedInterpretation = ReceiveDataViaNetwork.recieveInterpretation(dataInputStream);
+                        allInterpretations.add(recievedInterpretation);
+                        System.out.println(i + 1 + ". " + recievedInterpretation.getDate().toString());
+                        lengthSymptoms = ReceiveDataViaNetwork.receiveInt(dataInputStream);
+                        if(lengthSymptoms != 0) {
+                            for (int j = 0; j < lengthSymptoms; j++) {
+                                symptomName = ReceiveDataViaNetwork.receiveString(dataInputStream);
+                                allInterpretations.get(i).addSymptom(new Symptoms(symptomName));
+                            }
+                        }
+                    }
+                    SendDataViaNetwork.sendStrings("RECEIVED", dataOutputStream);
+                    while(true) {
+                        int option = Utilities.readInteger("Choose the number of the report you want to see: \n");
+                        if (option - 1 >= length) {
+                            System.out.println("That number is not an option, choose one on the list [1 - " + length + "]: \n");
+                        } else if (allInterpretations.get(option - 1) != null) {
+                            System.out.println(allInterpretations.get(option - 1));
+                            break;
+                        }
+                    }
                     break;
                 }
                 case 5:{
