@@ -27,7 +27,7 @@ public class LogInMenu {
 
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
-        socket = new Socket("10.60.98.153", 8000);
+        socket = new Socket("localhost", 8000);
 
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
