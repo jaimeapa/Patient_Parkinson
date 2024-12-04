@@ -204,7 +204,7 @@ public class Interpretation {
                 //System.out.println("Frames captured: " + frames.length);
                 for (Frame frame : frames) {
                     recordedValuesEMG.add(frame.analog[0]);
-                    recordedValuesEDA.add(frame.analog[2]);
+                    recordedValuesEDA.add(frame.analog[1]);
                 }
             }
             System.out.println(recordedValuesEMG);
