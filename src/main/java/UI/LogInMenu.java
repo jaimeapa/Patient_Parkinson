@@ -16,37 +16,34 @@ import java.util.logging.Logger;
 
 
 public class LogInMenu {
-    private static Socket socket;
+    //private static Socket socket;
     private static SendDataViaNetwork sendDataViaNetwork;
     private static ReceiveDataViaNetwork receiveDataViaNetwork;
-    /*private static DataOutputStream dataOutputStream;
-    private static DataInputStream dataInputStream;
-    private static Role role;*/
 
     public static void main(String[] args){
         while(true) {
             String ipAdress = Utilities.readString("Write the IP address of the server you want to connect to:\n");
             try {
-                socket = new Socket("localhost", 8000);
+                Socket socket = new Socket(ipAdress, 8000);
                 sendDataViaNetwork = new SendDataViaNetwork(socket);
                 receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
-                sendDataViaNetwork.sendInt(1, socket);
+                sendDataViaNetwork.sendInt(1);
 
                 Role role = new Role("patient");
                 while (true) {
                     switch (printLogInMenu()) {
                         case 1: {
-                            sendDataViaNetwork.sendInt(1, socket);
+                            sendDataViaNetwork.sendInt(1);
                             registerPatient();
                             break;
                         }
                         case 2: {
-                            sendDataViaNetwork.sendInt(2, socket);
+                            sendDataViaNetwork.sendInt(2);
                             logInMenu();
                             break;
                         }
                         case 3: {
-                            exitProgram();
+                            exitProgram(socket);
                         }
                         default: {
                             System.out.println("That number is not an option, try again");
@@ -125,14 +122,14 @@ public class LogInMenu {
         if(password != null) {
             //Patient patient = SendDataViaNetwork.logIn(email, password, socket);
             User u = new User(email, password, role);
-            sendDataViaNetwork.sendUser(u, socket);
+            sendDataViaNetwork.sendUser(u);
             try {
-                Patient patient = receiveDataViaNetwork.recievePatient(socket);
+                Patient patient = receiveDataViaNetwork.recievePatient();
                 if (patient != null) {
                     if (patient.getName().equals("name")) {
                         System.out.println("User or password is incorrect");
                     } else {
-                        Doctor doctor = receiveDataViaNetwork.receiveDoctor(socket);
+                        Doctor doctor = receiveDataViaNetwork.receiveDoctor();
                         System.out.println("Log in successful");
                         System.out.println(patient.toString());
                         clientPatientMenu(patient, doctor);
@@ -171,28 +168,28 @@ public class LogInMenu {
         }
         if(password != null) {
             u = new User(email, password, role);
-            sendDataViaNetwork.sendPatient(patient, socket);
-            sendDataViaNetwork.sendUser(u, socket);
-            String message = receiveDataViaNetwork.receiveString(socket);
-            patient = receiveDataViaNetwork.recievePatient(socket);
+            sendDataViaNetwork.sendPatient(patient);
+            sendDataViaNetwork.sendUser(u);
+            String message = receiveDataViaNetwork.receiveString();
+            patient = receiveDataViaNetwork.recievePatient();
             System.out.println(message);
             if (message.equals("ERROR")) {
                 System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
             } else {
-                Doctor doctor = receiveDataViaNetwork.receiveDoctor(socket);
+                Doctor doctor = receiveDataViaNetwork.receiveDoctor();
                 System.out.println("Your doctor is: " + doctor.getName());
                 clientPatientMenu(patient, doctor);
             }
         }
     }
     private static void readSymptoms(Interpretation interpretation) throws  IOException{
-        sendDataViaNetwork.sendInt(1, socket);
+        sendDataViaNetwork.sendInt(1);
         LinkedList<String> symptomsInTable = new LinkedList<>();
         System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
         String message = "";
         int i = 1;
         while(!message.equals("stop")){
-            message = receiveDataViaNetwork.receiveString(socket);
+            message = receiveDataViaNetwork.receiveString();
             if(!message.equals("stop")){
                 System.out.println(i+ ". " + message);
                 symptomsInTable.add(message);
@@ -202,7 +199,7 @@ public class LogInMenu {
         }
         System.out.println(i+ ". Other symptoms\n");
         System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
-        System.out.println(receiveDataViaNetwork.receiveString(socket));
+        System.out.println(receiveDataViaNetwork.receiveString());
 
         int symptomId;
         boolean mandarDatos = true;
@@ -212,11 +209,11 @@ public class LogInMenu {
             symptomId = Utilities.readInteger("Insert a number: ");
             if (symptomId == 0) {
                 mandarDatos = false;
-                sendDataViaNetwork.sendInt(symptomId, socket);
+                sendDataViaNetwork.sendInt(symptomId);
             } else if (alreadySendId.contains(symptomId)) {
                 System.out.println("You already selected that symptom!");
             }else if (symptomId > 0 && symptomId < i) {
-                sendDataViaNetwork.sendInt(symptomId, socket);
+                sendDataViaNetwork.sendInt(symptomId);
                 alreadySendId.add(symptomId);
                 symptomAdded = new Symptoms(symptomsInTable.get(symptomId - 1));
                 interpretation.addSymptom(symptomAdded);
@@ -236,11 +233,11 @@ public class LogInMenu {
                 System.out.println("Please, write yes or no");
             }
         }
-        System.out.println(receiveDataViaNetwork.receiveString(socket));
+        System.out.println(receiveDataViaNetwork.receiveString());
     }
 
     private static void readBITalino(Interpretation interpretation) throws IOException{
-        sendDataViaNetwork.sendInt(2, socket);
+        sendDataViaNetwork.sendInt(2);
         int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
         try {
             interpretation.recordBitalinoData(seconds, "20:18:06:13:01:08");
@@ -248,18 +245,18 @@ public class LogInMenu {
             System.out.println("Error al medir ");
         }
     }
-    private static void exitProgram() throws IOException{
+    private static void exitProgram(Socket socket) throws IOException{
         System.out.println("Exiting...");
-        sendDataViaNetwork.sendInt(3, socket);
+        sendDataViaNetwork.sendInt(3);
         releaseResources(socket);
         System.exit(0);
     }
     private static void sendInterpretationAndLogOut(Interpretation interpretation) throws IOException{
-        sendDataViaNetwork.sendInt(5, socket);
+        sendDataViaNetwork.sendInt(5);
         System.out.println("Sending your data to the server...");
         System.out.println(interpretation.toString());
-        sendDataViaNetwork.sendInterpretation(interpretation, socket);
-        if(receiveDataViaNetwork.receiveString(socket).equals("OK")){
+        sendDataViaNetwork.sendInterpretation(interpretation);
+        if(receiveDataViaNetwork.receiveString().equals("OK")){
             System.out.println("Data recieved by the server!");
         }else{
             System.out.println("Data was not recieved correctly");
@@ -267,24 +264,24 @@ public class LogInMenu {
 
     }
     private static void seeInterpretations() throws IOException{
-        sendDataViaNetwork.sendInt(4, socket);
-        int length = receiveDataViaNetwork.receiveInt(socket);
+        sendDataViaNetwork.sendInt(4);
+        int length = receiveDataViaNetwork.receiveInt();
         LinkedList<Interpretation> allInterpretations = new LinkedList<>();
         String symptomName;
         int lengthSymptoms;
         for(int i = 0; i < length; i++){
-            Interpretation recievedInterpretation = receiveDataViaNetwork.recieveInterpretation(socket);
+            Interpretation recievedInterpretation = receiveDataViaNetwork.recieveInterpretation();
             allInterpretations.add(recievedInterpretation);
             System.out.println(i + 1 + ". " + recievedInterpretation.getDate().toString());
-            lengthSymptoms = receiveDataViaNetwork.receiveInt(socket);
+            lengthSymptoms = receiveDataViaNetwork.receiveInt();
             if(lengthSymptoms != 0) {
                 for (int j = 0; j < lengthSymptoms; j++) {
-                    symptomName = receiveDataViaNetwork.receiveString(socket);
+                    symptomName = receiveDataViaNetwork.receiveString();
                     allInterpretations.get(i).addSymptom(new Symptoms(symptomName));
                 }
             }
         }
-        sendDataViaNetwork.sendStrings("RECEIVED", socket);
+        sendDataViaNetwork.sendStrings("RECEIVED");
         while(true) {
             int option = Utilities.readInteger("Choose the number of the report you want to see: \n");
             if (option - 1 >= length) {
