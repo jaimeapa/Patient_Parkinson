@@ -25,7 +25,6 @@ public class Patient implements Serializable {
     private String surname;
     private LocalDate dob;
     private String email;
-    private Signal signal;
     private LinkedList<Interpretation> interpretations;
 
     public Patient(String name, String surname, LocalDate dob, String email) {
@@ -92,13 +91,7 @@ public class Patient implements Serializable {
         }
     }
 
-    public Pojos.Signal getSignal() {
-        return signal;
-    }
 
-    public void setSignal(Pojos.Signal signal) {
-        this.signal = signal;
-    }
 
 
 
@@ -111,7 +104,6 @@ public class Patient implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
-                ", Signal=" + signal +
                 '}';
     }
 
