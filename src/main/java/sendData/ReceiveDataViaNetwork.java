@@ -152,7 +152,7 @@ public class ReceiveDataViaNetwork {
         return u;
     }
 
-    private static void releaseResources(){
+    public static void releaseResources(){
         try {
             dataInputStream.close();
         } catch (IOException ex) {

@@ -27,7 +27,7 @@ public class SendDataViaNetwork {
         //System.out.println("Connection established... sending text");
         //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF(message);
-        releaseResources(dataOutputStream);
+        //releaseResources(dataOutputStream);
         //releaseResourcesForString(printWriter,socket);
 
     }
@@ -113,7 +113,7 @@ public class SendDataViaNetwork {
 
 
 
-    private static void releaseResources(DataOutputStream dataOutputStream){
+    public static void releaseResources(){
         try {
             dataOutputStream.close();
         } catch (IOException ex) {
