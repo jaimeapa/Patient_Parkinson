@@ -223,10 +223,11 @@ public class LogInMenu {
             }
         }
         while(true) {
-            if (Utilities.readString("Would you like to add a more detailed description of your symptoms?[yes/no]").equalsIgnoreCase("yes")) {
+            String answer = Utilities.readString("Would you like to add a more detailed description of your symptoms?[yes/no]");
+            if (answer.equalsIgnoreCase("yes")) {
                 interpretation.setObservation(Utilities.readString("Write how you are feeling:\n"));
                 break;
-            } else if (Utilities.readString("Would you like to add a more detailed description of your symptoms?[yes/no]").equalsIgnoreCase("no")) {
+            } else if (answer.equalsIgnoreCase("no")) {
                 System.out.println("Noted!");
                 break;
             }else{

@@ -36,9 +36,6 @@ public class Symptoms {
     // Método toString
     @Override
     public String toString() {
-        return "Symptoms{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return  name ;
     }
 }
