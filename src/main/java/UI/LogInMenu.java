@@ -25,10 +25,10 @@ public class LogInMenu {
         while(true) {
             String ipAdress = Utilities.readString("Write the IP address of the server you want to connect to:\n");
             try {
-                socket = new Socket(ipAdress, 8000);
+                socket = new Socket("localhost", 8000);
+                SendDataViaNetwork sendDataViaNetwork = new SendDataViaNetwork(socket);
+                sendDataViaNetwork.sendInt(1, socket);
 
-
-                SendDataViaNetwork.sendInt(1, socket);
                 Role role = new Role("patient");
                 while (true) {
                     switch (printLogInMenu()) {
