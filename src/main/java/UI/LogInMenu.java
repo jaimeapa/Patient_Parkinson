@@ -1,10 +1,12 @@
 package UI;
 
 import BITalino.BITalinoException;
+import Encryption.EncryptPassword;
 import Pojos.*;
 import sendData.*;
 
 import java.io.*;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.net.*;
@@ -24,6 +26,7 @@ public class LogInMenu {
     private static DataInputStream dataInputStream;
     private static ObjectInputStream objectInputStream;
     private static Role role;
+    private static EncryptPassword encrypt;
 
     public static void main(String[] args) throws IOException {
         //Patient patient = null;
@@ -71,24 +74,33 @@ public class LogInMenu {
 
     private static void logInMenu(Socket socket) throws IOException{
         String email = Utilities.readString("Email: ");
-        String password = Utilities.readString("Password: ");
-        //Patient patient = SendDataViaNetwork.logIn(email, password, socket);
-        User u = new User (email,password.getBytes(), role);
-        SendDataViaNetwork.sendUser(u, dataOutputStream);
+        String psw = Utilities.readString("Password: ");
+        byte[] password = null;
         try {
-            Patient patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
-            if (patient != null) {
-                if(patient.getName().equals("name")){
-                    System.out.println("User or password is incorrect");
-                }else {
-                    Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
-                    System.out.println("Log in successful");
-                    System.out.println(patient.toString());
-                    clientPatientMenu(patient, doctor);
+            password = encrypt.encryptPassword(psw);
+        }catch(NoSuchAlgorithmException e){
+            System.out.println("Error when encrypting the password");
+            password = null;
+        }
+        if(password != null) {
+            //Patient patient = SendDataViaNetwork.logIn(email, password, socket);
+            User u = new User(email, password, role);
+            SendDataViaNetwork.sendUser(u, dataOutputStream);
+            try {
+                Patient patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
+                if (patient != null) {
+                    if (patient.getName().equals("name")) {
+                        System.out.println("User or password is incorrect");
+                    } else {
+                        Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
+                        System.out.println("Log in successful");
+                        System.out.println(patient.toString());
+                        clientPatientMenu(patient, doctor);
+                    }
                 }
+            } catch (IOException e) {
+                System.out.println("Log in problem");
             }
-        }catch(IOException e){
-            System.out.println("Log in problem");
         }
         /*if (patient != null) {
             System.out.println("Login successful!");
@@ -116,7 +128,7 @@ public class LogInMenu {
         String surname;
         LocalDate dob;
         String email;
-        String password;
+        byte[] password = null;
         name = Utilities.readString("Enter your name: ");
         surname = Utilities.readString("Enter your last name: ");
         dob = Utilities.readDate("Enter your date of birth: ");
@@ -126,20 +138,28 @@ public class LogInMenu {
         }while(!Utilities.checkEmail(email));
 
         patient = new Patient(name,surname,dob,email);
-        password = Utilities.readString("Enter your password: ");
-        u = new User(email, password.getBytes(), role);
-        //System.out.println(patient.toString());
-        SendDataViaNetwork.sendPatient(patient, dataOutputStream);
-        SendDataViaNetwork.sendUser(u, dataOutputStream);
-        String message = ReceiveDataViaNetwork.receiveString(dataInputStream);
-        patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
-        System.out.println(message);
-        if(message.equals("ERROR")){
-            System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
-        }else {
-            Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
-            System.out.println("Your doctor is: " + doctor.getName());
-            clientPatientMenu(patient, doctor);
+        String psw = Utilities.readString("Enter your password: ");
+        try {
+            password = encrypt.encryptPassword(psw);
+        }catch(NoSuchAlgorithmException e){
+            System.out.println("Error when encrypting the password");
+            password = null;
+        }
+        if(password != null) {
+            u = new User(email, password, role);
+            //System.out.println(patient.toString());
+            SendDataViaNetwork.sendPatient(patient, dataOutputStream);
+            SendDataViaNetwork.sendUser(u, dataOutputStream);
+            String message = ReceiveDataViaNetwork.receiveString(dataInputStream);
+            patient = ReceiveDataViaNetwork.recievePatient(dataInputStream);
+            System.out.println(message);
+            if (message.equals("ERROR")) {
+                System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
+            } else {
+                Doctor doctor = ReceiveDataViaNetwork.receiveDoctor(dataInputStream);
+                System.out.println("Your doctor is: " + doctor.getName());
+                clientPatientMenu(patient, doctor);
+            }
         }
     }
 
