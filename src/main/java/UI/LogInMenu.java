@@ -33,12 +33,12 @@ public class LogInMenu {
                 while (true) {
                     switch (printLogInMenu()) {
                         case 1: {
-                            SendDataViaNetwork.sendInt(1, socket);
+                            sendDataViaNetwork.sendInt(1, socket);
                             registerPatient();
                             break;
                         }
                         case 2: {
-                            SendDataViaNetwork.sendInt(2, socket);
+                            sendDataViaNetwork.sendInt(2, socket);
                             logInMenu();
                             break;
                         }
