@@ -25,8 +25,8 @@ public class ReceiveDataViaNetwork {
         //DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
         String information = "";
         information = dataInputStream.readUTF();
-        releaseResources(dataInputStream);
-        //return information;
+        //releaseResources(dataInputStream);
+        return information;
     }
 
     public static Doctor receiveDoctor(Socket socket){
@@ -152,7 +152,7 @@ public class ReceiveDataViaNetwork {
         return u;
     }
 
-    private static void releaseResources(DataInputStream dataInputStream){
+    private static void releaseResources(){
         try {
             dataInputStream.close();
         } catch (IOException ex) {
