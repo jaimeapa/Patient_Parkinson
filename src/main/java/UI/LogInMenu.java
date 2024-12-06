@@ -120,7 +120,7 @@ public class LogInMenu {
             password = null;
         }
         if(password != null) {
-            //Patient patient = SendDataViaNetwork.logIn(email, password, socket);
+            sendDataViaNetwork.sendStrings("OK");
             User u = new User(email, password, role);
             sendDataViaNetwork.sendUser(u);
             String message = receiveDataViaNetwork.receiveString();
@@ -138,6 +138,8 @@ public class LogInMenu {
             }else if(message.equals("ERROR")){
                 System.out.println("User or password is incorrect");
             }
+        }else{
+            sendDataViaNetwork.sendStrings("ERROR");
         }
 
     }
@@ -167,6 +169,7 @@ public class LogInMenu {
             password = null;
         }
         if(password != null) {
+            sendDataViaNetwork.sendStrings("OK");
             u = new User(email, password, role);
             sendDataViaNetwork.sendPatient(patient);
             sendDataViaNetwork.sendUser(u);
@@ -180,6 +183,8 @@ public class LogInMenu {
                 System.out.println("Your doctor is: " + doctor.getName());
                 clientPatientMenu(patient, doctor);
             }
+        }else{
+            sendDataViaNetwork.sendStrings("ERROR");
         }
     }
     private static void readSymptoms(Interpretation interpretation) throws  IOException{
