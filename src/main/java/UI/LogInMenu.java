@@ -123,20 +123,20 @@ public class LogInMenu {
             //Patient patient = SendDataViaNetwork.logIn(email, password, socket);
             User u = new User(email, password, role);
             sendDataViaNetwork.sendUser(u);
-            try {
-                Patient patient = receiveDataViaNetwork.recievePatient();
-                if (patient != null) {
-                    if (patient.getName().equals("name")) {
-                        System.out.println("User or password is incorrect");
-                    } else {
+            String message = receiveDataViaNetwork.receiveString();
+            if(message.equals("OK")) {
+                try {
+                    Patient patient = receiveDataViaNetwork.recievePatient();
+                    if (patient != null) {
                         Doctor doctor = receiveDataViaNetwork.receiveDoctor();
                         System.out.println("Log in successful");
-                        System.out.println(patient.toString());
                         clientPatientMenu(patient, doctor);
                     }
+                } catch (IOException e) {
+                    System.out.println("Log in problem");
                 }
-            } catch (IOException e) {
-                System.out.println("Log in problem");
+            }else if(message.equals("ERROR")){
+                System.out.println("User or password is incorrect");
             }
         }
 
