@@ -22,7 +22,7 @@ public class SendDataViaNetwork {
 
         }
     }
-    public static void sendStrings(String message) throws IOException {
+    public  void sendStrings(String message) throws IOException {
 
         //System.out.println("Connection established... sending text");
         //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -31,7 +31,7 @@ public class SendDataViaNetwork {
         //releaseResourcesForString(printWriter,socket);
 
     }
-    public static void sendInt(Integer message) throws IOException{
+    public  void sendInt(Integer message) throws IOException{
         //OutputStream outputStream = socket.getOutputStream();
         //DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         try{
@@ -45,7 +45,7 @@ public class SendDataViaNetwork {
         //releaseResourcesInt(dataOutputStream,outputStream);
     }
 
-    public static Patient logIn(String email, String password) throws IOException
+    public  Patient logIn(String email, String password) throws IOException
     {
         Patient patient = null;
         //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -57,7 +57,7 @@ public class SendDataViaNetwork {
         //Método no terminado
     }
 
-    public static void sendPatient(Patient patient)
+    public  void sendPatient(Patient patient)
     {
         //OutputStream outputStream = null;
         //ObjectOutputStream objectOutputStream = null;
@@ -88,7 +88,7 @@ public class SendDataViaNetwork {
 
     }
 
-    public static void sendInterpretation(Interpretation interpretation) throws IOException{
+    public void sendInterpretation(Interpretation interpretation) throws IOException{
         //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF(interpretation.getDate().toString());
         dataOutputStream.writeInt(interpretation.getDoctor_id());
@@ -99,7 +99,7 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(interpretation.getInterpretation());
         //releaseResources(dataOutputStream);
     }
-    public static void sendUser(User u) throws IOException
+    public  void sendUser(User u) throws IOException
     {
         //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF(u.getEmail());
@@ -113,7 +113,7 @@ public class SendDataViaNetwork {
 
 
 
-    public static void releaseResources(){
+    public  void releaseResources(){
         try {
             dataOutputStream.close();
         } catch (IOException ex) {

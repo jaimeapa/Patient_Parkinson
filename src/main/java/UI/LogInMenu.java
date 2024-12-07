@@ -17,16 +17,16 @@ import java.util.logging.Logger;
 
 public class LogInMenu {
     //private static Socket socket;
-    private static SendDataViaNetwork sendDataViaNetwork;
-    private static ReceiveDataViaNetwork receiveDataViaNetwork;
+   // private static SendDataViaNetwork sendDataViaNetwork;
+    //private static ReceiveDataViaNetwork receiveDataViaNetwork;
 
     public static void main(String[] args){
         while(true) {
             String ipAdress = Utilities.readString("Write the IP address of the server you want to connect to:\n");
             try {
                 Socket socket = new Socket(ipAdress, 8000);
-                sendDataViaNetwork = new SendDataViaNetwork(socket);
-                receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
+                SendDataViaNetwork sendDataViaNetwork = new SendDataViaNetwork(socket);
+                ReceiveDataViaNetwork receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
                 sendDataViaNetwork.sendInt(1);
 
                 Role role = new Role("patient");
@@ -34,16 +34,16 @@ public class LogInMenu {
                     switch (printLogInMenu()) {
                         case 1: {
                             sendDataViaNetwork.sendInt(1);
-                            registerPatient();
+                            registerPatient(sendDataViaNetwork,receiveDataViaNetwork);
                             break;
                         }
                         case 2: {
                             sendDataViaNetwork.sendInt(2);
-                            logInMenu();
+                            logInMenu(sendDataViaNetwork,receiveDataViaNetwork);
                             break;
                         }
                         case 3: {
-                            exitProgram(socket);
+                            exitProgram(socket,sendDataViaNetwork,receiveDataViaNetwork);
                         }
                         default: {
                             System.out.println("That number is not an option, try again");
@@ -65,7 +65,7 @@ public class LogInMenu {
         return Utilities.readInteger("What would you want to do?\n");
     }
 
-    public static void clientPatientMenu(Patient patient_logedIn, Doctor assignedDoctor) throws IOException {
+    public static void clientPatientMenu(Patient patient_logedIn, Doctor assignedDoctor,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException {
         Patient patient = patient_logedIn;
         LocalDate date = LocalDate.now();
         Interpretation interpretation = new Interpretation(date, patient_logedIn.getPatient_id(), assignedDoctor.getDoctor_id());
@@ -73,12 +73,12 @@ public class LogInMenu {
         while(menu){
             switch(printClientMenu()){
                 case 1:{
-                    readSymptoms(interpretation);
+                    readSymptoms(interpretation,sendDataViaNetwork,receiveDataViaNetwork);
                     break;
                 }
 
                 case 2:{
-                    readBITalino(interpretation);
+                    readBITalino(interpretation,sendDataViaNetwork);
                     break;
                 }
                 case 3:{
@@ -86,12 +86,12 @@ public class LogInMenu {
                     break;
                 }
                 case 4:{
-                    seeInterpretations();
+                    seeInterpretations(sendDataViaNetwork,receiveDataViaNetwork);
                     break;
                 }
                 case 5:{
                     menu = false;
-                    sendInterpretationAndLogOut(interpretation);
+                    sendInterpretationAndLogOut(interpretation,sendDataViaNetwork,receiveDataViaNetwork);
                     break;
                 }
             }
@@ -108,7 +108,7 @@ public class LogInMenu {
         return Utilities.readInteger("What would you want to do?\n");
     }
 
-    private static void logInMenu() throws IOException{
+    private static void logInMenu(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         String email = Utilities.readString("Email: ");
         String psw = Utilities.readString("Password: ");
         byte[] password = null;
@@ -130,7 +130,7 @@ public class LogInMenu {
                     if (patient != null) {
                         Doctor doctor = receiveDataViaNetwork.receiveDoctor();
                         System.out.println("Log in successful");
-                        clientPatientMenu(patient, doctor);
+                        clientPatientMenu(patient, doctor,sendDataViaNetwork,receiveDataViaNetwork);
                     }
                 } catch (IOException e) {
                     System.out.println("Log in problem");
@@ -143,7 +143,7 @@ public class LogInMenu {
         }
 
     }
-    public static void registerPatient() throws IOException
+    public static void registerPatient(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException
     {
         Patient patient;
         Role role = new Role("patient");
@@ -181,13 +181,13 @@ public class LogInMenu {
             } else {
                 Doctor doctor = receiveDataViaNetwork.receiveDoctor();
                 System.out.println("Your doctor is: " + doctor.getName());
-                clientPatientMenu(patient, doctor);
+                clientPatientMenu(patient, doctor,sendDataViaNetwork,receiveDataViaNetwork);
             }
         }else{
             sendDataViaNetwork.sendStrings("ERROR");
         }
     }
-    private static void readSymptoms(Interpretation interpretation) throws  IOException{
+    private static void readSymptoms(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws  IOException{
         sendDataViaNetwork.sendInt(1);
         LinkedList<String> symptomsInTable = new LinkedList<>();
         System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
@@ -242,7 +242,7 @@ public class LogInMenu {
         System.out.println(receiveDataViaNetwork.receiveString());
     }
 
-    private static void readBITalino(Interpretation interpretation) throws IOException{
+    private static void readBITalino(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(2);
         int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
         try {
@@ -251,13 +251,13 @@ public class LogInMenu {
             System.out.println("Error al medir ");
         }
     }
-    private static void exitProgram(Socket socket) throws IOException{
+    private static void exitProgram(Socket socket,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         System.out.println("Exiting...");
         sendDataViaNetwork.sendInt(3);
-        releaseResources(socket);
+        releaseResources(socket,sendDataViaNetwork,receiveDataViaNetwork);
         System.exit(0);
     }
-    private static void sendInterpretationAndLogOut(Interpretation interpretation) throws IOException{
+    private static void sendInterpretationAndLogOut(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(5);
         System.out.println("Sending your data to the server...");
         System.out.println(interpretation.toString());
@@ -269,7 +269,7 @@ public class LogInMenu {
         }
 
     }
-    private static void seeInterpretations() throws IOException{
+    private static void seeInterpretations(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(4);
         int length = receiveDataViaNetwork.receiveInt();
         LinkedList<Interpretation> allInterpretations = new LinkedList<>();
@@ -299,7 +299,7 @@ public class LogInMenu {
         }
     }
 
-    private static void releaseResources(Socket socket){
+    private static void releaseResources(Socket socket,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         sendDataViaNetwork.releaseResources();
         receiveDataViaNetwork.releaseResources();
 

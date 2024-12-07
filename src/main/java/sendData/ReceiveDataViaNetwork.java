@@ -20,7 +20,7 @@ public class ReceiveDataViaNetwork {
 
         }
     }
-    public static String receiveString() throws IOException {
+    public  String receiveString() throws IOException {
 
         //DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
         String information = "";
@@ -29,7 +29,7 @@ public class ReceiveDataViaNetwork {
         return information;
     }
 
-    public static Doctor receiveDoctor(){
+    public  Doctor receiveDoctor(){
         //InputStream inputStream = null;
         //ObjectInputStream objectInputStream = null;
         Doctor doctor = null;
@@ -57,7 +57,7 @@ public class ReceiveDataViaNetwork {
         return doctor;
     }
 
-    public static Patient recievePatient(){
+    public Patient recievePatient(){
         //InputStream inputStream = null;
         //ObjectInputStream objectInputStream = null;
         Patient patient = null;
@@ -84,7 +84,7 @@ public class ReceiveDataViaNetwork {
 
         return patient;
     }
-    public static Interpretation recieveInterpretation(){
+    public  Interpretation recieveInterpretation(){
         //InputStream inputStream = null;
         //ObjectInputStream objectInputStream = null;
         Interpretation interpretation = null;
@@ -120,7 +120,7 @@ public class ReceiveDataViaNetwork {
         return interpretation;
     }
 
-    public static int receiveInt() throws IOException{
+    public int receiveInt() throws IOException{
         //InputStream inputStream = socket.getInputStream();
         //DataInputStream dataInputStream = new DataInputStream(inputStream);
         int message = 10;
@@ -135,7 +135,7 @@ public class ReceiveDataViaNetwork {
         return message;
     }
 
-    public static User recieveUser()
+    public  User recieveUser()
     {
         User u = null;
         try{
@@ -152,7 +152,7 @@ public class ReceiveDataViaNetwork {
         return u;
     }
 
-    public static void releaseResources(){
+    public  void releaseResources(){
         try {
             dataInputStream.close();
         } catch (IOException ex) {
