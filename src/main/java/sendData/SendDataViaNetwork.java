@@ -14,21 +14,24 @@ import Pojos.User;
 public class SendDataViaNetwork {
 
     private static DataOutputStream dataOutputStream;
-
+    private static PrintWriter printWriter;
     public SendDataViaNetwork(Socket socket){
         try {
             this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            this.printWriter = new PrintWriter(socket.getOutputStream(), true);
         }catch (IOException e){
 
         }
     }
     public  void sendStrings(String message) throws IOException {
 
-        //System.out.println("Connection established... sending text");
-        //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        dataOutputStream.writeUTF(message);
-        //releaseResources(dataOutputStream);
-        //releaseResourcesForString(printWriter,socket);
+        //try {
+            //dataOutputStream.writeUTF(message);
+            //dataOutputStream.flush();
+            printWriter.println(message);
+        /*} catch (IOException e) {
+            System.err.println("Error send String ");
+        }*/
 
     }
     public  void sendInt(Integer message) throws IOException{

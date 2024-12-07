@@ -28,26 +28,30 @@ public class LogInMenu {
                 SendDataViaNetwork sendDataViaNetwork = new SendDataViaNetwork(socket);
                 ReceiveDataViaNetwork receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
                 sendDataViaNetwork.sendInt(1);
-                while (true) {
-                    switch (printLogInMenu()) {
-                        case 1: {
-                            sendDataViaNetwork.sendInt(1);
-                            registerPatient(sendDataViaNetwork,receiveDataViaNetwork);
-                            break;
-                        }
-                        case 2: {
-                            sendDataViaNetwork.sendInt(2);
-                            logInMenu(sendDataViaNetwork,receiveDataViaNetwork);
-                            break;
-                        }
-                        case 3: {
-                            exitProgram(socket,sendDataViaNetwork,receiveDataViaNetwork);
-                        }
-                        default: {
-                            System.out.println("That number is not an option, try again");
-                            break;
+                String message = receiveDataViaNetwork.receiveString();
+                System.out.println(message);
+                if(message.equals("PATIENT")) {
+                    while (true) {
+                        switch (printLogInMenu()) {
+                            case 1: {
+                                registerPatient(sendDataViaNetwork, receiveDataViaNetwork);
+                                break;
+                            }
+                            case 2: {
+                                logInMenu(sendDataViaNetwork, receiveDataViaNetwork);
+                                break;
+                            }
+                            case 3: {
+                                exitProgram(socket, sendDataViaNetwork, receiveDataViaNetwork);
+                            }
+                            default: {
+                                System.out.println("That number is not an option, try again");
+                                break;
+                            }
                         }
                     }
+                }else{
+                    System.out.println("Error in connection");
                 }
             } catch (IOException e) {
                 System.out.println("Invalid IP Adress");
@@ -106,6 +110,8 @@ public class LogInMenu {
     }
 
     private static void logInMenu(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
+        sendDataViaNetwork.sendInt(2);
+        System.out.println(receiveDataViaNetwork.receiveString());
         String email = Utilities.readString("Email: ");
         String psw = Utilities.readString("Password: ");
         byte[] password;
@@ -121,6 +127,7 @@ public class LogInMenu {
             User u = new User(email, password, role);
             sendDataViaNetwork.sendUser(u);
             String message = receiveDataViaNetwork.receiveString();
+            System.out.println(message);
             if(message.equals("OK")) {
                 try {
                     Patient patient = receiveDataViaNetwork.recievePatient();
@@ -142,6 +149,7 @@ public class LogInMenu {
     }
     public static void registerPatient(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException
     {
+        sendDataViaNetwork.sendInt(1);
         Patient patient;
         Role role = new Role("patient");
         User u;

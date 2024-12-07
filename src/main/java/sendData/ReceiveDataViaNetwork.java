@@ -11,22 +11,26 @@ import java.util.logging.Logger;
 
 public class ReceiveDataViaNetwork {
 
-
+    private static BufferedReader bufferedReader;
     private static DataInputStream dataInputStream;
     public ReceiveDataViaNetwork(Socket socket){
         try {
             this.dataInputStream = new DataInputStream(socket.getInputStream());
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }catch (IOException e){
 
         }
     }
     public  String receiveString() throws IOException {
 
-        //DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-        String information = "";
-        information = dataInputStream.readUTF();
-        //releaseResources(dataInputStream);
-        return information;
+        try {
+            //return dataInputStream.readUTF();
+            return bufferedReader.readLine();
+        } catch (IOException e) {
+            System.err.println("Error recibing String");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public  Doctor receiveDoctor(){
