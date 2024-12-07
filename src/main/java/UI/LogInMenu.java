@@ -28,8 +28,6 @@ public class LogInMenu {
                 SendDataViaNetwork sendDataViaNetwork = new SendDataViaNetwork(socket);
                 ReceiveDataViaNetwork receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
                 sendDataViaNetwork.sendInt(1);
-
-                Role role = new Role("patient");
                 while (true) {
                     switch (printLogInMenu()) {
                         case 1: {
@@ -66,7 +64,6 @@ public class LogInMenu {
     }
 
     public static void clientPatientMenu(Patient patient_logedIn, Doctor assignedDoctor,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException {
-        Patient patient = patient_logedIn;
         LocalDate date = LocalDate.now();
         Interpretation interpretation = new Interpretation(date, patient_logedIn.getPatient_id(), assignedDoctor.getDoctor_id());
         boolean menu = true;
@@ -82,7 +79,7 @@ public class LogInMenu {
                     break;
                 }
                 case 3:{
-                    System.out.println(patient.toString());
+                    System.out.println(patient_logedIn.toString());
                     break;
                 }
                 case 4:{
@@ -111,7 +108,7 @@ public class LogInMenu {
     private static void logInMenu(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         String email = Utilities.readString("Email: ");
         String psw = Utilities.readString("Password: ");
-        byte[] password = null;
+        byte[] password;
         Role role = new Role("patient");
         try {
             password = EncryptPassword.encryptPassword(psw);
