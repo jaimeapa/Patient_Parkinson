@@ -5,6 +5,7 @@ import BITalino.BITalinoException;
 
 import javax.bluetooth.RemoteDevice;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -164,22 +165,29 @@ public class Interpretation {
                     recordedValuesEDA.add(frame.analog[1]);
                 }
             }
-            System.out.println(recordedValuesEMG);
-            System.out.println(recordedValuesEDA);
+
             bitalino.stop();
 
+            if (recordedValuesEDA.stream().allMatch(num -> num == 0)) {
+                recordedValuesEDA = new LinkedList<>();
+            }
+            if (recordedValuesEMG.stream().allMatch(num -> num == 0)) {
+                recordedValuesEMG = new LinkedList<>();
+            }
+            System.out.println(recordedValuesEMG);
+            System.out.println(recordedValuesEDA);
             // Guardamos los valores según el tipo de señal
             //if (signalType == Signal.SignalType.EMG) {
-                signalEMG.addValues(recordedValuesEMG);
+            signalEMG.addValues(recordedValuesEMG);
                 //this.signalEMG = new Signal(Signal.SignalType.EMG, signalEMG.getValues());
 
             //} else if (signalType == Signal.SignalType.EDA) {
-                signalEDA.addValues(recordedValuesEDA);
+            signalEDA.addValues(recordedValuesEDA);
                 //this.signalEDA = new Signal(Signal.SignalType.EDA, signalEDA.getValues());
             //}
 
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            System.out.println("Problem when connecting to the BITalino");
         } finally {
             try {
                 if (bitalino != null) {

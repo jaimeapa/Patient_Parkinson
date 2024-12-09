@@ -9,20 +9,27 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.net.*;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LogInMenu {
 
     public static void main(String[] args){
-        while(true) {
+        Socket socket = null;
+        SendDataViaNetwork sendDataViaNetwork = null;
+        ReceiveDataViaNetwork receiveDataViaNetwork = null;
+        boolean running = true;
+        while(running) {
             String ipAdress = Utilities.readString("Write the IP address of the server you want to connect to:\n");
             try {
-                Socket socket = new Socket(ipAdress, 8000);
-                SendDataViaNetwork sendDataViaNetwork = new SendDataViaNetwork(socket);
-                ReceiveDataViaNetwork receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
+                socket = new Socket(ipAdress, 8000);
+                sendDataViaNetwork = new SendDataViaNetwork(socket);
+                receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
                 sendDataViaNetwork.sendInt(1);
                 String message = receiveDataViaNetwork.receiveString();
                 System.out.println(message);
                 if(message.equals("PATIENT")) {
-                    while (true) {
+                    while (running) {
                         switch (printLogInMenu()) {
                             case 1: {
                                 registerPatient(sendDataViaNetwork, receiveDataViaNetwork);
@@ -33,7 +40,9 @@ public class LogInMenu {
                                 break;
                             }
                             case 3: {
-                                exitProgram(socket, sendDataViaNetwork, receiveDataViaNetwork);
+                                sendDataViaNetwork.sendInt(3);
+                                running = false;
+                                break;
                             }
                             default: {
                                 System.out.println("That number is not an option, try again");
@@ -48,6 +57,11 @@ public class LogInMenu {
                 System.out.println("Invalid IP Adress");
             }
         }
+        //exitProgram(socket, sendDataViaNetwork, receiveDataViaNetwork);
+        System.out.println("Exiting...");
+        releaseResources(socket,sendDataViaNetwork,receiveDataViaNetwork);
+        System.exit(0);
+
     }
     private static int printLogInMenu() {
         System.out.println("\n\nPatient Menu:\n"
@@ -74,7 +88,7 @@ public class LogInMenu {
                     break;
                 }
                 case 3:{
-                    System.out.println(patient_logedIn.toString());
+                    System.out.println(patient_logedIn);
                     break;
                 }
                 case 4:{
@@ -247,12 +261,6 @@ public class LogInMenu {
             System.out.println("Error al medir ");
         }
     }
-    private static void exitProgram(Socket socket,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
-        System.out.println("Exiting...");
-        sendDataViaNetwork.sendInt(3);
-        releaseResources(socket,sendDataViaNetwork,receiveDataViaNetwork);
-        System.exit(0);
-    }
     private static void sendInterpretationAndLogOut(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(5);
         System.out.println("Sending your data to the server...");
@@ -271,42 +279,49 @@ public class LogInMenu {
         String symptomName;
         int lengthSymptoms;
         String interpretationName;
-        for(int i = 0; i < length; i++){
-            Interpretation recievedInterpretation = receiveDataViaNetwork.recieveInterpretation();
-            allInterpretations.add(recievedInterpretation);
-            interpretationName = recievedInterpretation.getDate().toString();
-            if(!recievedInterpretation.getInterpretation().equals("")){
-                interpretationName = interpretationName + " - Doctor has made notes";
-            }
-            System.out.println(i + 1 + ". " + interpretationName);
-            lengthSymptoms = receiveDataViaNetwork.receiveInt();
-            if(lengthSymptoms != 0) {
-                for (int j = 0; j < lengthSymptoms; j++) {
-                    symptomName = receiveDataViaNetwork.receiveString();
-                    allInterpretations.get(i).addSymptom(new Symptoms(symptomName));
+        if(length > 0) {
+            for (int i = 0; i < length; i++) {
+                Interpretation recievedInterpretation = receiveDataViaNetwork.recieveInterpretation();
+                allInterpretations.add(recievedInterpretation);
+                interpretationName = recievedInterpretation.getDate().toString();
+                if (!recievedInterpretation.getInterpretation().isEmpty()) {
+                    interpretationName = interpretationName + " - Doctor has made notes";
+                }
+                System.out.println(i + 1 + ". " + interpretationName);
+                lengthSymptoms = receiveDataViaNetwork.receiveInt();
+                if (lengthSymptoms != 0) {
+                    for (int j = 0; j < lengthSymptoms; j++) {
+                        symptomName = receiveDataViaNetwork.receiveString();
+                        allInterpretations.get(i).addSymptom(new Symptoms(symptomName));
+                    }
                 }
             }
-        }
-        sendDataViaNetwork.sendStrings("RECEIVED");
-        while(true) {
-            int option = Utilities.readInteger("Choose the number of the report you want to see: \n");
-            if (option - 1 >= length) {
-                System.out.println("That number is not an option, choose one on the list [1 - " + length + "]: \n");
-            } else if (allInterpretations.get(option - 1) != null) {
-                System.out.println(allInterpretations.get(option - 1));
-                break;
+            sendDataViaNetwork.sendStrings("RECEIVED");
+            while (true) {
+                int option = Utilities.readInteger("Choose the number of the report you want to see: \n");
+                if (option - 1 >= length) {
+                    System.out.println("That number is not an option, choose one on the list [1 - " + length + "]: \n");
+                } else if (allInterpretations.get(option - 1) != null) {
+                    System.out.println(allInterpretations.get(option - 1));
+                    break;
+                }
             }
+        }else{
+            System.out.println("You haven´t submitted any report yet. When you log out your report will be automatically submitted.");
         }
     }
 
     private static void releaseResources(Socket socket,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
-        sendDataViaNetwork.releaseResources();
-        receiveDataViaNetwork.releaseResources();
-
+        if(sendDataViaNetwork != null && receiveDataViaNetwork != null) {
+            sendDataViaNetwork.releaseResources();
+            receiveDataViaNetwork.releaseResources();
+        }
         try {
+            if(socket != null){
             socket.close();
+            }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(LogInMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
