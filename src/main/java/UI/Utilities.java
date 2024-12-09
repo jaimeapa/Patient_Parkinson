@@ -97,7 +97,7 @@ public class Utilities {
     public static boolean checkEmail(String email){
         Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
         Matcher mather = pattern.matcher(email);
-        if (mather.find() == true) {
+        if (mather.find()) {
             return true;
         } else {
             System.out.println("Please follow the email format: example@example.com");
@@ -114,7 +114,6 @@ public class Utilities {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
             result.append(input.charAt(i));
-            // Agregar ':' después de cada dos caracteres, excepto al final
             if ((i + 1) % 2 == 0 && i < input.length() - 1) {
                 result.append(":");
             }
