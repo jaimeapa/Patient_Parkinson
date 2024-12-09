@@ -6,6 +6,8 @@ import Pojos.Patient;
 import Pojos.User;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SendDataViaNetwork {
     private DataOutputStream dataOutputStream;
@@ -13,31 +15,30 @@ public class SendDataViaNetwork {
     public SendDataViaNetwork(Socket socket) {
         try {
             this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            System.err.println("Error al inicializar el flujo de salida: " + e.getMessage());
-            e.printStackTrace();
+        } catch (IOException ex) {
+            System.err.println("Error al inicializar el flujo de salida: " + ex.getMessage());
+            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean sendStrings(String message) {
+    public void sendStrings(String message) {
         try {
             dataOutputStream.writeUTF(message);
             dataOutputStream.flush();
-            return true;
-        } catch (IOException e) {
-            System.err.println("Error al enviar String: " + e.getMessage());
-            return false;
+        } catch (IOException ex) {
+            System.err.println("Error al enviar String: " + ex.getMessage());
+            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean sendInt(int message) {
+    public void sendInt(int message) {
         try {
             dataOutputStream.writeInt(message);
             dataOutputStream.flush();
-            return true;
-        } catch (IOException e) {
-            System.err.println("Error al enviar Int: " + e.getMessage());
-            return false;
+
+        } catch (IOException ex) {
+            System.err.println("Error al enviar Int: " + ex.getMessage());
+            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -50,7 +51,7 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(u.getRole().toString());
     }
 
-    public boolean sendPatient(Patient patient) {
+    public void sendPatient(Patient patient) {
         try {
             dataOutputStream.writeInt(patient.getPatient_id());
             dataOutputStream.writeUTF(patient.getName());
@@ -58,10 +59,10 @@ public class SendDataViaNetwork {
             dataOutputStream.writeUTF(patient.getDob().toString());
             dataOutputStream.writeUTF(patient.getEmail());
             dataOutputStream.flush();
-            return true;
-        } catch (IOException e) {
-            System.err.println("Error al enviar Patient: " + e.getMessage());
-            return false;
+
+        } catch (IOException ex) {
+            System.err.println("Error al enviar Patient: " + ex.getMessage());
+            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public void sendInterpretation(Interpretation interpretation) throws IOException{
@@ -78,9 +79,9 @@ public class SendDataViaNetwork {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
             }
-        } catch (IOException e) {
-            System.err.println("Error al liberar recursos: " + e.getMessage());
-            e.printStackTrace();
+        } catch (IOException ex) {
+            System.err.println("Error al liberar recursos: " + ex.getMessage());
+            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
