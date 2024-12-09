@@ -1,14 +1,18 @@
 package UI;
 
+import BITalino.BITalino;
 import BITalino.BITalinoException;
 import Encryption.EncryptPassword;
 import Pojos.*;
 import sendData.*;
+
+import javax.bluetooth.RemoteDevice;
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.net.*;
 import java.util.LinkedList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,36 +27,36 @@ public class Main {
             String ipAdress = Utilities.readString("Write the IP address of the server you want to connect to:\n");
             try {
                 socket = new Socket(ipAdress, 8000);
-                sendDataViaNetwork = new SendDataViaNetwork(socket);
-                receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
-                sendDataViaNetwork.sendInt(1);
-                String message = receiveDataViaNetwork.receiveString();
-                System.out.println(message);
-                if(message.equals("PATIENT")) {
-                    while (running) {
-                        switch (printLogInMenu()) {
-                            case 1: {
-                                registerPatient(sendDataViaNetwork, receiveDataViaNetwork);
-                                break;
-                            }
-                            case 2: {
-                                logInMenu(sendDataViaNetwork, receiveDataViaNetwork);
-                                break;
-                            }
-                            case 3: {
-                                sendDataViaNetwork.sendInt(3);
-                                running = false;
-                                break;
-                            }
-                            default: {
-                                System.out.println("That number is not an option, try again");
-                                break;
+                    sendDataViaNetwork = new SendDataViaNetwork(socket);
+                    receiveDataViaNetwork = new ReceiveDataViaNetwork(socket);
+                    sendDataViaNetwork.sendInt(1);
+                    String message = receiveDataViaNetwork.receiveString();
+                    System.out.println(message);
+                    if (message.equals("PATIENT")) {
+                        while (running) {
+                            switch (printLogInMenu()) {
+                                case 1: {
+                                    registerPatient(sendDataViaNetwork, receiveDataViaNetwork);
+                                    break;
+                                }
+                                case 2: {
+                                    logInMenu(sendDataViaNetwork, receiveDataViaNetwork);
+                                    break;
+                                }
+                                case 3: {
+                                    sendDataViaNetwork.sendInt(3);
+                                    running = false;
+                                    break;
+                                }
+                                default: {
+                                    System.out.println("That number is not an option, try again");
+                                    break;
+                                }
                             }
                         }
+                    } else {
+                        System.out.println("Error in connection");
                     }
-                }else{
-                    System.out.println("Error in connection");
-                }
             } catch (IOException e) {
                 System.out.println("Invalid IP Adress");
             }
@@ -254,9 +258,35 @@ public class Main {
 
     private static void readBITalino(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork){
         sendDataViaNetwork.sendInt(2);
+        System.out.println("Searching for BITalinos...\n\n");
+        String macAdress = null;
+        BITalino bitalino = null;
+        int bitID = 0;
+        try {
+            bitalino = new BITalino();
+            Vector<RemoteDevice> devices = bitalino.findDevices();
+            for(int i = 0; i < devices.size(); i++){
+                System.out.println(i+1 + ". " + devices.get(i));
+            }
+            do {
+                if (bitID < 1 || bitID >= devices.size()) {
+                    bitID = Utilities.readInteger("Choose your BITalino\n");
+                    macAdress = devices.get(bitID - 1).getBluetoothAddress();
+                    if (bitID < 1 || bitID > devices.size()) {
+                        System.out.println("Choose a valid number");
+                    }
+                }
+            } while (bitID < 0 || bitID > devices.size() + 1);
+        }catch (InterruptedException e) {
+            System.out.println("No se han encontrado BITalinos");
+        }
         int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
         try {
-            interpretation.recordBitalinoData(seconds, "20:18:06:13:01:08");
+            if(macAdress != null) {
+                interpretation.recordBitalinoData(seconds, Utilities.formatMacAdress(macAdress), bitalino);
+            }else{
+                System.out.println("Error when connecting to BITalino");
+            }
         }catch(BITalinoException e){
             System.out.println("Error al medir ");
         }
@@ -310,6 +340,8 @@ public class Main {
             System.out.println("You haven´t submitted any report yet. When you log out your report will be automatically submitted.");
         }
     }
+
+
 
     private static void releaseResources(Socket socket,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         if(sendDataViaNetwork != null && receiveDataViaNetwork != null) {
