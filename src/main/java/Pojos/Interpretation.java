@@ -145,11 +145,7 @@ public class Interpretation {
             bitalino.open(macAddress, samplingrate);
             System.out.println("Connection successful!");
 
-            /*if (signalType == Signal.SignalType.EMG) {
-                channel = 0;
-            } else if (signalType == Signal.SignalType.EDA) {
-                channel = 2;
-            }*/
+
             int[] channelsToAcquire = {0,2}; // Cambiar según el canal para EMG o EDA
             bitalino.start(channelsToAcquire);
 
@@ -176,15 +172,10 @@ public class Interpretation {
             }
             System.out.println(recordedValuesEMG);
             System.out.println(recordedValuesEDA);
-            // Guardamos los valores según el tipo de señal
-            //if (signalType == Signal.SignalType.EMG) {
-            signalEMG.addValues(recordedValuesEMG);
-                //this.signalEMG = new Signal(Signal.SignalType.EMG, signalEMG.getValues());
 
-            //} else if (signalType == Signal.SignalType.EDA) {
+            signalEMG.addValues(recordedValuesEMG);
             signalEDA.addValues(recordedValuesEDA);
-                //this.signalEDA = new Signal(Signal.SignalType.EDA, signalEDA.getValues());
-            //}
+
 
         } catch (Throwable ex) {
             System.out.println("Problem when connecting to the BITalino");
