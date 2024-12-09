@@ -136,11 +136,11 @@ public class Interpretation {
         return file;
     }*/
 
-    public void recordBitalinoData(int seconds, String macAddress) throws BITalinoException {
-        BITalino bitalino = new BITalino();
+    public void recordBitalinoData(int seconds, String macAddress, BITalino bitalino) throws BITalinoException {
+        //BITalino bitalino = new BITalino();
         try {
-            Vector<RemoteDevice> devices = bitalino.findDevices();
-            System.out.println(devices);
+            //Vector<RemoteDevice> devices = bitalino.findDevices();
+            //System.out.println(devices);
 
             bitalino.open(macAddress, samplingrate);
             System.out.println("Connection successful!");

@@ -74,6 +74,18 @@ public class Utilities {
             return false;
         }
     }
+
+    public static String formatMacAdress(String input) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            result.append(input.charAt(i));
+            // Agregar ':' después de cada dos caracteres, excepto al final
+            if ((i + 1) % 2 == 0 && i < input.length() - 1) {
+                result.append(":");
+            }
+        }
+        return result.toString();
+    }
     public static Patient registerPatientData()
     {
         Patient patient = null;
