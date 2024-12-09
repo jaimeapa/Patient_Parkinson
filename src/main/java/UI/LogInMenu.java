@@ -256,7 +256,6 @@ public class LogInMenu {
     private static void sendInterpretationAndLogOut(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(5);
         System.out.println("Sending your data to the server...");
-        System.out.println(interpretation.toString());
         sendDataViaNetwork.sendInterpretation(interpretation);
         if(receiveDataViaNetwork.receiveString().equals("OK")){
             System.out.println("Data recieved by the server!");
@@ -271,10 +270,15 @@ public class LogInMenu {
         LinkedList<Interpretation> allInterpretations = new LinkedList<>();
         String symptomName;
         int lengthSymptoms;
+        String interpretationName;
         for(int i = 0; i < length; i++){
             Interpretation recievedInterpretation = receiveDataViaNetwork.recieveInterpretation();
             allInterpretations.add(recievedInterpretation);
-            System.out.println(i + 1 + ". " + recievedInterpretation.getDate().toString());
+            interpretationName = recievedInterpretation.getDate().toString();
+            if(!recievedInterpretation.getInterpretation().equals("")){
+                interpretationName = interpretationName + " - Doctor has made notes";
+            }
+            System.out.println(i + 1 + ". " + interpretationName);
             lengthSymptoms = receiveDataViaNetwork.receiveInt();
             if(lengthSymptoms != 0) {
                 for (int j = 0; j < lengthSymptoms; j++) {
