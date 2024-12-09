@@ -216,7 +216,6 @@ public class Main {
             }
 
         }
-        System.out.println(i+ ". Other symptoms\n");
         System.out.println("Input the numbers of your symptoms. Write 0 to exit: \n");
         System.out.println(receiveDataViaNetwork.receiveString());
 
