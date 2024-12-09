@@ -1,25 +1,12 @@
 package Pojos;
 
-import javax.bluetooth.RemoteDevice;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.Serializable;
+
 import java.rmi.NotBoundException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import BITalino.Frame;
-import BITalino.BITalino;
-import BITalino.BITalinoException;
-
-public class Patient implements Serializable {
-    private static final long serialVersionUID = 4092297860583387711L;
+public class Patient{
     private int patient_id;
     private String name;
     private String surname;
@@ -84,17 +71,12 @@ public class Patient implements Serializable {
     public void setEmail(String email) throws NotBoundException {
         Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
         Matcher mather = pattern.matcher(email);
-        if (mather.find() == true) {
+        if (mather.find()) {
             this.email = email;
         } else {
             throw new NotBoundException("Not valid email");
         }
     }
-
-
-
-
-
 
     @Override
     public String toString() {

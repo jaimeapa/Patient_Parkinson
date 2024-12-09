@@ -4,17 +4,12 @@ import BITalino.BITalino;
 import BITalino.BITalinoException;
 
 import javax.bluetooth.RemoteDevice;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 import BITalino.Frame;
-import BITalino.BITalino;
-import BITalino.BITalinoException;
+
 
 public class Interpretation {
 
@@ -29,26 +24,6 @@ public class Interpretation {
     private String observation;
     public static final int samplingrate = 100;
 
-    public Interpretation(LocalDate date, int patient, int doctor, String interpretation) {
-        this.date = date;
-        this.patient_id = patient;
-        this.doctor_id = doctor;
-        this.interpretation = interpretation;
-        this.signalEDA = new Signal(Signal.SignalType.EDA);
-        this.signalEMG = new Signal(Signal.SignalType.EMG);
-        this.symptoms = new LinkedList<>();
-
-    }
-    public Interpretation(int interpretation_id, LocalDate date, int patient, int doctor, String interpretation) {
-        this.id = interpretation_id;
-        this.date = date;
-        this.patient_id = patient;
-        this.doctor_id = doctor;
-        this.interpretation = interpretation;
-        this.signalEDA = new Signal(Signal.SignalType.EDA);
-        this.signalEMG = new Signal(Signal.SignalType.EMG);
-        this.symptoms = new LinkedList<>();
-    }
     public Interpretation(LocalDate date, int patient, int doctor){
         this.date = date;
         this.patient_id = patient;
@@ -179,7 +154,6 @@ public class Interpretation {
 
     public void recordBitalinoData(int seconds, String macAddress) throws BITalinoException {
         BITalino bitalino = new BITalino();
-        int channel = 0;
         try {
             Vector<RemoteDevice> devices = bitalino.findDevices();
             System.out.println(devices);
@@ -196,8 +170,8 @@ public class Interpretation {
             bitalino.start(channelsToAcquire);
 
             System.out.println(" - Recording the EMG and EDA signals...");
-            LinkedList<Integer> recordedValuesEDA = new LinkedList<Integer>();
-            LinkedList<Integer> recordedValuesEMG = new LinkedList<Integer>();
+            LinkedList<Integer> recordedValuesEDA = new LinkedList  <>();
+            LinkedList<Integer> recordedValuesEMG = new LinkedList<>();
             for (int j = 0; j < seconds /** samplingrate / 10*/; j++) {
                 //System.out.println("Starting recording");
                 Frame[] frames = bitalino.read(samplingrate);
@@ -221,8 +195,6 @@ public class Interpretation {
                 //this.signalEDA = new Signal(Signal.SignalType.EDA, signalEDA.getValues());
             //}
 
-        } catch (BITalinoException ex) {
-            ex.printStackTrace();
         } catch (Throwable ex) {
             ex.printStackTrace();
         } finally {
@@ -235,7 +207,6 @@ public class Interpretation {
             }
         }
     }
-
     @Override
     public String toString() {
         return "Report " + date + ":"+

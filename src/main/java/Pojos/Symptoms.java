@@ -4,11 +4,6 @@ public class Symptoms {
     private int id;
     private String name;
 
-    // Constructor
-    public Symptoms(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
     public Symptoms (String name){
         this.name = name;
     }

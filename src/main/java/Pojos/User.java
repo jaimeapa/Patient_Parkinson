@@ -37,7 +37,7 @@ public class User {
     public void setEmail(String email) throws NotBoundException {
         Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
         Matcher mather = pattern.matcher(email);
-        if (mather.find() == true) {
+        if (mather.find()) {
             this.email = email;
         } else {
             throw new NotBoundException("Not valid email");
@@ -49,8 +49,13 @@ public class User {
     public void setPassword(byte[] password) {
         this.password = password;
     }
+    public Role getRole() {
+        return role;
+    }
 
-
+    public void setRole(Role role) {
+        this.role = role;
+    }
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -59,7 +64,6 @@ public class User {
         result = prime * result + Objects.hash(email, id, role);
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -72,15 +76,6 @@ public class User {
         return Objects.equals(email, other.email) && Objects.equals(id, other.id)
                 && Arrays.equals(password, other.password) && Objects.equals(role, other.role);
     }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", password=" + Arrays.toString(password) + ", role=" + role

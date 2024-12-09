@@ -4,21 +4,12 @@ import BITalino.BITalinoException;
 import Encryption.EncryptPassword;
 import Pojos.*;
 import sendData.*;
-
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
-import java.sql.*;
 import java.time.LocalDate;
 import java.net.*;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
 public class LogInMenu {
-    //private static Socket socket;
-   // private static SendDataViaNetwork sendDataViaNetwork;
-    //private static ReceiveDataViaNetwork receiveDataViaNetwork;
 
     public static void main(String[] args){
         while(true) {
@@ -213,7 +204,7 @@ public class LogInMenu {
 
         int symptomId;
         boolean mandarDatos = true;
-        Symptoms symptomAdded = null;
+        Symptoms symptomAdded;
         LinkedList<Integer> alreadySendId = new LinkedList<>();
         while (mandarDatos) {
             symptomId = Utilities.readInteger("Insert a number: ");
@@ -314,6 +305,5 @@ public class LogInMenu {
             ex.printStackTrace();
         }
     }
-
 }
 

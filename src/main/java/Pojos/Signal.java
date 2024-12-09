@@ -1,13 +1,12 @@
 package Pojos;
 
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +15,6 @@ public class Signal {
     private String signalFilename;
     private SignalType signalType;
     public static final int samplingrate = 100;
-
     public enum SignalType{
         EMG,
         EDA
@@ -26,10 +24,6 @@ public class Signal {
 
     public Signal(SignalType signaltype){
         this.values = new LinkedList<>();
-        this.signalType = signaltype;
-    }
-    public Signal(SignalType signaltype, List<Integer> values){
-        this.values = values;
         this.signalType = signaltype;
     }
 

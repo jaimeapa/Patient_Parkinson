@@ -2,18 +2,13 @@ package sendData;
 
 import Pojos.*;
 
-import java.io.*;
+
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
-import java.net.Socket;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class ReceiveDataViaNetwork {
     private DataInputStream dataInputStream;

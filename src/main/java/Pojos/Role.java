@@ -5,21 +5,9 @@ import java.util.Objects;
 
 public class Role {
     private Integer id;
-
     private String name;
-
-
     private List<User> users;
 
-    public Role() {
-        super();
-    }
-
-    public Role(int role_id, String name)
-    {
-        this.id = role_id;
-        this.name = name;
-    }
     public Role(String name) {
         super();
         this.name = name;

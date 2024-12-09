@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,14 +23,6 @@ public class Doctor implements Serializable {
         this.email = email;
         patients = new LinkedList<>();
     }
-    public Doctor(String name, String surname, LocalDate dob, String email) {
-        this.name = name;
-        this.surname = surname;
-        this.dob = dob;
-        this.email = email;
-        patients = new LinkedList<>();
-    }
-
     public int getDoctor_id() {
         return doctor_id;
     }

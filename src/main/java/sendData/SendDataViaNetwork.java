@@ -1,19 +1,11 @@
 package sendData;
 
-import java.io.*;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import Pojos.Interpretation;
 import Pojos.Patient;
-import Pojos.Signal;
 import Pojos.User;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 
 public class SendDataViaNetwork {
     private DataOutputStream dataOutputStream;
@@ -51,13 +43,11 @@ public class SendDataViaNetwork {
 
     public  void sendUser(User u) throws IOException
     {
-        //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF(u.getEmail());
         byte[] password = u.getPassword();
 
         dataOutputStream.writeUTF(new String(password));
         dataOutputStream.writeUTF(u.getRole().toString());
-        //releaseResources(dataOutputStream);
     }
 
     public boolean sendPatient(Patient patient) {
@@ -75,7 +65,6 @@ public class SendDataViaNetwork {
         }
     }
     public void sendInterpretation(Interpretation interpretation) throws IOException{
-        //DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF(interpretation.getDate().toString());
         dataOutputStream.writeInt(interpretation.getDoctor_id());
         dataOutputStream.writeUTF(interpretation.getSignalEMG().valuesToString());
@@ -83,12 +72,7 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(interpretation.getSignalEDA().valuesToString());
         dataOutputStream.writeUTF(interpretation.getObservation());
         dataOutputStream.writeUTF(interpretation.getInterpretation());
-        //releaseResources(dataOutputStream);
     }
-
-
-
-
     public void releaseResources() {
         try {
             if (dataOutputStream != null) {
