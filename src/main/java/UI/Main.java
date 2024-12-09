@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LogInMenu {
+public class Main {
 
     public static void main(String[] args){
         Socket socket = null;
@@ -321,7 +321,7 @@ public class LogInMenu {
             socket.close();
             }
         } catch (IOException ex) {
-            Logger.getLogger(LogInMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
