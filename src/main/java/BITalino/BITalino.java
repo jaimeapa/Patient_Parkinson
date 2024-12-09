@@ -14,20 +14,11 @@ package BITalino;
  * It provides methods to connect, configure, and retrieve data from the BITalino device.
  */
 public class BITalino {
-	
-        /// Array with the list of analog inputs to be acquired from the device (auxiliary variable)
+
 	private int[] analogChannels = null;
-
-        /// Number of bytes expected for a frame sent by the device (auxiliary variable)
 	private int number_bytes = 0;
-
-        /// Instance of the Bluetooth socket connection established with the BITalino device
 	private StreamConnection hSocket = null;
-
-        /// Instance of the data stream with data coming from the BITalino device
 	private DataInputStream iStream = null;
-
-        /// Instance of the data stream through which data can be sent to the BITalino device
 	private DataOutputStream oStream = null;
 	
 	public BITalino() {}
@@ -37,12 +28,9 @@ public class BITalino {
 	 * @return a list of found devices with the name BITalino.
 	 * @throws InterruptedException if the thread is interrupted during the search.
 	 */
-
 	public Vector<RemoteDevice> findDevices() throws InterruptedException
 	{
-	        /** Searches for Bluetooth devices in range.
-	         * \return a list of found devices with the name BITalino
-	         */
+
 		DeviceDiscoverer finder = new  DeviceDiscoverer();	
 		while (finder.inqStatus == null) 
 		{
@@ -124,11 +112,6 @@ public class BITalino {
 	}
 
 
-	/**
-	 * Starts a signal acquisition from the device.
-	 * @param anChannels Set of channels to acquire. Accepted channels are 0...5 for inputs A1...A6.
-	 * @throws Throwable if the provided channels are invalid or the device is not connected.
-	 */
 	public void start(int[] anChannels) throws Throwable 
 	{
                 /** Starts a signal acquisition from the device.
@@ -172,10 +155,7 @@ public class BITalino {
 		}
 		
 	}
-	/**
-	 * Stops a signal acquisition.
-	 * @throws BITalinoException if the device is not connected.
-	 */
+
 	public void stop() throws BITalinoException 
 	{
                 /** Stops a signal acquisition.
@@ -191,10 +171,7 @@ public class BITalino {
 			throw new BITalinoException(BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED);
 		}
 	}
-	/**
-	 * Disconnects from a BITalino device.
-	 * @throws BITalinoException if the device is not connected.
-	 */
+
 	public void close() throws BITalinoException 
 	{
                 /** Disconnects from a %BITalino device. If an aquisition is running, it is stopped. 
@@ -215,11 +192,7 @@ public class BITalino {
 		}
 		
 	}
-	/**
-	 * Sends a command to BITalino.
-	 * @param data Byte corresponding to the command to be sent.
-	 * @throws BITalinoException if communication is lost.
-	 */
+
 	public void Write(int data) throws BITalinoException 
 	{
 
@@ -235,11 +208,7 @@ public class BITalino {
 		}
 	}
 
-	/**
-	 * Sets the battery voltage threshold for the low-battery LED.
-	 * @param value Battery voltage threshold. Default value is 0.
-	 * @throws BITalinoException if the threshold is invalid or communication is lost.
-	 */
+
 	public void battery(int value) throws BITalinoException 
 	{
 
