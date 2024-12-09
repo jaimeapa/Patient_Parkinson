@@ -8,22 +8,11 @@ import java.util.LinkedList;
  */
 public class Patient {
 
-    /** Unique identifier for the patient. */
     private int patient_id;
-
-    /** Name of the patient. */
     private String name;
-
-    /** Surname of the patient. */
     private String surname;
-
-    /** Date of birth of the patient. */
     private LocalDate dob;
-
-    /** Email address of the patient. */
     private String email;
-
-    /** List of interpretations associated with the patient. */
     private LinkedList<Interpretation> interpretations;
 
     /**
