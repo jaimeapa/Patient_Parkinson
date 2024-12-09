@@ -17,22 +17,11 @@ import java.util.LinkedList;
  */
 public class Doctor implements Serializable {
 
-    /** Unique identifier for the doctor. */
     private int doctor_id;
-
-    /** First name of the doctor. */
     private String name;
-
-    /** Surname of the doctor. */
     private String surname;
-
-    /** Date of birth of the doctor. */
     private LocalDate dob;
-
-    /** Email address of the doctor. */
     private String email;
-
-    /** List of patients assigned to the doctor. */
     private LinkedList<Patient> patients;
 
     /**
