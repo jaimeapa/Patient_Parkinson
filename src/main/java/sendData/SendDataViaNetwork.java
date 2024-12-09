@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 public class SendDataViaNetwork {
     private DataOutputStream dataOutputStream;
 
+
     public SendDataViaNetwork(Socket socket) {
         try {
             this.dataOutputStream = new DataOutputStream(socket.getOutputStream());

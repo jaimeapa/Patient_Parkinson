@@ -114,27 +114,6 @@ public class Interpretation {
         this.symptoms.add(symptom);
     }
 
-    /*public File almacenarDatosEnFichero() throws FileNotFoundException {
-        Date date = java.sql.Date.valueOf(LocalDate.now());
-        File file = new File("MeasurementsBitalino/" + name + "_" + surname + "-" + date + ".txt");
-
-        try (PrintWriter pw = new PrintWriter(file)) {
-            pw.println("Patient: " + toString());
-
-            pw.println(" - Bitalino recorded data: ");
-            if (signal != null) {
-                if (signal.getSignalType() == Signal.SignalType.EMG) {
-                    values_EMG.forEach(value -> pw.println("   " + value));
-                } else if (signal.getSignalType() == Signal.SignalType.EDA) {
-                    values_EDA.forEach(value -> pw.println("   " + value));
-                }
-            } else {
-                pw.println("   No signal data available.");
-            }
-        }
-
-        return file;
-    }*/
 
     public void recordBitalinoData(int seconds, String macAddress, BITalino bitalino) throws BITalinoException {
         //BITalino bitalino = new BITalino();
