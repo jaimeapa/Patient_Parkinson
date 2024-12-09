@@ -8,11 +8,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+/**
+ * This class handles sending data over a network connection.
+ * It uses a `DataOutputStream` to serialize and send various types of objects and primitives.
+ */
 public class SendDataViaNetwork {
     private DataOutputStream dataOutputStream;
 
-
+    /**
+     * Constructor that initializes the `DataOutputStream` from the provided socket.
+     * @param socket the socket used for network communication.
+     */
     public SendDataViaNetwork(Socket socket) {
         try {
             this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -21,7 +27,10 @@ public class SendDataViaNetwork {
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Sends a UTF-encoded string over the network.
+     * @param message the string to send.
+     */
     public void sendStrings(String message) {
         try {
             dataOutputStream.writeUTF(message);
@@ -31,7 +40,10 @@ public class SendDataViaNetwork {
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Sends an integer value over the network.
+     * @param message the integer to send.
+     */
     public void sendInt(int message) {
         try {
             dataOutputStream.writeInt(message);
@@ -42,16 +54,23 @@ public class SendDataViaNetwork {
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public  void sendUser(User u) throws IOException
+    /**
+     * Sends a `User` object over the network.
+     * @param user the `User` object to send.
+     * @throws IOException if an I/O error occurs.
+     */
+    public  void sendUser(User user) throws IOException
     {
-        dataOutputStream.writeUTF(u.getEmail());
-        byte[] password = u.getPassword();
+        dataOutputStream.writeUTF(user.getEmail());
+        byte[] password = user.getPassword();
 
         dataOutputStream.writeUTF(new String(password));
-        dataOutputStream.writeUTF(u.getRole().toString());
+        dataOutputStream.writeUTF(user.getRole().toString());
     }
-
+    /**
+     * Sends a `Patient` object over the network.
+     * @param patient the `Patient` object to send.
+     */
     public void sendPatient(Patient patient) {
         try {
             dataOutputStream.writeInt(patient.getPatient_id());
@@ -66,6 +85,11 @@ public class SendDataViaNetwork {
             Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /**
+     * Sends an `Interpretation` object over the network.
+     * @param interpretation the `Interpretation` object to send.
+     * @throws IOException if an I/O error occurs.
+     */
     public void sendInterpretation(Interpretation interpretation) throws IOException{
         dataOutputStream.writeUTF(interpretation.getDate().toString());
         dataOutputStream.writeInt(interpretation.getDoctor_id());
@@ -75,6 +99,9 @@ public class SendDataViaNetwork {
         dataOutputStream.writeUTF(interpretation.getObservation());
         dataOutputStream.writeUTF(interpretation.getInterpretation());
     }
+    /**
+     * Releases the resources used by the `DataOutputStream`.
+     */
     public void releaseResources() {
         try {
             if (dataOutputStream != null) {

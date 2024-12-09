@@ -10,6 +10,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class represents a signal associated with a patient.
+ * It supports both EMG and EDA signal types, and provides functionalities for
+ * storing, processing, and managing signal data.
+ */
 public class Signal {
     private List<Integer> values;
     private String signalFilename;
@@ -20,8 +25,10 @@ public class Signal {
         EDA
     }
 
-    // Constructor único
-
+    /**
+     * Constructor to initialize a signal with a specific type.
+     * @param signaltype the type of the signal (EMG or EDA).
+     */
     public Signal(SignalType signaltype){
         this.values = new LinkedList<>();
         this.signalType = signaltype;
@@ -74,7 +81,9 @@ public class Signal {
         this.signalType = signalType;
     }
 
-    // Métodos para almacenar los datos en archivos
+    /**
+     * Stores the signal data in a file based on its type.
+     */
     public void storeSignalInFile() {
         FileWriter fw = null;
         BufferedWriter bw = null;
@@ -109,7 +118,11 @@ public class Signal {
         }
     }
 
-    // Método común para obtener los valores de la señal
+    /**
+     * Retrieves the signal values at the specified sampling rate.
+     * @param samplingRate the sampling rate for the signal.
+     * @return a list of signal values at the specified rate.
+     */
     public LinkedList<Integer> getSignalValues(int samplingRate) {
         LinkedList<Integer> result = new LinkedList<>();
         for (int j = 0; j < samplingRate; j++) {
@@ -123,25 +136,10 @@ public class Signal {
         return result;
     }
 
-    // Método para obtener los valores de la señal como un String
-    /*   public String getSignalValuesString (int samplingRate) {
-        StringBuilder result = new StringBuilder();
-
-        for (int j = 0; j < samplingRate; j++) {
-            int blockSize = samplingRate;
-            for (int i = 0; i < blockSize; i++) {
-                int value = j * blockSize + i;
-                result.append(values.get(value)).append(", ");
-            }
-        }
-        if (result.length() > 0) {
-            result.setLength(result.length() - 2);
-        }
-
-        return result.toString();
-    }*/
-
-
+    /**
+     * Converts the list of signal values into a space-separated string.
+     * @return a string representation of the signal values.
+    */
     public String valuesToString() {
         StringBuilder message = new StringBuilder();
         String separator = " ";
@@ -155,6 +153,11 @@ public class Signal {
 
         return message.toString();
     }
+    /**
+     * Parses a space-separated string into a list of signal values.
+     * @param str the input string representing signal values.
+     * @return a list of integers parsed from the input string.
+     */
     public List<Integer> stringToValues(String str) {
         values.clear(); // Limpiamos la lista antes de agregar nuevos valores.
         String[] tokens = str.split(" "); // Dividimos el String por el espacio.
@@ -173,7 +176,10 @@ public class Signal {
 
         return values;
     }
-
+    /**
+     * Adds a list of new signal values to the existing signal.
+     * @param values a list of new signal values to add.
+     */
     public void addValues(LinkedList<Integer> values){
         this.values.addAll(values);
     }

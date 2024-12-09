@@ -10,9 +10,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import Pojos.Patient;
-
+/**
+ * Utility class providing helper methods for reading user input, validating data, and formatting strings.
+ * This class simplifies repetitive tasks such as reading integers, dates, and strings, as well as validating email formats.
+ */
 public class Utilities {
 
+    /**
+     * Reads an integer from the user after displaying a prompt.
+     * Ensures that the input is valid and repeats the prompt if the input is not a valid integer.
+     *
+     * @param question The prompt to display to the user.
+     * @return A valid integer input by the user.
+     */
     public static int readInteger(String question) {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(input);
@@ -33,6 +43,13 @@ public class Utilities {
             }
         }
     }
+    /**
+     * Reads a date from the user, asking for day, month, and year separately.
+     * Ensures the date is valid and repeats the prompt if the input is not a valid date.
+     *
+     * @param question The prompt to display to the user.
+     * @return A valid LocalDate input by the user.
+     */
     public static LocalDate readDate(String question)  {
 
         while (true) {
@@ -49,6 +66,13 @@ public class Utilities {
 
         }
     }
+    /**
+     * Reads a string from the user after displaying a prompt.
+     * Ensures that the input is valid and repeats the prompt if an error occurs during reading.
+     *
+     * @param question The prompt to display to the user.
+     * @return A valid string input by the user.
+     */
     public static String readString(String question) {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(input);
@@ -64,6 +88,12 @@ public class Utilities {
             }
         }
     }
+    /**
+     * Validates an email string to ensure it follows a proper email format.
+     *
+     * @param email The email string to validate.
+     * @return {@code true} if the email format is valid; {@code false} otherwise.
+     */
     public static boolean checkEmail(String email){
         Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
         Matcher mather = pattern.matcher(email);
@@ -74,7 +104,12 @@ public class Utilities {
             return false;
         }
     }
-
+    /**
+     * Formats a given MAC address string by adding colons (':') after every two characters.
+     *
+     * @param input The unformatted MAC address string.
+     * @return The formatted MAC address string.
+     */
     public static String formatMacAdress(String input) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
@@ -86,6 +121,13 @@ public class Utilities {
         }
         return result.toString();
     }
+
+    /**
+     * Placeholder method for registering patient data.
+     * Currently, this method returns {@code null}.
+     *
+     * @return A {@code Patient} object containing registered data or {@code null}.
+     */
     public static Patient registerPatientData()
     {
         Patient patient = null;
@@ -93,7 +135,4 @@ public class Utilities {
 
         return patient;
     }
-
-
-
 }

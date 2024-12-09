@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.Vector;
 import BITalino.Frame;
 
-
+/**
+ * This class represents an Interpretation for a patient's medical data.
+ * It stores information such as the interpretation date, associated signals (EMG and EDA),
+ * patient and doctor IDs, and observations related to the interpretation.
+ */
 public class Interpretation {
 
     private int id;
@@ -24,7 +28,12 @@ public class Interpretation {
     private List<Symptoms> symptoms;
     private String observation;
     public static final int samplingrate = 100;
-
+    /**
+     * Constructor to create an interpretation with the specified date, patient, and doctor IDs.
+     * @param date the date of the interpretation.
+     * @param patient the ID of the patient.
+     * @param doctor the ID of the doctor.
+     */
     public Interpretation(LocalDate date, int patient, int doctor){
         this.date = date;
         this.patient_id = patient;
@@ -35,6 +44,16 @@ public class Interpretation {
         this.observation = "";
         this.symptoms = new LinkedList<>();
     }
+    /**
+     * Constructor to create an interpretation with all required details.
+     * @param date the date of the interpretation.
+     * @param interpretation textual interpretation provided by the doctor.
+     * @param signalEMG EMG signal data.
+     * @param signalEDA EDA signal data.
+     * @param patient_id the ID of the patient.
+     * @param doctor_id the ID of the doctor.
+     * @param observation additional observations.
+     */
     public Interpretation(LocalDate date, String interpretation, Signal signalEMG, Signal signalEDA, int patient_id, int doctor_id, String observation) {
         this.date = date;
         this.interpretation = interpretation;
@@ -45,7 +64,11 @@ public class Interpretation {
         this.doctor_id = doctor_id;
         this.observation = observation;
     }
+    // Getters and setters for class properties.
 
+    /**
+     * Adds a symptom to the interpretation's symptoms list.
+     */
     public LocalDate getDate() {
         return date;
     }
@@ -114,13 +137,15 @@ public class Interpretation {
         this.symptoms.add(symptom);
     }
 
-
+    /**
+     * Records data from a BITalino device for a given duration and stores the EMG and EDA signals.
+     * @param seconds duration of data recording in seconds.
+     * @param macAddress MAC address of the BITalino device.
+     * @param bitalino BITalino device object.
+     * @throws BITalinoException if there is an issue with the BITalino device.
+     */
     public void recordBitalinoData(int seconds, String macAddress, BITalino bitalino) throws BITalinoException {
-        //BITalino bitalino = new BITalino();
         try {
-            //Vector<RemoteDevice> devices = bitalino.findDevices();
-            //System.out.println(devices);
-
             bitalino.open(macAddress, samplingrate);
             System.out.println("Connection successful!");
 
@@ -168,6 +193,10 @@ public class Interpretation {
             }
         }
     }
+    /**
+     * Returns a string representation of the interpretation.
+     * @return a string containing details of the interpretation.
+     */
     @Override
     public String toString() {
         return "Report " + date + ":"+

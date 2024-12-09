@@ -15,7 +15,11 @@ import java.util.LinkedList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+/**
+ * The Main class acts as the entry point for the client-side application. It handles the connection
+ * to the server, user interactions, and navigation through various menus. This class allows patients
+ * to log in, register, record symptoms, connect to BITalino devices, and view reports.
+ */
 public class Main {
 
     public static void main(String[] args){
@@ -67,6 +71,11 @@ public class Main {
         System.exit(0);
 
     }
+    /**
+     * Displays the login menu for the patient and captures the user's selection.
+     *
+     * @return the selected menu option as an integer.
+     */
     private static int printLogInMenu() {
         System.out.println("\n\nPatient Menu:\n"
                 + "\n1. Register"
@@ -75,7 +84,16 @@ public class Main {
         );
         return Utilities.readInteger("What would you want to do?\n");
     }
-
+    /**
+     * Handles the patient menu functionality after a successful login. Patients can input symptoms,
+     * record signals, view data, and see reports.
+     *
+     * @param patient_logedIn the logged-in patient's information.
+     * @param assignedDoctor the doctor assigned to the patient.
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     * @throws IOException if there is an issue with server communication.
+     */
     public static void clientPatientMenu(Patient patient_logedIn, Doctor assignedDoctor,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException {
         LocalDate date = LocalDate.now();
         Interpretation interpretation = new Interpretation(date, patient_logedIn.getPatient_id(), assignedDoctor.getDoctor_id());
@@ -107,6 +125,11 @@ public class Main {
             }
         }
     }
+    /**
+     * Displays the main patient menu for diagnosis and other actions.
+     *
+     * @return the selected menu option as an integer.
+     */
     private static int printClientMenu(){
         System.out.println("\n\nDiagnosis Menu:\n"
                 + "\n1. Input your symptoms"
@@ -118,6 +141,14 @@ public class Main {
         return Utilities.readInteger("What would you want to do?\n");
     }
 
+    /**
+     * Handles the login process, allowing a patient to log into their account.
+     * It sends the login credentials to the server for verification.
+     *
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     * @throws IOException if there is an issue with server communication.
+     */
     private static void logInMenu(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(2);
         System.out.println(receiveDataViaNetwork.receiveString());
@@ -156,6 +187,14 @@ public class Main {
         }
 
     }
+    /**
+     * Handles the registration process for a new patient. It sends the patient's data
+     * to the server and assigns a doctor to the patient upon successful registration.
+     *
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     * @throws IOException if there is an issue with server communication.
+     */
     public static void registerPatient(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException
     {
         sendDataViaNetwork.sendInt(1);
@@ -201,6 +240,14 @@ public class Main {
             sendDataViaNetwork.sendStrings("ERROR");
         }
     }
+    /**
+     * Collects and sends the patient's symptoms to the server. Allows the patient to select
+     * symptoms from a predefined list or add a detailed observation.
+     *
+     * @param interpretation the interpretation object containing diagnostic data.
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     */
     private static void readSymptoms(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         sendDataViaNetwork.sendInt(1);
         LinkedList<String> symptomsInTable = new LinkedList<>();
@@ -254,7 +301,12 @@ public class Main {
         }
         System.out.println(receiveDataViaNetwork.receiveString());
     }
-
+    /**
+     * Connects to a BITalino device, records signal data, and updates the interpretation object.
+     *
+     * @param interpretation the interpretation object containing diagnostic data.
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     */
     private static void readBITalino(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork){
         sendDataViaNetwork.sendInt(2);
         System.out.println("Searching for BITalinos...\n\n");
@@ -290,6 +342,15 @@ public class Main {
             System.out.println("Error al medir ");
         }
     }
+
+    /**
+     * Sends the current interpretation and logs the user out. Confirms whether the server received the data.
+     *
+     * @param interpretation the interpretation object containing diagnostic data.
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     * @throws IOException if there is an issue with server communication.
+     */
     private static void sendInterpretationAndLogOut(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
         sendDataViaNetwork.sendInt(5);
         System.out.println("Sending your data to the server...");
@@ -301,6 +362,13 @@ public class Main {
         }
 
     }
+    /**
+     * Retrieves and displays all reports associated with the logged-in patient from the server.
+     * Allows the patient to select and view details of specific reports.
+     *
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     */
     private static void seeInterpretations(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         sendDataViaNetwork.sendInt(4);
         int length = receiveDataViaNetwork.receiveInt();
@@ -339,9 +407,13 @@ public class Main {
             System.out.println("You haven´t submitted any report yet. When you log out your report will be automatically submitted.");
         }
     }
-
-
-
+    /**
+     * Closes all open resources, including the socket and network communication objects.
+     *
+     * @param socket the socket used to communicate with the server.
+     * @param sendDataViaNetwork the object responsible for sending data to the server.
+     * @param receiveDataViaNetwork the object responsible for receiving data from the server.
+     */
     private static void releaseResources(Socket socket,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         if(sendDataViaNetwork != null && receiveDataViaNetwork != null) {
             sendDataViaNetwork.releaseResources();

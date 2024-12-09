@@ -9,10 +9,17 @@ import java.time.format.DateTimeFormatter;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
-
+/**
+ * This class is responsible for receiving data over a network connection.
+ * It uses a `DataInputStream` to read data from a socket and provides methods
+ * to deserialize and interpret various types of objects and primitives.
+ */
 public class ReceiveDataViaNetwork {
     private DataInputStream dataInputStream;
-
+    /**
+     * Constructor that initializes the `DataInputStream` from the provided socket.
+     * @param socket the socket used for network communication.
+     */
     public ReceiveDataViaNetwork(Socket socket) {
         try {
             this.dataInputStream = new DataInputStream(socket.getInputStream());
@@ -21,7 +28,10 @@ public class ReceiveDataViaNetwork {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Receives a UTF-encoded string from the network.
+     * @return the received string, or null in case of an error.
+     */
     public String receiveString() {
         try {
             return dataInputStream.readUTF();
@@ -31,7 +41,10 @@ public class ReceiveDataViaNetwork {
             return null;
         }
     }
-
+    /**
+     * Receives a `Doctor` object from the network.
+     * @return the received `Doctor` object, or null in case of an error.
+     */
     public Doctor receiveDoctor() {
         Doctor doctor = null;
         try {
@@ -51,7 +64,10 @@ public class ReceiveDataViaNetwork {
         }
         return doctor;
     }
-
+    /**
+     * Receives a `Patient` object from the network.
+     * @return the received `Patient` object, or null in case of an error.
+     */
     public Patient recievePatient() {
         Patient patient = null;
         try {
@@ -71,7 +87,10 @@ public class ReceiveDataViaNetwork {
         }
         return patient;
     }
-
+    /**
+     * Receives an `Interpretation` object from the network.
+     * @return the received `Interpretation` object, or null in case of an error.
+     */
     public Interpretation recieveInterpretation() {
         Interpretation interpretation = null;
         try {
@@ -101,7 +120,10 @@ public class ReceiveDataViaNetwork {
         }
         return interpretation;
     }
-
+    /**
+     * Receives an integer value from the network.
+     * @return the received integer, or 0 in case of an error.
+     */
     public int receiveInt() {
         int message = 0;
         try {
@@ -112,7 +134,9 @@ public class ReceiveDataViaNetwork {
         }
         return message;
     }
-
+    /**
+     * Releases the resources used by the `DataInputStream`.
+     */
     public void releaseResources() {
         try {
             if (dataInputStream != null) {
