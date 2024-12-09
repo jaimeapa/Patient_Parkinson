@@ -113,23 +113,6 @@ public class Interpretation {
         this.symptoms.add(symptom);
     }
 
-    public void saveValues(Signal signal) {
-        if (signal != null) {
-            // Llamamos al método getSignalValues con el parámetro de tasa de muestreo.
-            LinkedList<Integer> signalValues = signal.getSignalValues(samplingrate);
-
-            // Verificamos el tipo de señal y guardamos los valores en la lista correspondiente.
-            if (signal.getSignalType() == Signal.SignalType.EMG) {
-                signalEMG.addValues(signalValues);
-                System.out.println("Valores guardados en values_EMG");
-            } else if (signal.getSignalType() == Signal.SignalType.EDA) {
-                signalEDA.addValues(signalValues);
-                System.out.println("Valores guardados en values_EDA");
-            }
-        } else {
-            System.out.println("No hay señal asignada a este paciente.");
-        }
-    }
     /*public File almacenarDatosEnFichero() throws FileNotFoundException {
         Date date = java.sql.Date.valueOf(LocalDate.now());
         File file = new File("MeasurementsBitalino/" + name + "_" + surname + "-" + date + ".txt");

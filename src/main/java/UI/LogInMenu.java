@@ -183,7 +183,7 @@ public class LogInMenu {
             sendDataViaNetwork.sendStrings("ERROR");
         }
     }
-    private static void readSymptoms(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws  IOException{
+    private static void readSymptoms(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         sendDataViaNetwork.sendInt(1);
         LinkedList<String> symptomsInTable = new LinkedList<>();
         System.out.println("\n\nUsual Symptoms for Parkinson: \n\n");
@@ -238,7 +238,7 @@ public class LogInMenu {
         System.out.println(receiveDataViaNetwork.receiveString());
     }
 
-    private static void readBITalino(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork) throws IOException{
+    private static void readBITalino(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork){
         sendDataViaNetwork.sendInt(2);
         int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
         try {
@@ -264,7 +264,7 @@ public class LogInMenu {
         }
 
     }
-    private static void seeInterpretations(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork) throws IOException{
+    private static void seeInterpretations(SendDataViaNetwork sendDataViaNetwork,ReceiveDataViaNetwork receiveDataViaNetwork){
         sendDataViaNetwork.sendInt(4);
         int length = receiveDataViaNetwork.receiveInt();
         LinkedList<Interpretation> allInterpretations = new LinkedList<>();

@@ -1,11 +1,8 @@
 package Pojos;
 
-
-import java.rmi.NotBoundException;
 import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 public class Patient{
     private int patient_id;
     private String name;
@@ -68,14 +65,8 @@ public class Patient{
         return email;
     }
 
-    public void setEmail(String email) throws NotBoundException {
-        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
-        Matcher mather = pattern.matcher(email);
-        if (mather.find()) {
+    public void setEmail(String email)  {
             this.email = email;
-        } else {
-            throw new NotBoundException("Not valid email");
-        }
     }
 
     @Override

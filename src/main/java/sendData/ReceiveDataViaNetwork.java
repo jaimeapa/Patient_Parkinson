@@ -113,21 +113,6 @@ public class ReceiveDataViaNetwork {
         return message;
     }
 
-    public User receiveUser() {
-        User user = null;
-        try {
-            String email = dataInputStream.readUTF();
-            byte[] password = dataInputStream.readUTF().getBytes();
-            String role = dataInputStream.readUTF();
-            Role userRole = new Role(role);
-            user = new User(email, password, userRole);
-        } catch (IOException e) {
-            System.err.println("Error al recibir el usuario: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return user;
-    }
-
     public void releaseResources() {
         try {
             if (dataInputStream != null) {

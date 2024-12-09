@@ -59,14 +59,8 @@ public class Doctor implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) throws NotBoundException {
-        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
-        Matcher mather = pattern.matcher(email);
-        if (mather.find() == true) {
-            this.email = email;
-        } else {
-            throw new NotBoundException("Not valid email");
-        }
+    public void setEmail(String email) {
+       this.email=email;
     }
 
     public LinkedList<Patient> getPatients() {
