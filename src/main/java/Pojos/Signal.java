@@ -60,49 +60,74 @@ public class Signal {
         this.signalType = signaltype;
     }
 
-    // Método para crear el nombre del archivo basado en el tipo de señal
-    /*private String createFilename() {
-        Calendar c = Calendar.getInstance();
-        String day = Integer.toString(c.get(Calendar.DATE));
-        String month = Integer.toString(c.get(Calendar.MONTH));
-        String year = Integer.toString(c.get(Calendar.YEAR));
-        String hour = Integer.toString(c.get(Calendar.HOUR));
-        String minute = Integer.toString(c.get(Calendar.MINUTE));
-        String second = Integer.toString(c.get(Calendar.SECOND));
-        String millisecond = Integer.toString(c.get(Calendar.MILLISECOND));
-
-        String signalPrefix = signalType == SignalType.EMG ? "EMG" : "EDA";
-        return patientName + signalPrefix + day + month + year + "_" + hour + minute + second + millisecond + ".txt";
-    }*/
-
-    // Métodos getters y setters
+    /**
+     * Returns the list of values representing the signal data.
+     *
+     * @return A list of integers representing the signal data.
+     */
     public List<Integer> getValues() {
         return values;
     }
 
+    /**
+     * Sets the list of values for the signal data.
+     *
+     * @param values A list of integers representing the signal data to set.
+     */
     public void setValues(List<Integer> values) {
         this.values = values;
     }
 
+    /**
+     * Sets the EMG (electromyography) signal data by converting a string representation to values.
+     *
+     * @param stringEMG A string containing the EMG signal data.
+     */
     public void setValuesEMG(String stringEMG) {
         this.values = stringToValues(stringEMG);
     }
+
+    /**
+     * Sets the EDA (electrodermal activity) signal data by converting a string representation to values.
+     *
+     * @param stringEDA A string containing the EDA signal data.
+     */
     public void setValuesEDA(String stringEDA) {
         this.values = stringToValues(stringEDA);
     }
 
+    /**
+     * Returns the filename where the signal data is stored.
+     *
+     * @return The filename of the signal data.
+     */
     public String getSignalFilename() {
         return signalFilename;
     }
 
+    /**
+     * Sets the filename where the signal data is stored.
+     *
+     * @param signalFilename The filename to set for the signal data.
+     */
     public void setSignalFilename(String signalFilename) {
         this.signalFilename = signalFilename;
     }
 
+    /**
+     * Returns the type of the signal (EMG or EDA).
+     *
+     * @return The type of the signal.
+     */
     public SignalType getSignalType() {
         return signalType;
     }
 
+    /**
+     * Sets the type of the signal (EMG or EDA).
+     *
+     * @param signalType The signal type to set.
+     */
     public void setSignalType(SignalType signalType) {
         this.signalType = signalType;
     }

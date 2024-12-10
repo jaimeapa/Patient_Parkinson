@@ -57,32 +57,78 @@ public class User {
         this.role = role;
     }
 
-    // Getters and setters for class properties.
+    /**
+     * Returns the ID of the user.
+     *
+     * @return The ID of the user.
+     */
     public Integer getId() {
         return id;
     }
+
+    /**
+     * Sets the ID of the user.
+     *
+     * @param id The ID to set for the user.
+     */
     public void setId(Integer id) {
         this.id = id;
     }
+
+    /**
+     * Returns the email address of the user.
+     *
+     * @return The email address of the user.
+     */
     public String getEmail() {
         return email;
     }
-    public void setEmail(String email)  {
+
+    /**
+     * Sets the email address for the user.
+     *
+     * @param email The email address to set for the user.
+     */
+    public void setEmail(String email) {
         this.email = email;
     }
+
+    /**
+     * Returns the password of the user, stored as a byte array.
+     *
+     * @return The user's password.
+     */
     public byte[] getPassword() {
         return password;
     }
+
+    /**
+     * Sets the password for the user, stored as a byte array.
+     *
+     * @param password The password to set for the user.
+     */
     public void setPassword(byte[] password) {
         this.password = password;
     }
+
+    /**
+     * Returns the role assigned to the user (e.g., Admin, User).
+     *
+     * @return The role of the user.
+     */
     public Role getRole() {
         return role;
     }
 
+    /**
+     * Sets the role for the user.
+     *
+     * @param role The role to set for the user.
+     */
     public void setRole(Role role) {
         this.role = role;
     }
+
     /**
      * Generates a hash code for the User object.
      * @return the hash code for the user.

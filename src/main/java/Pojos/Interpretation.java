@@ -104,76 +104,157 @@ public class Interpretation {
         this.doctor_id = doctor_id;
         this.observation = observation;
     }
-    // Getters and setters for class properties.
 
     /**
-     * Adds a symptom to the interpretation's symptoms list.
+     * Returns the date of the medical record.
+     *
+     * @return The date when the medical record was created.
      */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * Returns the interpretation ID of the medical record.
+     *
+     * @return The ID of the interpretation.
+     */
     public int getInterpretation_id() {
         return id;
     }
 
+    /**
+     * Sets the date for the medical record.
+     *
+     * @param date The date to set for the medical record.
+     */
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
+    /**
+     * Returns the patient ID associated with the medical record.
+     *
+     * @return The patient ID.
+     */
     public int getPatient_id() {
         return patient_id;
     }
 
+    /**
+     * Sets the patient ID for the medical record.
+     *
+     * @param patient The patient ID to set.
+     */
     public void setPatient(int patient) {
         this.patient_id = patient;
     }
 
+    /**
+     * Returns the doctor ID associated with the medical record.
+     *
+     * @return The doctor ID.
+     */
     public int getDoctor_id() {
         return doctor_id;
     }
 
+    /**
+     * Returns the EMG (electromyography) signal data for the medical record.
+     *
+     * @return The EMG signal.
+     */
     public Signal getSignalEMG() {
         return signalEMG;
     }
 
+    /**
+     * Returns the EDA (electrodermal activity) signal data for the medical record.
+     *
+     * @return The EDA signal.
+     */
     public Signal getSignalEDA() {
         return signalEDA;
     }
 
+    /**
+     * Returns the observation or notes for the medical record.
+     *
+     * @return The observation related to the medical record.
+     */
     public String getObservation() {
         return observation;
     }
 
+    /**
+     * Sets the doctor ID for the medical record.
+     *
+     * @param doctor The doctor ID to set.
+     */
     public void setDoctor(int doctor) {
         this.doctor_id = doctor;
     }
 
+    /**
+     * Returns the interpretation of the medical record.
+     *
+     * @return The interpretation or diagnosis.
+     */
     public String getInterpretation() {
         return interpretation;
     }
 
+    /**
+     * Sets the interpretation for the medical record.
+     *
+     * @param interpretation The interpretation or diagnosis to set.
+     */
     public void setInterpretation(String interpretation) {
         this.interpretation = interpretation;
     }
 
+    /**
+     * Sets the interpretation ID for the medical record.
+     *
+     * @param interpretation_id The interpretation ID to set.
+     */
     public void setInterpretation_id(int interpretation_id) {
         this.id = interpretation_id;
     }
 
+    /**
+     * Sets the EMG (electromyography) signal data for the medical record.
+     *
+     * @param signalEMG The EMG signal to set.
+     */
     public void setSignalEMG(Signal signalEMG) {
         this.signalEMG = signalEMG;
     }
 
+    /**
+     * Sets the EDA (electrodermal activity) signal data for the medical record.
+     *
+     * @param signalEDA The EDA signal to set.
+     */
     public void setSignalEDA(Signal signalEDA) {
         this.signalEDA = signalEDA;
     }
 
+    /**
+     * Sets the observation or notes for the medical record.
+     *
+     * @param observation The observation to set.
+     */
     public void setObservation(String observation) {
         this.observation = observation;
     }
 
-    public void addSymptom(Symptoms symptom){
+    /**
+     * Adds a symptom to the list of symptoms associated with the medical record.
+     *
+     * @param symptom The symptom to add to the list.
+     */
+    public void addSymptom(Symptoms symptom) {
         this.symptoms.add(symptom);
     }
 
