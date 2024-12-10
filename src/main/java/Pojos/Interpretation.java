@@ -271,13 +271,13 @@ public class Interpretation {
             System.out.println("Connection successful!");
 
 
-            int[] channelsToAcquire = {0,2}; // Cambiar según el canal para EMG o EDA
+            int[] channelsToAcquire = {0,2};
             bitalino.start(channelsToAcquire);
 
             System.out.println(" - Recording the EMG and EDA signals...");
             LinkedList<Integer> recordedValuesEDA = new LinkedList  <>();
             LinkedList<Integer> recordedValuesEMG = new LinkedList<>();
-            for (int j = 0; j < seconds /** samplingrate / 10*/; j++) {
+            for (int j = 0; j < seconds; j++) {
                 //System.out.println("Starting recording");
                 Frame[] frames = bitalino.read(samplingrate);
                 //System.out.println("Frames captured: " + frames.length);
@@ -310,7 +310,7 @@ public class Interpretation {
                     bitalino.close();
                 }
             } catch (BITalinoException ex) {
-                ex.printStackTrace();
+                System.out.println("The BITalino is not connected");
             }
         }
     }

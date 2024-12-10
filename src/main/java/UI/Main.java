@@ -309,6 +309,7 @@ public class Main {
      */
     private static void readBITalino(Interpretation interpretation,SendDataViaNetwork sendDataViaNetwork){
         sendDataViaNetwork.sendInt(2);
+        System.out.println("Now your EDA and your EMG will be measured with BITalino.");
         System.out.println("Searching for BITalinos...\n\n");
         String macAdress = null;
         BITalino bitalino = null;
@@ -319,24 +320,27 @@ public class Main {
             for(int i = 0; i < devices.size(); i++){
                 System.out.println(i+1 + ". " + devices.get(i));
             }
-            do {
-                if (bitID < 1 || bitID >= devices.size()) {
-                    bitID = Utilities.readInteger("Choose your BITalino\n");
-                    macAdress = devices.get(bitID - 1).getBluetoothAddress();
-                    if (bitID < 1 || bitID > devices.size()) {
-                        System.out.println("Choose a valid number");
+            if(!devices.isEmpty()) {
+                do {
+                    if (bitID < 1 || bitID >= devices.size()) {
+                        bitID = Utilities.readInteger("Choose your BITalino\n");
+                        macAdress = devices.get(bitID - 1).getBluetoothAddress();
+                        if (bitID < 1 || bitID > devices.size()) {
+                            System.out.println("Choose a valid number");
+                        }
                     }
-                }
-            } while (bitID < 0 || bitID > devices.size() + 1);
+                } while (bitID < 0 || bitID > devices.size() + 1);
+            }else{
+                System.out.println("No BITalinos have been found, connect your BITalino with bluetooth and try again!");
+            }
         }catch (InterruptedException e) {
             System.out.println("No se han encontrado BITalinos");
         }
-        int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
+
         try {
             if(macAdress != null) {
+                int seconds = Utilities.readInteger("How many seconds will you like to measure your signals?");
                 interpretation.recordBitalinoData(seconds, Utilities.formatMacAdress(macAdress), bitalino);
-            }else{
-                System.out.println("Error when connecting to BITalino");
             }
         }catch(BITalinoException e){
             System.out.println("Error al medir ");

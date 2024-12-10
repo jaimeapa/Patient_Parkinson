@@ -169,7 +169,6 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient{" +
-                "patient_id=" + patient_id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", dob=" + dob +
