@@ -16,15 +16,41 @@ import java.util.logging.Logger;
  * storing, processing, and managing signal data.
  */
 public class Signal {
+    /**
+     * A list of integer values representing the signal data.
+     */
     private List<Integer> values;
+
+    /**
+     * The filename where the signal data is stored.
+     */
     private String signalFilename;
+
+    /**
+     * The type of the signal (either EMG or EDA).
+     */
     private SignalType signalType;
+
+    /**
+     * The sampling rate used for the signal data (in Hz).
+     * Default value is 100 Hz.
+     */
     public static final int samplingrate = 100;
-    public enum SignalType{
+
+    /**
+     * Enum representing the possible types of signals.
+     */
+    public enum SignalType {
+        /**
+         * Represents an EMG (electromyography) signal.
+         */
         EMG,
+
+        /**
+         * Represents an EDA (electrodermal activity) signal.
+         */
         EDA
     }
-
     /**
      * Constructor to initialize a signal with a specific type.
      * @param signaltype the type of the signal (EMG or EDA).

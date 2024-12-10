@@ -15,7 +15,12 @@ import java.io.IOException;
  * to deserialize and interpret various types of objects and primitives.
  */
 public class ReceiveDataViaNetwork {
+
+    /**
+     * The DataInputStream used to read primitive data types from an input stream.
+     */
     private DataInputStream dataInputStream;
+
     /**
      * Constructor that initializes the `DataInputStream` from the provided socket.
      * @param socket the socket used for network communication.

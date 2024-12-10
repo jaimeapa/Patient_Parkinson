@@ -13,6 +13,9 @@ import java.util.logging.Logger;
  * It uses a `DataOutputStream` to serialize and send various types of objects and primitives.
  */
 public class SendDataViaNetwork {
+    /**
+     * The DataOutputStream used to write primitive data types to an output stream.
+     */
     private DataOutputStream dataOutputStream;
 
     /**

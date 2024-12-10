@@ -16,14 +16,35 @@ import java.util.LinkedList;
  * Implements {@link Serializable} for object serialization.
  */
 public class Doctor implements Serializable {
-
+    /**
+     * The ID of the doctor.
+     */
     private int doctor_id;
-    private String name;
-    private String surname;
-    private LocalDate dob;
-    private String email;
-    private LinkedList<Patient> patients;
 
+    /**
+     * The name of the doctor.
+     */
+    private String name;
+
+    /**
+     * The surname of the doctor.
+     */
+    private String surname;
+
+    /**
+     * The date of birth of the doctor.
+     */
+    private LocalDate dob;
+
+    /**
+     * The email address of the doctor.
+     */
+    private String email;
+
+    /**
+     * A list of patients associated with the doctor.
+     */
+    private LinkedList<Patient> patients;
     /**
      * Constructs a new Doctor with the specified details.
      *

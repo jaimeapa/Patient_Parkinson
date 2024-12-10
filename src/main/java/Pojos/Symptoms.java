@@ -4,12 +4,25 @@ package Pojos;
  * It includes basic information such as the symptom's ID and name.
  */
 public class Symptoms {
+    /**
+     * The ID of the symptom.
+     */
     private int id;
+
+    /**
+     * The name of the symptom.
+     */
     private String name;
 
-    public Symptoms (String name){
+    /**
+     * Constructs a new symptom with the specified name.
+     *
+     * @param name The name of the symptom.
+     */
+    public Symptoms(String name) {
         this.name = name;
     }
+
 
     /**
      * Gets the unique identifier of the symptom.

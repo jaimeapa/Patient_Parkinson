@@ -9,10 +9,26 @@ import java.util.Objects;
  * It contains details such as the user's ID, email, password, and role.
  */
 public class User {
+    /**
+     * The ID of the user.
+     */
     private Integer id;
+
+    /**
+     * The email address of the user.
+     */
     private String email;
+
+    /**
+     * The password of the user, stored as a byte array.
+     */
     private byte[] password;
+
+    /**
+     * The role assigned to the user (e.g., Admin, User).
+     */
     private Role role;
+
 
     /**
      * Constructor to initialize a user with all attributes.

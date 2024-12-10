@@ -18,15 +18,55 @@ import BITalino.Frame;
  */
 public class Interpretation {
 
+    /**
+     * The ID of the medical record.
+     */
     private int id;
+
+    /**
+     * The date when the medical record was created.
+     */
     private LocalDate date;
+
+    /**
+     * The ID of the patient associated with this medical record.
+     */
     private int patient_id;
+
+    /**
+     * The ID of the doctor who created this medical record.
+     */
     private int doctor_id;
+
+    /**
+     * The EMG (electromyography) signal data associated with this record.
+     */
     private Signal signalEMG;
+
+    /**
+     * The EDA (electrodermal activity) signal data associated with this record.
+     */
     private Signal signalEDA;
+
+    /**
+     * The interpretation or diagnosis based on the data in the medical record.
+     */
     private String interpretation;
+
+    /**
+     * A list of symptoms related to the patient in this medical record.
+     */
     private List<Symptoms> symptoms;
+
+    /**
+     * Additional observations or notes about the patient's condition.
+     */
     private String observation;
+
+    /**
+     * The sampling rate used for the signal data (in Hz).
+     * Default value is 100 Hz.
+     */
     public static final int samplingrate = 100;
     /**
      * Constructor to create an interpretation with the specified date, patient, and doctor IDs.

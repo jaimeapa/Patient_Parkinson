@@ -7,12 +7,34 @@ import java.util.LinkedList;
  * Represents a patient with personal information and a list of interpretations.
  */
 public class Patient {
-
+    /**
+     * The ID of the patient.
+     */
     private int patient_id;
+
+    /**
+     * The first name of the patient.
+     */
     private String name;
+
+    /**
+     * The surname of the patient.
+     */
     private String surname;
+
+    /**
+     * The date of birth of the patient.
+     */
     private LocalDate dob;
+
+    /**
+     * The email address of the patient.
+     */
     private String email;
+
+    /**
+     * A list of interpretations associated with the patient's medical records.
+     */
     private LinkedList<Interpretation> interpretations;
 
     /**

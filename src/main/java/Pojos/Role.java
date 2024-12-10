@@ -4,9 +4,19 @@ import java.util.List;
 import java.util.Objects;
 
 public class Role {
-
+    /**
+     * The ID of the group.
+     */
     private Integer id;
+
+    /**
+     * The name of the group.
+     */
     private String name;
+
+    /**
+     * A list of users associated with the group.
+     */
     private List<User> users;
 
     /**
