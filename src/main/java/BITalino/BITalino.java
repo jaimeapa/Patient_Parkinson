@@ -15,12 +15,37 @@ package BITalino;
  */
 public class BITalino {
 
+	/**
+	 * An array representing the analog channels of the BITalino device.
+	 * Initialized to null by default.
+	 */
 	private int[] analogChannels = null;
+
+	/**
+	 * The number of bytes used in the communication with the BITalino device.
+	 * Default value is 0.
+	 */
 	private int number_bytes = 0;
+
+	/**
+	 * The socket connection to the BITalino device.
+	 * Used for establishing a communication link.
+	 */
 	private StreamConnection hSocket = null;
+
+	/**
+	 * The input stream for receiving data from the BITalino device.
+	 */
 	private DataInputStream iStream = null;
+
+	/**
+	 * The output stream for sending data to the BITalino device.
+	 */
 	private DataOutputStream oStream = null;
-	
+
+	/**
+	 * Constructs a new BITalino instance with default configurations.
+	 */
 	public BITalino() {}
 
 	/**
@@ -49,17 +74,6 @@ public class BITalino {
 	 */
 	public void open(String macAdd, int samplingRate) throws BITalinoException 
 	{
-	        /** Connects to a %BITalino device.
-	         * \param[in] macAdd The device Bluetooth MAC address ("xx:xx:xx:xx:xx:xx")
-                 * \param[in] samplingRate Sampling rate in Hz. Accepted values are 1, 10, 100 or 1000 Hz. Default value is 1000 Hz.
-
-	         * \exception BITalinoErrorTypes (BITalinoErrorTypes.MACADDRESS_NOT_VALID)
-	         * \exception BITalinoErrorTypes (BITalinoErrorTypes.SAMPLING_RATE_NOT_DEFINED)
-	         * \exception IllegalArgumentException
-	         * \exception ConnectionNotFoundException
-	         * \exception IOException
-	         * \exception SecurityException
-	         */
 			if (macAdd.split(":").length > 1) 
 			{
 				macAdd = macAdd.replace(":", "");
@@ -111,16 +125,15 @@ public class BITalino {
 		}
 	}
 
-
+	/** Starts a signal acquisition from the device.
+	 * \param[in] anChannels Set of channels to acquire. Accepted channels are 0...5 for inputs A1...A6.
+	 * If this set is empty, no analog channels will be acquired.
+	 * \remarks This method cannot be called during an acquisition.
+	 * \exception BITalinoException (BITalinoErrorTypes.ANALOG_CHANNELS_NOT_VALID)
+	 * \exception BITalinoException (BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED)
+	 */
 	public void start(int[] anChannels) throws Throwable 
 	{
-                /** Starts a signal acquisition from the device.
-                 * \param[in] anChannels Set of channels to acquire. Accepted channels are 0...5 for inputs A1...A6.
-                 * If this set is empty, no analog channels will be acquired.
-                 * \remarks This method cannot be called during an acquisition.
-                 * \exception BITalinoException (BITalinoErrorTypes.ANALOG_CHANNELS_NOT_VALID)
-                 * \exception BITalinoException (BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED)
-                 */
 		analogChannels = anChannels;
 		if (analogChannels.length > 6 | analogChannels.length == 0) {
 			throw new BITalinoException(BITalinoErrorTypes.ANALOG_CHANNELS_NOT_VALID);
@@ -156,12 +169,12 @@ public class BITalino {
 		
 	}
 
+	/** Stops a signal acquisition.
+	 * \remarks This method must be called only during an acquisition.
+	 * \exception BITalinoException (BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED)
+	 */
 	public void stop() throws BITalinoException 
 	{
-                /** Stops a signal acquisition.
-                 * \remarks This method must be called only during an acquisition.
-                 * \exception BITalinoException (BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED)
-                 */
 		try 
 		{
 			Write(0);
@@ -172,11 +185,11 @@ public class BITalino {
 		}
 	}
 
+	/** Disconnects from a %BITalino device. If an aquisition is running, it is stopped.
+	 * \exception BITalinoException (BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED)
+	 */
 	public void close() throws BITalinoException 
 	{
-                /** Disconnects from a %BITalino device. If an aquisition is running, it is stopped. 
-                 * \exception BITalinoException (BITalinoErrorTypes.BT_DEVICE_NOT_CONNECTED)
-                 */
 		try 
 		{
 			hSocket.close();
@@ -193,36 +206,38 @@ public class BITalino {
 		
 	}
 
-	public void Write(int data) throws BITalinoException 
-	{
 
-		try 
-		{
+	/**
+	 * Writes a single data value to the BITalino device's output stream.
+	 *
+	 * @param data The data value to write to the device.
+	 * @throws BITalinoException If communication with the device is lost.
+	 */
+	public void Write(int data) throws BITalinoException {
+		try {
 			oStream.write(data);
 			oStream.flush();
 			Thread.sleep(1000);
-		} 
-		catch (Exception e) 
-		{
+		} catch (Exception e) {
 			throw new BITalinoException(BITalinoErrorTypes.LOST_COMMUNICATION);
 		}
 	}
 
-
-	public void battery(int value) throws BITalinoException 
-	{
-
+	/**
+	 * Sets the battery threshold value for the BITalino device.
+	 *
+	 * @param value The battery threshold value, which must be between 0 and 63.
+	 * @throws BITalinoException If the value is out of the valid range (0-63).
+	 */
+	public void battery(int value) throws BITalinoException {
 		int Mode;
-		if (value >= 0 && value<=63) 
-		{
+		if (value >= 0 && value <= 63) {
 			Mode = value << 2;
 			Write(Mode);
-			
-		} 
-		else 
-		{
+		} else {
 			throw new BITalinoException(BITalinoErrorTypes.THRESHOLD_NOT_VALID);
 		}
+
 		
 	}
 	/** Assigns the digital outputs states.
