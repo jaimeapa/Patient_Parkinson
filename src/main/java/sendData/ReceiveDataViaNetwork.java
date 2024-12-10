@@ -37,43 +37,31 @@ public class ReceiveDataViaNetwork {
      * Receives a UTF-encoded string from the network.
      * @return the received string, or null in case of an error.
      */
-    public String receiveString() {
-        try {
-            return dataInputStream.readUTF();
-        } catch (IOException e) {
-            System.err.println("Error al recibir String: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+    public String receiveString() throws IOException{
+        return dataInputStream.readUTF();
     }
     /**
      * Receives a `Doctor` object from the network.
      * @return the received `Doctor` object, or null in case of an error.
      */
-    public Doctor receiveDoctor() {
+    public Doctor receiveDoctor() throws IOException{
         Doctor doctor = null;
-        try {
-            int id = dataInputStream.readInt();
-            String name = dataInputStream.readUTF();
-            String surname = dataInputStream.readUTF();
-            String date = dataInputStream.readUTF();
-            String email = dataInputStream.readUTF();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate dob = LocalDate.parse(date, formatter);
-            doctor = new Doctor(id, name, surname, dob, email);
-        } catch (EOFException ex) {
-            System.out.println("Todos los datos fueron leídos correctamente.");
-        } catch (IOException ex) {
-            System.err.println("Error al recibir datos del doctor: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+        int id = dataInputStream.readInt();
+        String name = dataInputStream.readUTF();
+        String surname = dataInputStream.readUTF();
+        String date = dataInputStream.readUTF();
+        String email = dataInputStream.readUTF();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dob = LocalDate.parse(date, formatter);
+        doctor = new Doctor(id, name, surname, dob, email);
+
         return doctor;
     }
     /**
      * Receives a `Patient` object from the network.
      * @return the received `Patient` object, or null in case of an error.
      */
-    public Patient recievePatient() {
+    public Patient recievePatient(){
         Patient patient = null;
         try {
             int id = dataInputStream.readInt();
@@ -96,7 +84,7 @@ public class ReceiveDataViaNetwork {
      * Receives an `Interpretation` object from the network.
      * @return the received `Interpretation` object, or null in case of an error.
      */
-    public Interpretation recieveInterpretation() {
+    public Interpretation recieveInterpretation() throws IOException{
         Interpretation interpretation = null;
         try {
             String stringDate = dataInputStream.readUTF();
@@ -119,9 +107,6 @@ public class ReceiveDataViaNetwork {
             interpretation = new Interpretation(date, interpretationText, signalEMG, signalEDA, patientId, doctorId, observation);
         } catch (EOFException ex) {
             System.out.println("Todos los datos fueron leídos correctamente.");
-        } catch (IOException ex) {
-            System.err.println("Error al recibir la interpretación: " + ex.getMessage());
-            ex.printStackTrace();
         }
         return interpretation;
     }

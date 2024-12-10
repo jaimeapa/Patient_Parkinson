@@ -34,28 +34,17 @@ public class SendDataViaNetwork {
      * Sends a UTF-encoded string over the network.
      * @param message the string to send.
      */
-    public void sendStrings(String message) {
-        try {
-            dataOutputStream.writeUTF(message);
-            dataOutputStream.flush();
-        } catch (IOException ex) {
-            System.err.println("Error al enviar String: " + ex.getMessage());
-            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void sendStrings(String message) throws IOException{
+        dataOutputStream.writeUTF(message);
+        dataOutputStream.flush();
     }
     /**
      * Sends an integer value over the network.
      * @param message the integer to send.
      */
-    public void sendInt(int message) {
-        try {
-            dataOutputStream.writeInt(message);
-            dataOutputStream.flush();
-
-        } catch (IOException ex) {
-            System.err.println("Error al enviar Int: " + ex.getMessage());
-            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void sendInt(int message) throws IOException{
+        dataOutputStream.writeInt(message);
+        dataOutputStream.flush();
     }
     /**
      * Sends a `User` object over the network.
@@ -74,19 +63,14 @@ public class SendDataViaNetwork {
      * Sends a `Patient` object over the network.
      * @param patient the `Patient` object to send.
      */
-    public void sendPatient(Patient patient) {
-        try {
-            dataOutputStream.writeInt(patient.getPatient_id());
-            dataOutputStream.writeUTF(patient.getName());
-            dataOutputStream.writeUTF(patient.getSurname());
-            dataOutputStream.writeUTF(patient.getDob().toString());
-            dataOutputStream.writeUTF(patient.getEmail());
-            dataOutputStream.flush();
+    public void sendPatient(Patient patient) throws IOException{
+        dataOutputStream.writeInt(patient.getPatient_id());
+        dataOutputStream.writeUTF(patient.getName());
+        dataOutputStream.writeUTF(patient.getSurname());
+        dataOutputStream.writeUTF(patient.getDob().toString());
+        dataOutputStream.writeUTF(patient.getEmail());
+        dataOutputStream.flush();
 
-        } catch (IOException ex) {
-            System.err.println("Error al enviar Patient: " + ex.getMessage());
-            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     /**
      * Sends an `Interpretation` object over the network.
