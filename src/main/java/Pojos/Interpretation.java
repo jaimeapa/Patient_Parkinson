@@ -278,9 +278,7 @@ public class Interpretation {
             LinkedList<Integer> recordedValuesEDA = new LinkedList  <>();
             LinkedList<Integer> recordedValuesEMG = new LinkedList<>();
             for (int j = 0; j < seconds; j++) {
-                //System.out.println("Starting recording");
                 Frame[] frames = bitalino.read(samplingrate);
-                //System.out.println("Frames captured: " + frames.length);
                 for (Frame frame : frames) {
                     recordedValuesEMG.add(frame.analog[0]);
                     recordedValuesEDA.add(frame.analog[1]);
