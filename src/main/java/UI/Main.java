@@ -234,11 +234,12 @@ public class Main {
                 sendDataViaNetwork.sendPatient(patient);
                 sendDataViaNetwork.sendUser(u);
                 String message = receiveDataViaNetwork.receiveString();
-                patient = receiveDataViaNetwork.recievePatient();
+
                 System.out.println(message);
                 if (message.equals("ERROR")) {
                     System.out.println("\n\nThere are no available doctors, sorry for the inconvinience");
                 } else {
+                    patient = receiveDataViaNetwork.recievePatient();
                     Doctor doctor = receiveDataViaNetwork.receiveDoctor();
                     System.out.println("Your doctor is: " + doctor.getName());
                     clientPatientMenu(patient, doctor, sendDataViaNetwork, receiveDataViaNetwork, socket);
